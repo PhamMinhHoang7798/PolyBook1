@@ -1,99 +1,83 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao.impl;
 
-import java.util.List;
-import poly.book.dao.UserDAO;
 import entity.User;
+import poly.book.dao.UserDAO;
 import util.XJdbc;
-import util.XQuery;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
 
-    private final String createSql = """
-            INSERT INTO NguoiDung
-            (TenDangNhap, MatKhau, HoTen, HinhAnh, VaiTro, TrangThai)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """;
-
-    private final String updateSql = """
-            UPDATE NguoiDung
-            SET MatKhau=?, HoTen=?, HinhAnh=?, VaiTro=?, TrangThai=?
-            WHERE TenDangNhap=?
-            """;
-
-    private final String deleteByIdSql = """
-            DELETE FROM NguoiDung
-            WHERE TenDangNhap=?
-            """;
-
-    private final String findAllSql = "SELECT * FROM NguoiDung";
-    private final String findByIdSql = "SELECT * FROM NguoiDung WHERE TenDangNhap=?";
-
-    public User create(User entity) {
-        Object[] values = {
-            entity.getTenDangNhap(),
-            entity.getMatKhau(),
-            entity.getHoTen(),
-            entity.getHinhAnh(),
-            entity.getVaiTro(),
-            entity.isTrangThai()
-        };
-        XJdbc.executeUpdate(createSql, values);
-        return entity;
-    }
-
-    @Override
-    public void update(User entity) {
-        Object[] values = {
-            entity.getMatKhau(),
-            entity.getHoTen(),
-            entity.getHinhAnh(),
-            entity.getVaiTro(),
-            entity.isTrangThai(),
-            entity.getTenDangNhap()
-        };
-        XJdbc.executeUpdate(updateSql, values);
-    }
-
-    public void deleteById(String id) {
-        XJdbc.executeUpdate(deleteByIdSql, id);
-    }
-
-    public List<User> findAll() {
-        return XQuery.getBeanList(User.class, findAllSql);
-    }
-
-    public User findById(String id) {
-        return XQuery.getSingleBean(User.class, findByIdSql, id);
-    }
+    // Cần thay đổi tên bảng [Users] và các cột cho khớp SQL của bạn
+    String INSERT_SQL = "INSERT INTO Users (Username, Password, Fullname, Role) VALUES (?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE Users SET Password = ?, Fullname = ?, Role = ? WHERE Username = ?";
+    String DELETE_SQL = "DELETE FROM Users WHERE Username = ?";
+    String SELECT_ALL_SQL = "SELECT * FROM Users";
+    String SELECT_BY_ID_SQL = "SELECT * FROM Users WHERE Username = ?";
+    String SELECT_BY_KEYWORD_SQL = "SELECT * FROM Users WHERE Fullname LIKE ?";
 
     @Override
     public void insert(User user) {
-        create(user);
+        // Thay các get... bằng đúng tên hàm trong file entity.User
+        XJdbc.executeUpdate(INSERT_SQL, user.getUsername(), user.getPassword(), user.getFullname(), user.getRole());
     }
 
+    @Override
+    public void update(User user) {
+        XJdbc.executeUpdate(UPDATE_SQL, user.getPassword(), user.getFullname(), user.getRole(), user.getUsername());
+    }
 
     @Override
     public void delete(String tenDangNhap) {
-        deleteById(tenDangNhap);
+        XJdbc.executeUpdate(DELETE_SQL, tenDangNhap);
     }
 
     @Override
     public User selectById(String tenDangNhap) {
-        return XQuery.getSingleBean(User.class, findByIdSql, tenDangNhap);
+        List<User> list = this.selectBySql(SELECT_BY_ID_SQL, tenDangNhap);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     @Override
     public List<User> selectAll() {
-        return findAll();
+        return this.selectBySql(SELECT_ALL_SQL);
     }
-
 
     @Override
     public List<User> selectByKeyword(String keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.selectBySql(SELECT_BY_KEYWORD_SQL, "%" + keyword + "%");
+    }
+
+    @Override
+    public User findById(String username) {
+        // Dùng chung logic với selectById vì chức năng giống nhau
+        return this.selectById(username);
+    }
+
+    // Hàm phụ trợ dùng chung để truy vấn danh sách User
+    private List<User> selectBySql(String sql, Object... args) {
+        List<User> list = new ArrayList<>();
+        try {
+            ResultSet rs = XJdbc.executeQuery(sql, args);
+            while (rs.next()) {
+                User user = new User();
+                // Map dữ liệu từ ResultSet vào Entity
+                user.setUsername(rs.getString("Username"));
+                user.setPassword(rs.getString("Password"));
+                user.setFullname(rs.getString("Fullname"));
+                user.setRole(rs.getBoolean("Role")); // Giả sử Role là boolean
+                list.add(user);
+            }
+            rs.getStatement().getConnection().close();
+            return list;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,63 +1,68 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao.impl;
 
 import entity.LoaiSP;
+import poly.book.dao.LoaiSPDAO;
 import util.XJdbc;
-import java.sql.*;
-import java.util.*;
 
-public class LoaiSPDAOImpl {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-    String insert_sql = "INSERT INTO LoaiSanPham VALUES (?,?)";
-    String update_sql = "UPDATE LoaiSanPham SET TenLoai=? WHERE MaLoai=?";
-    String delete_sql = "DELETE FROM LoaiSanPham WHERE MaLoai=?";
-    String select_all = "SELECT * FROM LoaiSanPham";
-    String select_by_id = "SELECT * FROM LoaiSanPham WHERE MaLoai=?";
+public class LoaiSPDAOImpl implements LoaiSPDAO {
 
+    // Cần thay đổi tên bảng [LoaiSP] và các cột cho khớp SQL của bạn
+    String INSERT_SQL = "INSERT INTO LoaiSP (MaLoai, TenLoai) VALUES (?, ?)";
+    String UPDATE_SQL = "UPDATE LoaiSP SET TenLoai = ? WHERE MaLoai = ?";
+    String DELETE_SQL = "DELETE FROM LoaiSP WHERE MaLoai = ?";
+    String SELECT_ALL_SQL = "SELECT * FROM LoaiSP";
+    String SELECT_BY_ID_SQL = "SELECT * FROM LoaiSP WHERE MaLoai = ?";
 
+    @Override
     public void insert(LoaiSP entity) {
-        XJdbc.executeUpdate(insert_sql,
-                entity.getMaLoai(),
-                entity.getTenLoai());
+        XJdbc.executeUpdate(INSERT_SQL, entity.getMaLoai(), entity.getTenLoai());
     }
 
+    @Override
     public void update(LoaiSP entity) {
-        XJdbc.executeUpdate(update_sql,
-                entity.getTenLoai(),
-                entity.getMaLoai());
+        XJdbc.executeUpdate(UPDATE_SQL, entity.getTenLoai(), entity.getMaLoai());
     }
 
+    @Override
     public void delete(String maLoai) {
-        XJdbc.executeUpdate(delete_sql, maLoai);
+        XJdbc.executeUpdate(DELETE_SQL, maLoai);
     }
 
+    @Override
     public List<LoaiSP> selectAll() {
-        return selectBySql(select_all);
+        return this.selectBySql(SELECT_ALL_SQL);
     }
 
+    @Override
     public LoaiSP findById(String maLoai) {
-        List<LoaiSP> list = selectBySql(select_by_id, maLoai);
-        return list.isEmpty() ? null : list.get(0);
+        List<LoaiSP> list = this.selectBySql(SELECT_BY_ID_SQL, maLoai);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
+    // Hàm phụ trợ dùng chung để truy vấn danh sách LoaiSP
     private List<LoaiSP> selectBySql(String sql, Object... args) {
         List<LoaiSP> list = new ArrayList<>();
         try {
             ResultSet rs = XJdbc.executeQuery(sql, args);
             while (rs.next()) {
-                LoaiSP l = new LoaiSP();
-                l.setMaLoai(rs.getString("MaLoai"));
-                l.setTenLoai(rs.getString("TenLoai"));
-                list.add(l);
+                LoaiSP loaiSP = new LoaiSP();
+                // Map dữ liệu từ ResultSet vào Entity
+                loaiSP.setMaLoai(rs.getString("MaLoai"));
+                loaiSP.setTenLoai(rs.getString("TenLoai"));
+                list.add(loaiSP);
             }
             rs.getStatement().getConnection().close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            return list;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return list;
     }
 }
-
