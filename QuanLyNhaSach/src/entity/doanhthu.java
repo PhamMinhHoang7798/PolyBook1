@@ -1,23 +1,66 @@
 package entity;
 
-import java.util.Date;
-
 public class doanhthu {
-    public static class ByCategory {
 
-        private String category;
-        private double revenue;
-        private int quantity;
-        private double minPrice;
-        private double maxPrice;
-        private double avgPrice;
+    // ===== THỐNG KÊ THEO VOUCHER =====
+    public static class TheoVoucher {
+        private String maVoucher;
+        private double tongDoanhThu;
+        private int soLuongHoaDon;
+
+        public String getMaVoucher() {
+            return maVoucher;
+        }
+
+        public void setMaVoucher(String maVoucher) {
+            this.maVoucher = maVoucher;
+        }
+
+        public double getTongDoanhThu() {
+            return tongDoanhThu;
+        }
+
+        public void setTongDoanhThu(double tongDoanhThu) {
+            this.tongDoanhThu = tongDoanhThu;
+        }
+
+        public int getSoLuongHoaDon() {
+            return soLuongHoaDon;
+        }
+
+        public void setSoLuongHoaDon(int soLuongHoaDon) {
+            this.soLuongHoaDon = soLuongHoaDon;
+        }
     }
-    public static class ByUser {
 
-        private String user;
-        private double revenue;
-        private int quantity;
-        private Date firstTime;
-        private Date lastTime;
+    // ===== THỐNG KÊ THEO NGƯỜI DÙNG =====
+    public static class TheoNguoiDung {
+        private String tenDangNhap;
+        private double tongDoanhThu;
+        private int soHoaDon;
+
+        public String getTenDangNhap() {
+            return tenDangNhap;
+        }
+
+        public void setTenDangNhap(String tenDangNhap) {
+            this.tenDangNhap = tenDangNhap;
+        }
+
+        public double getTongDoanhThu() {
+            return tongDoanhThu;
+        }
+
+        public void setTongDoanhThu(double tongDoanhThu) {
+            this.tongDoanhThu = tongDoanhThu;
+        }
+
+        public int getSoHoaDon() {
+            return soHoaDon;
+        }
+
+        public void setSoHoaDon(int soHoaDon) {
+            this.soHoaDon = soHoaDon;
+        }
     }
 }

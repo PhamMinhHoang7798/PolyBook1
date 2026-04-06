@@ -1,7 +1,7 @@
 package dao.impl;
 
-import entity.doanhthu;
 import dao.doanhthuDAO;
+import entity.doanhthu;
 import util.XJdbc;
 
 import java.sql.ResultSet;
@@ -12,47 +12,87 @@ import java.util.List;
 
 public class doanhthuDAOImpl implements doanhthuDAO {
 
-    // Thay đổi câu query tính tổng doanh thu theo Category / User sao cho khớp với DB của bạn
-    String SQL_REVENUE_BY_CATEGORY = "{CALL sp_DoanhThu_ByCategory(?, ?)}"; // Hoặc dùng SELECT ... GROUP BY
-    String SQL_REVENUE_BY_USER = "{CALL sp_DoanhThu_ByUser(?, ?)}"; 
+    // ===== SQL =====
+    private static final String SQL_THEO_VOUCHER = """
+        SELECT 
+            MaVoucher,
+            SUM(TongTien) AS TongDoanhThu,
+            COUNT(*) AS SoLuongHoaDon
+        FROM HoaDon
+        WHERE NgayLap BETWEEN ? AND ?
+        GROUP BY MaVoucher
+    """;
 
+    private static final String SQL_THEO_NGUOIDUNG = """
+        SELECT 
+            TenDangNhap,
+            SUM(TongTien) AS TongDoanhThu,
+            COUNT(*) AS SoHoaDon
+        FROM HoaDon
+        WHERE NgayLap BETWEEN ? AND ?
+        GROUP BY TenDangNhap
+    """;
+
+    // ===== THỐNG KÊ THEO VOUCHER =====
     @Override
-    public List<doanhthu.ByCategory> getByCategory(Date begin, Date end) {
-        List<doanhthu.ByCategory> list = new ArrayList<>();
+    public List<doanhthu.TheoVoucher> thongKeTheoVoucher(Date tuNgay, Date denNgay) {
+        List<doanhthu.TheoVoucher> list = new ArrayList<>();
+        ResultSet rs = null;
+
         try {
-            ResultSet rs = XJdbc.executeQuery(SQL_REVENUE_BY_CATEGORY, begin, end);
+            rs = XJdbc.executeQuery(SQL_THEO_VOUCHER, tuNgay, denNgay);
+
             while (rs.next()) {
-                doanhthu.ByCategory tk = new doanhthu.ByCategory();
-                // Map theo cấu trúc của class ByCategory trong entity.doanhthu
-                tk.setCategoryName(rs.getString("CategoryName"));
-                tk.setTotalRevenue(rs.getDouble("TotalRevenue"));
-                tk.setTotalQuantity(rs.getInt("TotalQuantity"));
+                doanhthu.TheoVoucher tk = new doanhthu.TheoVoucher();
+                tk.setMaVoucher(rs.getString("MaVoucher"));
+                tk.setTongDoanhThu(rs.getDouble("TongDoanhThu"));
+                tk.setSoLuongHoaDon(rs.getInt("SoLuongHoaDon"));
                 list.add(tk);
             }
-            rs.getStatement().getConnection().close();
-            return list;
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Lỗi thống kê theo voucher", e);
+        } finally {
+            dongKetNoi(rs);
         }
+
+        return list;
     }
 
+    // ===== THỐNG KÊ THEO NGƯỜI DÙNG =====
     @Override
-    public List<doanhthu.ByUser> getByUser(Date begin, Date end) {
-        List<doanhthu.ByUser> list = new ArrayList<>();
+    public List<doanhthu.TheoNguoiDung> thongKeTheoNguoiDung(Date tuNgay, Date denNgay) {
+        List<doanhthu.TheoNguoiDung> list = new ArrayList<>();
+        ResultSet rs = null;
+
         try {
-            ResultSet rs = XJdbc.executeQuery(SQL_REVENUE_BY_USER, begin, end);
+            rs = XJdbc.executeQuery(SQL_THEO_NGUOIDUNG, tuNgay, denNgay);
+
             while (rs.next()) {
-                doanhthu.ByUser tk = new doanhthu.ByUser();
-                // Map theo cấu trúc của class ByUser trong entity.doanhthu
-                tk.setUsername(rs.getString("Username"));
-                tk.setTotalRevenue(rs.getDouble("TotalRevenue"));
-                tk.setBillCount(rs.getInt("BillCount"));
+                doanhthu.TheoNguoiDung tk = new doanhthu.TheoNguoiDung();
+                tk.setTenDangNhap(rs.getString("TenDangNhap"));
+                tk.setTongDoanhThu(rs.getDouble("TongDoanhThu"));
+                tk.setSoHoaDon(rs.getInt("SoHoaDon"));
                 list.add(tk);
             }
-            rs.getStatement().getConnection().close();
-            return list;
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Lỗi thống kê theo người dùng", e);
+        } finally {
+            dongKetNoi(rs);
+        }
+
+        return list;
+    }
+
+    // ===== ĐÓNG KẾT NỐI =====
+    private void dongKetNoi(ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.getStatement().getConnection().close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

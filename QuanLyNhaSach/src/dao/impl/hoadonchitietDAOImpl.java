@@ -1,87 +1,108 @@
 package dao.impl;
 
+import dao.CrudDAO;
 import entity.hoadonchitiet;
-import dao.hoadonchitietDAO;
 import util.XJdbc;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class hoadonchitietDAOImpl implements hoadonchitietDAO {
+public class hoadonchitietDAOImpl implements CrudDAO<hoadonchitiet, Integer> {
 
-    // --- SQL CƠ BẢN ---
-    String INSERT_SQL = "INSERT INTO Hoadonchitiet (BillId, DrinkId, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
-    String UPDATE_SQL = "UPDATE Hoadonchitiet SET BillId = ?, DrinkId = ?, SoLuong = ?, DonGia = ? WHERE Id = ?";
-    String DELETE_SQL = "DELETE FROM Hoadonchitiet WHERE Id = ?";
-    String SELECT_ALL_SQL = "SELECT * FROM Hoadonchitiet";
-    String SELECT_BY_ID_SQL = "SELECT * FROM Hoadonchitiet WHERE Id = ?";
+    String INSERT_SQL = "INSERT INTO HoaDonChiTiet (MaHoaDon, MaKhachHang, NgayLap, PhuongThucThanhToan, TrangThai, KhuyenMai, TongTien, MaVoucher, TenDangNhap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
-    // --- SQL MỞ RỘNG ---
-    String SELECT_BY_BILL_ID = "SELECT * FROM Hoadonchitiet WHERE BillId = ?";
-    String SELECT_BY_DRINK_ID = "SELECT * FROM Hoadonchitiet WHERE DrinkId = ?";
+    String UPDATE_SQL = "UPDATE HoaDonChiTiet SET MaKhachHang=?, NgayLap=?, PhuongThucThanhToan=?, TrangThai=?, KhuyenMai=?, TongTien=?, MaVoucher=?, TenDangNhap=? WHERE MaHoaDon=?";
+    
+    String DELETE_SQL = "DELETE FROM HoaDonChiTiet WHERE MaHoaDon=?";
+    
+    String SELECT_ALL = "SELECT * FROM HoaDonChiTiet";
+    
+    String SELECT_BY_ID = "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
 
-    // ================= IMPLEMENT CrudDAO =================
-    @Override
-    public hoadonchitiet create(hoadonchitiet entity) {
-        XJdbc.executeUpdate(INSERT_SQL, entity.getBillId(), entity.getDrinkId(), entity.getSoLuong(), entity.getDonGia());
-        return entity;
+    public void insert(hoadonchitiet entity) {
+        XJdbc.executeUpdate(INSERT_SQL,
+                entity.getMaHoaDon(),
+                entity.getMaKhachHang(),
+                entity.getNgayLap(),
+                entity.getPhuongThucThanhToan(),
+                entity.getTrangThai(),
+                entity.getKhuyenMai(),
+                entity.getTongTien(),
+                entity.getMaVoucher(),
+                entity.getTenDangNhap()
+        );
     }
 
     @Override
     public void update(hoadonchitiet entity) {
-        XJdbc.executeUpdate(UPDATE_SQL, entity.getBillId(), entity.getDrinkId(), entity.getSoLuong(), entity.getDonGia(), entity.getId());
+        XJdbc.executeUpdate(UPDATE_SQL,
+                entity.getMaKhachHang(),
+                entity.getNgayLap(),
+                entity.getPhuongThucThanhToan(),
+                entity.getTrangThai(),
+                entity.getKhuyenMai(),
+                entity.getTongTien(),
+                entity.getMaVoucher(),
+                entity.getTenDangNhap(),
+                entity.getMaHoaDon()
+        );
     }
 
-    @Override
-    public void deleteById(Long id) {
-        XJdbc.executeUpdate(DELETE_SQL, id);
+    public void delete(Integer maHoaDon) {
+        XJdbc.executeUpdate(DELETE_SQL, maHoaDon);
     }
 
-    @Override
-    public List<hoadonchitiet> findAll() {
-        return this.selectBySql(SELECT_ALL_SQL);
+    public List<hoadonchitiet> selectAll() {
+        return selectBySql(SELECT_ALL);
     }
 
-    @Override
-    public hoadonchitiet findById(Long id) {
-        List<hoadonchitiet> list = this.selectBySql(SELECT_BY_ID_SQL, id);
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
+    public hoadonchitiet selectById(Integer maHoaDon) {
+        List<hoadonchitiet> list = selectBySql(SELECT_BY_ID, maHoaDon);
+        return list.isEmpty() ? null : list.get(0);
     }
 
-    // ================= IMPLEMENT hoadonchitietDAO =================
-    @Override
-    public List<hoadonchitiet> findByBillId(Long billId) {
-        return this.selectBySql(SELECT_BY_BILL_ID, billId);
-    }
-
-    @Override
-    public List<hoadonchitiet> findByDrinkId(String drinkId) {
-        return this.selectBySql(SELECT_BY_DRINK_ID, drinkId);
-    }
-
-    // --- HÀM PHỤ TRỢ ---
     private List<hoadonchitiet> selectBySql(String sql, Object... args) {
         List<hoadonchitiet> list = new ArrayList<>();
         try {
             ResultSet rs = XJdbc.executeQuery(sql, args);
             while (rs.next()) {
-                hoadonchitiet hdct = new hoadonchitiet();
-                hdct.setId(rs.getLong("Id"));
-                hdct.setBillId(rs.getLong("BillId"));
-                hdct.setDrinkId(rs.getString("DrinkId"));
-                hdct.setSoLuong(rs.getInt("SoLuong"));
-                hdct.setDonGia(rs.getDouble("DonGia"));
-                list.add(hdct);
+                hoadonchitiet hd = new hoadonchitiet();
+                hd.setMaHoaDon(rs.getInt("MaHoaDon"));
+                hd.setMaKhachHang(rs.getString("MaKhachHang"));
+                hd.setNgayLap(rs.getDate("NgayLap"));
+                hd.setPhuongThucThanhToan(rs.getString("PhuongThucThanhToan"));
+                hd.setTrangThai(rs.getString("TrangThai"));
+                hd.setKhuyenMai(rs.getDouble("KhuyenMai"));
+                hd.setTongTien(rs.getDouble("TongTien"));
+                hd.setMaVoucher(rs.getString("MaVoucher"));
+                hd.setTenDangNhap(rs.getString("TenDangNhap"));
+                list.add(hd);
             }
             rs.getStatement().getConnection().close();
-            return list;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return list;
+    }
+
+    @Override
+    public hoadonchitiet create(hoadonchitiet entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<hoadonchitiet> findAll() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public hoadonchitiet findById(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

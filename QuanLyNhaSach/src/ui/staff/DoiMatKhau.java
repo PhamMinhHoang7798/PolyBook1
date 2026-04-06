@@ -13,6 +13,9 @@ import util.XDialog;
  */
 public class DoiMatKhau extends javax.swing.JFrame {
       UserDAOImpl dao = new UserDAOImpl();
+      private static final java.util.logging.Logger logger =
+        java.util.logging.Logger.getLogger(DoiMatKhau.class.getName());
+
 
     public DoiMatKhau() {
         initComponents();

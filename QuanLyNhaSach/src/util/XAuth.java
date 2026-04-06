@@ -28,11 +28,11 @@ public class XAuth {
     }
 
     public static boolean isManager() {
-        return isLogin() && user.isVaiTro();
+        return isLogin() && user.getVaiTro() == 2;
     }
 
     public static boolean isActive() {
-        return isLogin() && user.isTrangThai;
+        return isLogin() && user.isTrangThai();
     }
 }
 

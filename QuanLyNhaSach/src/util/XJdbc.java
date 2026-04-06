@@ -108,23 +108,24 @@ public class XJdbc {
     /**
      * Truy vấn một giá trị
      *
-     * @param <T> kiểu dữ liệu kết quả
+    
      * @param sql câu lệnh SQL (SELECT)
      * @param values các giá trị cung cấp cho các tham số trong SQL
      * @return giá trị truy vấn hoặc null
      * @throws RuntimeException không thực thi được câu lệnh SQL
      */
-    public static <T> T getValue(String sql, Object... values) {
-        try {
-            var resultSet = XJdbc.executeQuery(sql, values);
-            if (resultSet.next()) {
-                return (T) resultSet.getObject(1);
-            }
-            return null;
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+    public static Object getValue(String sql, Object... values) {
+    try {
+        var resultSet = XJdbc.executeQuery(sql, values);
+        if (resultSet.next()) {
+            return resultSet.getObject(1);
         }
+        return null;
+    } catch (SQLException ex) {
+        throw new RuntimeException(ex);
     }
+}
+
 
     /**
      * Tạo PreparedStatement từ câu lệnh SQL/PROC
@@ -150,17 +151,17 @@ public class XJdbc {
     }
 
     private static void demo1() {
-        String sql = "SELECT * FROM Drinks WHERE UnitPrice BETWEEN ? AND ?";
+        String sql = "SELECT * FROM SanPham WHERE DonGia BETWEEN ? AND ?";
         var rs = XJdbc.executeQuery(sql, 1.5, 5.0);
     }
 
     private static void demo2() {
-        String sql = "SELECT max(UnitPrice) FROM Drinks WHERE UnitPrice > ?";
+        String sql = "SELECT max(DonGia) FROM SanPham WHERE DonGia > ?";
         var maxPrice = XJdbc.getValue(sql, 1.5);
     }
 
     private static void demo3() {
-        String sql = "DELETE FROM Drinks WHERE UnitPrice < ?";
+        String sql = "DELETE FROM SanPham WHERE DonGia < ?";
         var count = XJdbc.executeUpdate(sql, 0.0);
     }
 }
