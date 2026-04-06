@@ -1,7 +1,7 @@
 package dao.impl;
 
 import entity.User;
-import poly.book.dao.UserDAO;
+import dao.UserDAO;
 import util.XJdbc;
 
 import java.sql.ResultSet;

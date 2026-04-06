@@ -1,6 +1,6 @@
 package dao;
 
-import poly.book.dao.*;
+import dao.*;
 import java.util.Date;
 import java.util.List;
 import entity.hoadon;

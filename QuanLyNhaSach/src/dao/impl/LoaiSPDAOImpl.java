@@ -1,7 +1,7 @@
 package dao.impl;
 
 import entity.LoaiSP;
-import poly.book.dao.LoaiSPDAO;
+import dao.LoaiSPDAO;
 import util.XJdbc;
 
 import java.sql.ResultSet;
