@@ -1,7 +1,7 @@
 package dao.impl;
 
 import entity.hoadon;
-import poly.book.dao.hoadonDAO;
+import dao.hoadonDAO;
 import util.XJdbc;
 
 import java.sql.ResultSet;

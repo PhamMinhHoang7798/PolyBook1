@@ -29,7 +29,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        kButton3 = new com.k33ptoo.components.KButton();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -43,18 +42,12 @@ public class MenuNhanVien extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(25, 53, 94));
         jPanel1.setPreferredSize(new java.awt.Dimension(240, 603));
 
-        kButton3.setkBorderRadius(100);
-        kButton3.setkEndColor(new java.awt.Color(255, 255, 255));
-        kButton3.setkStartColor(new java.awt.Color(255, 255, 255));
-        kButton3.setPreferredSize(new java.awt.Dimension(100, 100));
-
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nhân viên");
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
         jButton1.setText("Tìm kiếm");
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
@@ -68,7 +61,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\add2.png")); // NOI18N
         jButton2.setText("Tạo hóa đơn mới");
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
@@ -82,7 +74,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
 
         jButton7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\out.png")); // NOI18N
         jButton7.setText("Đăng xuất");
         jButton7.setBorderPainted(false);
         jButton7.setContentAreaFilled(false);
@@ -96,7 +87,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\history.png")); // NOI18N
         jButton3.setText("Lịch sử");
         jButton3.setBorderPainted(false);
         jButton3.setContentAreaFilled(false);
@@ -110,7 +100,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Label.png")); // NOI18N
         jButton4.setText("Đổi mật khẩu");
         jButton4.setBorderPainted(false);
         jButton4.setContentAreaFilled(false);
@@ -148,11 +137,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
                                     .addComponent(jButton2))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(62, 62, 62)
-                    .addComponent(kButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(78, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,14 +151,9 @@ public class MenuNhanVien extends javax.swing.JFrame {
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
                 .addComponent(jButton7)
                 .addGap(29, 29, 29))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(23, 23, 23)
-                    .addComponent(kButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(486, Short.MAX_VALUE)))
         );
 
         jPanel2.setPreferredSize(new java.awt.Dimension(716, 630));
@@ -262,6 +241,5 @@ public class MenuNhanVien extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private com.k33ptoo.components.KButton kButton3;
     // End of variables declaration//GEN-END:variables
 }

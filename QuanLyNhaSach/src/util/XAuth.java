@@ -32,7 +32,7 @@ public class XAuth {
     }
 
     public static boolean isActive() {
-        return isLogin() && user.isTrangThai();
+        return isLogin() && user.isTrangThai;
     }
 }
 

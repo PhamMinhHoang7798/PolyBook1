@@ -4,7 +4,7 @@
  */
 package ui.staff;
 
-import poly.book.dao.UserDAO;
+import dao.UserDAO;
 import dao.impl.UserDAOImpl;
 import entity.User;
 import ui.customer.CheckOut;

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
-import poly.book.dao.*;
+import dao.impl.LoaiSPDAOImpl;
 import entity.LoaiSP;
 import java.util.List;
 

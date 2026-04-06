@@ -1,6 +1,6 @@
 package dao;
 
-import poly.book.dao.*;
+import dao.impl.hoadonchitietDAOImpl;
 import java.util.List;
 import entity.hoadonchitiet;
 

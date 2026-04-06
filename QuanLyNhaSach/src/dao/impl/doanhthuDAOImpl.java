@@ -1,7 +1,7 @@
 package dao.impl;
 
 import entity.doanhthu;
-import poly.book.dao.doanhthuDAO;
+import dao.doanhthuDAO;
 import util.XJdbc;
 
 import java.sql.ResultSet;

@@ -1,7 +1,7 @@
 package dao.impl;
 
 import entity.User;
-import poly.book.dao.UserDAO;
+import dao.UserDAO;
 import util.XJdbc;
 
 import java.sql.ResultSet;
@@ -22,12 +22,12 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void insert(User user) {
         // Thay các get... bằng đúng tên hàm trong file entity.User
-        XJdbc.executeUpdate(INSERT_SQL, user.getUsername(), user.getPassword(), user.getFullname(), user.getRole());
+        XJdbc.executeUpdate(INSERT_SQL, user.getMaUser(), user.getMatKhau(),user.getHoTen(), user.isVaiTro());
     }
 
     @Override
     public void update(User user) {
-        XJdbc.executeUpdate(UPDATE_SQL, user.getPassword(), user.getFullname(), user.getRole(), user.getUsername());
+        XJdbc.executeUpdate(UPDATE_SQL, user.getMatKhau(), user.getHoTen(), user.isVaiTro(), user.getMaUser());
     }
 
     @Override
@@ -68,10 +68,10 @@ public class UserDAOImpl implements UserDAO {
             while (rs.next()) {
                 User user = new User();
                 // Map dữ liệu từ ResultSet vào Entity
-                user.setUsername(rs.getString("Username"));
-                user.setPassword(rs.getString("Password"));
-                user.setFullname(rs.getString("Fullname"));
-                user.setRole(rs.getBoolean("Role")); // Giả sử Role là boolean
+                user.setMaUser(rs.getString("Username"));
+                user.setMatKhau(rs.getString("Password"));
+                user.setHoTen(rs.getString("Fullname"));
+                user.setVaiTro(rs.getBoolean("Role")); // Giả sử Role là boolean
                 list.add(user);
             }
             rs.getStatement().getConnection().close();

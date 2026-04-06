@@ -28,11 +28,8 @@ public class MenuQuanLy extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        kButton1 = new com.k33ptoo.components.KButton();
-        kButton2 = new com.k33ptoo.components.KButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        kButton3 = new com.k33ptoo.components.KButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -42,10 +39,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
 
-        kButton1.setText("kButton1");
-
-        kButton2.setText("kButton2");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(25, 53, 94));
@@ -54,14 +47,8 @@ public class MenuQuanLy extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Admin");
 
-        kButton3.setkBorderRadius(100);
-        kButton3.setkEndColor(new java.awt.Color(255, 255, 255));
-        kButton3.setkStartColor(new java.awt.Color(255, 255, 255));
-        kButton3.setPreferredSize(new java.awt.Dimension(100, 100));
-
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Card file.png")); // NOI18N
         jButton1.setText("Quản lý loại sản phẩm");
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
@@ -75,7 +62,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Label.png")); // NOI18N
         jButton2.setText("Quản lý sản phẩm");
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
@@ -89,7 +75,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\identity-card.png")); // NOI18N
         jButton3.setText("Quản lý thẻ thành viên");
         jButton3.setBorderPainted(false);
         jButton3.setContentAreaFilled(false);
@@ -103,7 +88,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\5c53652f-2ec3-4efb-98b2-a214cd2b6688.png")); // NOI18N
         jButton4.setText("Quản lý phiếu bán hàng");
         jButton4.setBorderPainted(false);
         jButton4.setContentAreaFilled(false);
@@ -117,7 +101,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         jButton5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Unknown person.png")); // NOI18N
         jButton5.setText("Quản lý người dùng");
         jButton5.setBorderPainted(false);
         jButton5.setContentAreaFilled(false);
@@ -131,7 +114,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         jButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Statistics.png")); // NOI18N
         jButton6.setText("Quản lý doanh thu");
         jButton6.setBorderPainted(false);
         jButton6.setContentAreaFilled(false);
@@ -145,7 +127,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         jButton7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\out.png")); // NOI18N
         jButton7.setText("Đăng xuất");
         jButton7.setBorderPainted(false);
         jButton7.setContentAreaFilled(false);
@@ -167,12 +148,8 @@ public class MenuQuanLy extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(kButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jLabel1))))
+                        .addGap(79, 79, 79)
+                        .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -196,9 +173,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(kButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
@@ -314,8 +289,5 @@ public class MenuQuanLy extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private com.k33ptoo.components.KButton kButton1;
-    private com.k33ptoo.components.KButton kButton2;
-    private com.k33ptoo.components.KButton kButton3;
     // End of variables declaration//GEN-END:variables
 }
