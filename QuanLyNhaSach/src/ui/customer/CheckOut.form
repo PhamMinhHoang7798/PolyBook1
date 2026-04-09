@@ -130,7 +130,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="label" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m &amp; Thanh to&#xe1;n"/>
+            <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m &amp; Thanh to&#xe1;n "/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="jButton3">

@@ -51,7 +51,7 @@ public class CheckOut extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(23, 33, 98));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setLabel("Tìm kiếm & Thanh toán");
+        jButton2.setText("Tìm kiếm & Thanh toán ");
 
         jButton3.setForeground(new java.awt.Color(255, 51, 51));
         jButton3.setText("Tiếng Việt");
