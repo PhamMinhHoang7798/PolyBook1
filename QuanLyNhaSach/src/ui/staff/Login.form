@@ -103,6 +103,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtUserName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="admin"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnThoat">
           <Properties>
@@ -122,6 +125,12 @@
           </Events>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtPassword">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="123"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPasswordActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnDangNhap1">
           <Properties>

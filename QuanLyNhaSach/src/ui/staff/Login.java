@@ -28,33 +28,36 @@ public class Login extends javax.swing.JFrame {
     }
 
     public void login() {
-    String username = txtUserName.getText().trim();
-    String password = new String(txtPassword.getPassword());
+        String username = txtUserName.getText().trim();
+        String password = new String(txtPassword.getPassword());
 
-    UserDAO dao = new UserDAOImpl();
-    User user = dao.selectById(username);
+        UserDAO dao = new UserDAOImpl();
+        User user = dao.selectById(username);
 
-    if (user == null) {
-        XDialog.alert(this, "Sai tên đăng nhập!");
-    } else if (!password.equals(user.getMatKhau())) {
-        XDialog.alert(this, "Sai mật khẩu!");
-    } else if (!user.isTrangThai()) {
-        XDialog.alert(this, "Tài khoản đã bị khóa!");
-    } else {
-        XAuth.user = user;
-        this.dispose();
+        if (user == null) {
+            XDialog.alert(this, "Sai tên đăng nhập!");
+        } else if (!password.equals(user.getMatKhau())) {
+            XDialog.alert(this, "Sai mật khẩu!");
+        } else if (!user.isTrangThai()) {
+            XDialog.alert(this, "Tài khoản đã bị khóa!");
+        } else {
+            XAuth.user = user;
+            this.dispose();
 
-        // PHÂN QUYỀN
-    switch(user.getVaiTro()) {
-        case 1 -> new MenuQuanLy().setVisible(true);
-        case 2 -> new MenuNhanVien().setVisible(true);
-        case 0 -> new CheckOut().setVisible(true);
-        default -> XDialog.alert(this, "Không xác định vai trò!");
+            // PHÂN QUYỀN
+            switch (user.getVaiTro()) {
+                case 1 ->
+                    new MenuQuanLy().setVisible(true);
+                case 2 ->
+                    new MenuNhanVien().setVisible(true);
+                case 0 ->
+                    new CheckOut().setVisible(true);
+                default ->
+                    XDialog.alert(this, "Không xác định vai trò!");
+            }
+
+        }
     }
-
-    }
-}
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -85,6 +88,8 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(33, 52, 129));
         jLabel1.setText("ĐĂNG NHẬP");
 
+        txtUserName.setText("admin");
+
         btnThoat.setBackground(new java.awt.Color(47, 93, 164));
         btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnThoat.setForeground(new java.awt.Color(255, 255, 255));
@@ -92,6 +97,13 @@ public class Login extends javax.swing.JFrame {
         btnThoat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThoatActionPerformed(evt);
+            }
+        });
+
+        txtPassword.setText("123");
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordActionPerformed(evt);
             }
         });
 
@@ -169,7 +181,12 @@ public class Login extends javax.swing.JFrame {
 
     private void btnDangNhap1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhap1ActionPerformed
         // TODO add your handling code here:
+        this.login();
     }//GEN-LAST:event_btnDangNhap1ActionPerformed
+
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
     /**
      * @param args the command line arguments
