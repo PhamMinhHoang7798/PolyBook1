@@ -69,4 +69,8 @@ public class User {
     public void setTrangThai(boolean trangThai) {
         this.trangThai = trangThai;
     }
+
+    public void setUsername(String text) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

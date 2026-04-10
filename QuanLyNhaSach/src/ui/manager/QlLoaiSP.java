@@ -307,7 +307,7 @@ public class QlLoaiSP extends javax.swing.JFrame {
     private void tlbLoaiSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tlbLoaiSanPhamMouseClicked
         // TODO add your handling code here:
         tlbLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
-    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
         edit();
     }
 });
