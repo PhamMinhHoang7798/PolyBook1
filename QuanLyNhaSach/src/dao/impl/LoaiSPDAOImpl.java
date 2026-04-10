@@ -12,11 +12,11 @@ import java.util.List;
 public class LoaiSPDAOImpl implements LoaiSPDAO {
 
     // Cần thay đổi tên bảng [LoaiSP] và các cột cho khớp SQL của bạn
-    String INSERT_SQL = "INSERT INTO LoaiSP (MaLoai, TenLoai) VALUES (?, ?)";
-    String UPDATE_SQL = "UPDATE LoaiSP SET TenLoai = ? WHERE MaLoai = ?";
-    String DELETE_SQL = "DELETE FROM LoaiSP WHERE MaLoai = ?";
-    String SELECT_ALL_SQL = "SELECT * FROM LoaiSP";
-    String SELECT_BY_ID_SQL = "SELECT * FROM LoaiSP WHERE MaLoai = ?";
+    String INSERT_SQL = "INSERT INTO LoaiSanPham (MaLoai, TenLoai) VALUES (?, ?)";
+    String UPDATE_SQL = "UPDATE LoaiSanPham SET TenLoai = ? WHERE MaLoai = ?";
+    String DELETE_SQL = "DELETE FROM LoaiSanPham WHERE MaLoai = ?";
+    String SELECT_ALL_SQL = "SELECT * FROM LoaiSanPham";
+    String SELECT_BY_ID_SQL = "SELECT * FROM LoaiSanPham WHERE MaLoai = ?";
 
     @Override
     public void insert(LoaiSP entity) {

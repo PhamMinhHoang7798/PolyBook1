@@ -22,6 +22,10 @@ public class QlLoaiSP extends javax.swing.JFrame {
     public QlLoaiSP() {
         initComponents();
         setLocationRelativeTo(null);
+        tlbLoaiSanPham.setDefaultEditor(Object.class, null); 
+        tlbLoaiSanPham.setRowHeight(30);
+        tlbLoaiSanPham.getColumnModel().getColumn(0).setPreferredWidth(120);
+        tlbLoaiSanPham.getColumnModel().getColumn(1).setPreferredWidth(300);
         loadTable();
     }
     void loadTable() {
@@ -311,7 +315,6 @@ public class QlLoaiSP extends javax.swing.JFrame {
         edit();
     }
 });
-
     }//GEN-LAST:event_tlbLoaiSanPhamMouseClicked
     
     LoaiSPDAOImpl dao = new LoaiSPDAOImpl();
