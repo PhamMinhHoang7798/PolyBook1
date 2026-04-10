@@ -7,7 +7,7 @@ package ui.staff;
 import dao.UserDAO;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import ui.customer.CheckOut;
+import ui.customer.MenuKhackCheckOut;
 import ui.manager.MenuQuanLy;
 import util.XAuth;
 import util.XDialog;
@@ -51,7 +51,7 @@ public class Login extends javax.swing.JFrame {
                 case 2 ->
                     new MenuNhanVien().setVisible(true);
                 case 0 ->
-                    new CheckOut().setVisible(true);
+                    new MenuKhackCheckOut().setVisible(true);
                 default ->
                     XDialog.alert(this, "Không xác định vai trò!");
             }
