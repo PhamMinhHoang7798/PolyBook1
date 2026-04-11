@@ -542,21 +542,26 @@ public class QlNguoidung extends javax.swing.JFrame {
 
     private void tblQLNguoiDungMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQLNguoiDungMouseClicked
         // TODO add your handling code here:
+        if (evt.getClickCount() == 2) { // double click
         int row = tblQLNguoiDung.getSelectedRow();
-    if (row < 0) return;
+        if (row < 0) return;
 
-    txtTenDangNhap.setText(getValueSafe(row, 0));
-    txtMatkhau.setText(getValueSafe(row, 1));
-    txtHoten.setText(getValueSafe(row, 2));
+        txtTenDangNhap.setText(getValueSafe(row, 0));
+        txtMatkhau.setText(getValueSafe(row, 1));
+        txtHoten.setText(getValueSafe(row, 2));
 
-    String role = getValueSafe(row, 4);
-    if (role.equals("Quản lý")) rbtQuanLy.setSelected(true);
-    else if (role.equals("Nhân viên")) rbtNhanVien.setSelected(true);
-    else rbtKhachHang.setSelected(true);
+        String role = getValueSafe(row, 4);
+        if (role.equals("Quản lý")) rbtQuanLy.setSelected(true);
+        else if (role.equals("Nhân viên")) rbtNhanVien.setSelected(true);
+        else rbtKhachHang.setSelected(true);
 
-    String status = getValueSafe(row, 5);
-    if (status.equals("Hoạt động")) rbtHoatDong.setSelected(true);
-    else rbtTamDung.setSelected(true);
+        String status = getValueSafe(row, 5);
+        if (status.equals("Hoạt động")) rbtHoatDong.setSelected(true);
+        else rbtTamDung.setSelected(true);
+
+        // 🔥 thêm dòng này
+        jTabbedPane1.setSelectedIndex(1);
+    }
     }//GEN-LAST:event_tblQLNguoiDungMouseClicked
 
     private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
