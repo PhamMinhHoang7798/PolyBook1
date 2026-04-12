@@ -31,8 +31,8 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
         btnThoat = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnTraCuuSP = new javax.swing.JButton();
+        btnTimKiemVaThanhToan = new javax.swing.JButton();
         btnThoat1 = new javax.swing.JButton();
 
         btnThoat.setBackground(new java.awt.Color(47, 93, 164));
@@ -53,15 +53,20 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
         jLabel1.setText("Quầy Checkout tự động");
 
-        jButton1.setBackground(new java.awt.Color(23, 33, 98));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Tra cứu sản phẩm");
+        btnTraCuuSP.setBackground(new java.awt.Color(23, 33, 98));
+        btnTraCuuSP.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        btnTraCuuSP.setForeground(new java.awt.Color(255, 255, 255));
+        btnTraCuuSP.setText("Tra cứu sản phẩm");
+        btnTraCuuSP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTraCuuSPActionPerformed(evt);
+            }
+        });
 
-        jButton2.setBackground(new java.awt.Color(23, 33, 98));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setLabel("Tìm kiếm & Thanh toán");
+        btnTimKiemVaThanhToan.setBackground(new java.awt.Color(23, 33, 98));
+        btnTimKiemVaThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        btnTimKiemVaThanhToan.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiemVaThanhToan.setLabel("Tìm kiếm & Thanh toán");
 
         btnThoat1.setBackground(new java.awt.Color(47, 93, 164));
         btnThoat1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -84,14 +89,14 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
                         .addComponent(btnThoat1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2)
+                            .addComponent(btnTimKiemVaThanhToan)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(235, 235, 235)
                                     .addComponent(jLabel1))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(220, 220, 220)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(btnTraCuuSP, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 233, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -101,9 +106,9 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(jLabel1)
                 .addGap(100, 100, 100)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnTraCuuSP, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnTimKiemVaThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                 .addComponent(btnThoat1)
                 .addContainerGap())
@@ -137,6 +142,10 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnThoat1ActionPerformed
 
+    private void btnTraCuuSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraCuuSPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTraCuuSPActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -165,8 +174,8 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnThoat;
     private javax.swing.JButton btnThoat1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnTimKiemVaThanhToan;
+    private javax.swing.JButton btnTraCuuSP;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
