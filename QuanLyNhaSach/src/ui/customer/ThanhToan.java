@@ -11,14 +11,71 @@ package ui.customer;
 public class ThanhToan extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ThanhToan.class.getName());
+    // Khai báo các DAO Implementation
+    private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
+    private dao.LoaiSPDAO loaiDAO = new dao.impl.LoaiSPDAOImpl();
+    private dao.impl.hoadonchitietDAOImpl hdctDAO = new dao.impl.hoadonchitietDAOImpl();
+    private dao.impl.hoadonDAOImpl hdDAO = new dao.impl.hoadonDAOImpl();
 
+    // Model để quản lý dữ liệu trên Table
+    private javax.swing.table.DefaultTableModel modelSanPham;
+    private javax.swing.table.DefaultTableModel modelGioHang;
+private double tongTien = 0;
     /**
      * Creates new form ThanhToan
      */
     public ThanhToan() {
-        initComponents();
+    initComponents();
+    init();
+}
+
+private void init() {
+    setLocationRelativeTo(null); // Cho form ra giữa màn hình
+    modelSanPham = (javax.swing.table.DefaultTableModel) jTable3.getModel();
+    modelGioHang = (javax.swing.table.DefaultTableModel) jTable4.getModel();
+    
+    modelGioHang.setRowCount(0); // Xóa trắng giỏ hàng ban đầu
+    
+    fillComboBoxLoai(); // Đổ loại sản phẩm vào ComboBox
+    fillTableSanPham(); // Đổ danh sách sản phẩm vào bảng
+}
+private void fillComboBoxLoai() {
+        javax.swing.DefaultComboBoxModel model = (javax.swing.DefaultComboBoxModel) cboTimeRanges2.getModel();
+        model.removeAllElements();
+        model.addElement("Tất cả");
+        try {
+            java.util.List<entity.LoaiSP> list = loaiDAO.selectAll();
+            for (entity.LoaiSP loai : list) {
+                model.addElement(loai); // Nhờ LoaiSP đã có hàm toString() nên nó sẽ hiện tên loại
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    private void fillTableSanPham() {
+        modelSanPham.setRowCount(0);
+        try {
+            java.util.List<entity.SanPham> list = spDAO.selectAll();
+            for (entity.SanPham sp : list) {
+                modelSanPham.addRow(new Object[]{
+                    sp.getMaSanPham(), 
+                    sp.getTenSanPham(), 
+                    sp.getDonGia(), 
+                    "Chọn"
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void tinhTongTien() {
+    tongTien = 0;
+    for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+        tongTien += (Double) modelGioHang.getValueAt(i, 3);
+    }
+    jLabel4.setText(String.format("%,.0f VNĐ", tongTien));
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,7 +127,6 @@ public class ThanhToan extends javax.swing.JFrame {
 
         btnFilter5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnFilter5.setForeground(new java.awt.Color(12, 66, 139));
-        btnFilter5.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
         btnFilter5.setText("Tìm");
         btnFilter5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,6 +145,11 @@ public class ThanhToan extends javax.swing.JFrame {
                 "Mã sản phẩm", "Tên sản phẩm", "Giá", "Thao tác  "
             }
         ));
+        jTable3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable3MouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTable3);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -155,7 +216,6 @@ public class ThanhToan extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\shopping-cart.png")); // NOI18N
         jLabel2.setText("Giỏ hàng");
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
@@ -181,6 +241,11 @@ public class ThanhToan extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("In hóa đơn");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(209, 98, 98));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -276,11 +341,95 @@ public class ThanhToan extends javax.swing.JFrame {
 
     private void btnFilter5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter5ActionPerformed
         // TODO add your handling code here:
+        String keyword = txtBegin4.getText().trim();
+        // Bạn có thể dùng SpDAO.selectAll() rồi lọc bằng code cho nhanh
+        fillTableSanPham(); // Load lại rồi lọc theo keyword ở đây
     }//GEN-LAST:event_btnFilter5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        modelGioHang.setRowCount(0);
+        tinhTongTien();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked
+        // TODO add your handling code here:
+        if (evt.getClickCount() == 2) { // Click đúp để chọn
+        int row = jTable3.getSelectedRow();
+        String maSP = jTable3.getValueAt(row, 0).toString();
+        String tenSP = jTable3.getValueAt(row, 1).toString();
+        double gia = (Double) jTable3.getValueAt(row, 2);
+
+        // Kiểm tra xem đã có trong giỏ chưa
+        boolean found = false;
+        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+            if (modelGioHang.getValueAt(i, 0).toString().startsWith(maSP)) {
+                int sl = (Integer) modelGioHang.getValueAt(i, 1) + 1;
+                modelGioHang.setValueAt(sl, i, 1);
+                modelGioHang.setValueAt(sl * gia, i, 3);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            // Lưu mã SP vào tên để sau này dễ tách mã ra lưu DB
+            modelGioHang.addRow(new Object[]{maSP + " - " + tenSP, 1, gia, gia, "Xóa"});
+        }
+        tinhTongTien();
+    }
+    }//GEN-LAST:event_jTable3MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (modelGioHang.getRowCount() == 0) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Giỏ hàng đang trống!");
+        return;
+    }
+
+    try {
+        // 1. Tạo Mã hóa đơn (Dựa trên thời gian để tránh trùng)
+        int maHD = (int) (System.currentTimeMillis() % 1000000); 
+
+        // 2. Lưu vào bảng HoaDonChiTiet (Bảng tổng)
+        entity.hoadonchitiet hdct = new entity.hoadonchitiet();
+        hdct.setMaHoaDon(maHD);
+        hdct.setMaKhachHang("KH01"); // Tạm thời để mặc định
+        hdct.setNgayLap(new java.util.Date());
+        hdct.setPhuongThucThanhToan("Tiền mặt");
+        hdct.setTrangThai("Đã thanh toán");
+        hdct.setTongTien(tongTien);
+        hdct.setTenDangNhap("admin"); // Đạt có thể thay bằng user đang đăng nhập
+
+        hdctDAO.insert(hdct);
+
+        // 3. Lưu chi tiết từng món vào bảng HoaDon (Bảng chi tiết)
+        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+            String temp = modelGioHang.getValueAt(i, 0).toString();
+            String maSP = temp.split(" - ")[0]; // Tách lấy mã SP từ chuỗi "Mã - Tên"
+            int sl = (Integer) modelGioHang.getValueAt(i, 1);
+            double gia = (Double) modelGioHang.getValueAt(i, 2);
+
+            entity.hoadon hd = new entity.hoadon();
+            hd.setMaHoaDon(maHD);
+            hd.setMaSanPham(maSP);
+            hd.setSoLuong(sl);
+            hd.setDonGia(gia);
+
+            hdDAO.insert(hd);
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Thanh toán thành công! Mã HĐ: " + maHD);
+        
+        // Reset giỏ hàng
+        modelGioHang.setRowCount(0);
+        tinhTongTien();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn!");
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
