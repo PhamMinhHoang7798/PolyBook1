@@ -7,6 +7,7 @@ import util.XJdbc;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import ui.staff.HoaDonChiTiet;
 
 public class hoadonchitietDAOImpl implements CrudDAO<hoadonchitiet, Integer> {
 
@@ -103,6 +104,10 @@ public class hoadonchitietDAOImpl implements CrudDAO<hoadonchitiet, Integer> {
 
     @Override
     public hoadonchitiet findById(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void insert(HoaDonChiTiet ct) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

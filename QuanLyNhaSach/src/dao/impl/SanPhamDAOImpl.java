@@ -75,4 +75,8 @@ public class SanPhamDAOImpl implements SanPhamDAO {
         }
         return list;
     }
+
+    public SanPham findById(String maSP) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package ui.staff;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import entity.*;
+import dao.impl.*;
 
 /**
  *
@@ -11,12 +16,22 @@ package ui.staff;
 public class TaoHoaDon extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TaoHoaDon.class.getName());
+    private DefaultTableModel model;
+    private List<HoaDonChiTiet> listCTHD = new ArrayList<>();
 
+    private SanPhamDAOImpl sanPhamDAO = new SanPhamDAOImpl();
+    private hoadonDAOImpl hoaDonDAO = new hoadonDAOImpl();
+    private HoaDonChiTietDAOImpl ctDAO = new HoaDonChiTietDAOImpl();
     /**
      * Creates new form TaoHoaDon
      */
     public TaoHoaDon() {
         initComponents();
+        model = (DefaultTableModel) jTable1.getModel();
+
+        jButton2.addActionListener(e -> themSanPham());
+        jButton5.addActionListener(e -> thanhToan());
+        jButton4.addActionListener(e -> huyhoadon());
     }
 
     /**
@@ -295,4 +310,96 @@ public class TaoHoaDon extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
+  private void themSanPham() {
+    String maSP = JOptionPane.showInputDialog(this, "Nhập mã sản phẩm:");
+
+    if (maSP == null || maSP.isEmpty()) return;
+
+    SanPham sp = sanPhamDAO.findById(maSP);
+
+    if (sp == null) {
+        JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
+        return;
+    }
+
+    // nếu đã có thì tăng số lượng
+    for (HoaDonChiTiet ct : listCTHD) {
+        if (ct.getMaSP().equals(maSP)) {
+            ct.setSoLuong((int)ct.getSoLuong() + 1);
+            loadTable();
+            tinhTongTien();
+            return;
+        }
+    }
+
+    HoaDonChiTiet ct = new HoaDonChiTiet();
+    ct.setMaSP();
+    ct.setGia(10000);
+    ct.setSoLuong(1);
+
+    listCTHD.add(ct);
+
+    loadTable();
+    tinhTongTien();
+}
+
+  private void thanhToan() {
+    if (listCTHD.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Chưa có sản phẩm!");
+        return;
+    }
+
+    HoaDon hd = new HoaDon();
+    hd.setMaHD("HD" + System.currentTimeMillis());
+    hd.setNgayTao(new Date());
+
+    hoaDonDAO.insert(hd);
+
+    for (HoaDonChiTiet ct : listCTHD) {
+        ct.setMaHD("HDTEST");
+        //ctDAO.insert(ct);
+    }
+
+    JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
+
+    huyhoadon();
+}
+
+    private void huyhoadon() {
+    listCTHD.clear();
+    model.setRowCount(0);
+    jLabel4.setText("0");
+    jLabel7.setText("0");
+}
+
+ private void loadTable() {
+    model.setRowCount(0);
+
+    for (HoaDonChiTiet ct : listCTHD) {
+        model.addRow(new Object[]{
+            ct.getMaSP(),
+            ct.getTenSP(),
+            ct.getGia(),
+            ct.getSoLuong(),
+            "Xóa"
+        });
+    }
+}
+ private void tinhTongTien() {
+    double tong = 0;
+
+    for (HoaDonChiTiet ct : listCTHD) {
+        tong +=(double) ct.getGia() * (int)ct.getSoLuong();
+    }
+
+    jLabel4.setText(String.valueOf(tong));
+    jLabel7.setText(String.valueOf(tong));
+}
+
+    private static class HoaDonChiTietDAOImpl {
+
+        public HoaDonChiTietDAOImpl() {
+        }
+    }
 }
