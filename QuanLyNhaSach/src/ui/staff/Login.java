@@ -46,11 +46,11 @@ public class Login extends javax.swing.JFrame {
 
             // PHÂN QUYỀN
             switch (user.getVaiTro()) {
-                case 1 ->
+                case 1 -> //quản lý
                     new MenuQuanLy().setVisible(true);
-                case 2 ->
+                case 2 -> // nv
                     new MenuNhanVien().setVisible(true);
-                case 0 ->
+                case 0 -> // khack
                     new MenuKhackCheckOut().setVisible(true);
                 default ->
                     XDialog.alert(this, "Không xác định vai trò!");

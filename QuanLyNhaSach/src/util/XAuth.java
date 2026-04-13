@@ -28,7 +28,7 @@ public class XAuth {
     }
 
     public static boolean isManager() {
-        return isLogin() && user.getVaiTro() == 2;
+        return isLogin() && user.getVaiTro() == 1;
     }
 
     public static boolean isActive() {
