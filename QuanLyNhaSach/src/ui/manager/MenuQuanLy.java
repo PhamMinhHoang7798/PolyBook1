@@ -4,12 +4,14 @@
  */
 package ui.manager;
 
+import ui.staff.Login;
+
 /**
  *
  * @author nguye
  */
 public class MenuQuanLy extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuQuanLy.class.getName());
 
     /**
@@ -227,19 +229,41 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         // TODO add your handling code here:
+        if (util.XDialog.confirm(this, "Bạn có muốn đăng xuất không?")) {
+        // 1. Xóa thông tin đăng nhập cũ
+        util.XAuth.logout();
+        
+        // 2. Đóng tất cả các cửa sổ đang mở (nếu cần) và giải phóng bộ nhớ
         this.dispose();
+        
+        // 3. Chạy màn hình Login trong EventQueue để đảm bảo an toàn luồng UI
+        java.awt.EventQueue.invokeLater(() -> {
+          new Login().setVisible(true);
+        });
+    }
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnQuanLyDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyDoanhThuActionPerformed
         // TODO add your handling code here:
+        if (util.XAuth.isManager()) {
+            new QLDoanhThu().setVisible(true);
+        } else {
+            util.XDialog.alert(this, "Chỉ quản lý mới được xem doanh thu!");
+        }
     }//GEN-LAST:event_btnQuanLyDoanhThuActionPerformed
 
     private void btnQuanLyNguoiDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyNguoiDungActionPerformed
         // TODO add your handling code here:
+        if (util.XAuth.isManager()) {
+            new QlNguoidung().setVisible(true);
+        } else {
+            util.XDialog.alert(this, "Bạn không có quyền truy cập chức năng này!");
+        }
     }//GEN-LAST:event_btnQuanLyNguoiDungActionPerformed
 
     private void btnQuanLyPhieuBanHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyPhieuBanHangActionPerformed
         // TODO add your handling code here:
+        new Phieubanhangmoi().setVisible(true);
     }//GEN-LAST:event_btnQuanLyPhieuBanHangActionPerformed
 
     private void btnQuanLyTheThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyTheThanhVienActionPerformed
@@ -248,10 +272,12 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
     private void btnQuanLySPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLySPActionPerformed
         // TODO add your handling code here:
+        new QlSanpham().setVisible(true);
     }//GEN-LAST:event_btnQuanLySPActionPerformed
 
     private void btnQuanlyLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanlyLoaiSPActionPerformed
         // TODO add your handling code here:
+        new QlLoaiSP().setVisible(true);
     }//GEN-LAST:event_btnQuanlyLoaiSPActionPerformed
 
     /**
