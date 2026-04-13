@@ -4,6 +4,8 @@
  */
 package ui.manager;
 
+import ui.staff.Login;
+
 /**
  *
  * @author nguye
@@ -228,9 +230,16 @@ public class MenuQuanLy extends javax.swing.JFrame {
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         // TODO add your handling code here:
         if (util.XDialog.confirm(this, "Bạn có muốn đăng xuất không?")) {
-        util.XAuth.clear(); // Xóa thông tin phiên làm việc
-        this.dispose();     // Đóng Menu chính
-        new Login().setVisible(true); // Quay lại màn hình đăng nhập
+        // 1. Xóa thông tin đăng nhập cũ
+        util.XAuth.logout();
+        
+        // 2. Đóng tất cả các cửa sổ đang mở (nếu cần) và giải phóng bộ nhớ
+        this.dispose();
+        
+        // 3. Chạy màn hình Login trong EventQueue để đảm bảo an toàn luồng UI
+        java.awt.EventQueue.invokeLater(() -> {
+          new Login().setVisible(true);
+        });
     }
     }//GEN-LAST:event_btnLogOutActionPerformed
 
