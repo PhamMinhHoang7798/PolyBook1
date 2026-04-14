@@ -17,18 +17,43 @@ public class hoadonchitiet {
         this.gia = gia;
     }
 
-    public int getMaCT() { return maCT; }
-    public void setMaCT(int maCT) { this.maCT = maCT; }
+    public int getMaCT() {
+        return maCT;
+    }
 
-    public String getMaHoaDon() { return maHoaDon; }
-    public void setMaHoaDon(String maHoaDon) { this.maHoaDon = maHoaDon; }
+    public void setMaCT(int maCT) {
+        this.maCT = maCT;
+    }
 
-    public String getMaSanPham() { return maSanPham; }
-    public void setMaSanPham(String maSanPham) { this.maSanPham = maSanPham; }
+    public String getMaHoaDon() {
+        return maHoaDon;
+    }
 
-    public int getSoLuong() { return soLuong; }
-    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
+    public void setMaHoaDon(String maHoaDon) {
+        this.maHoaDon = maHoaDon;
+    }
 
-    public double getGia() { return gia; }
-    public void setGia(double gia) { this.gia = gia; }
+    public String getMaSanPham() {
+        return maSanPham;
+    }
+
+    public void setMaSanPham(String maSanPham) {
+        this.maSanPham = maSanPham;
+    }
+
+    public int getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public double getGia() {
+        return gia;
+    }
+
+    public void setGia(double gia) {
+        this.gia = gia;
+    }
 }

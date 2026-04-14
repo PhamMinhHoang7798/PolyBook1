@@ -10,35 +10,45 @@ import java.util.List;
 
 public class hoadonchitietDAOImpl implements hoadonchitietDAO {
 
-    String INSERT_SQL = "INSERT INTO HoaDonChiTiet VALUES (?,?,?,?,?)";
-    String UPDATE_SQL = "UPDATE HoaDonChiTiet SET MaHoaDon=?, MaSanPham=?, SoLuong=?, Gia=? WHERE MaCT=?";
-    String DELETE_SQL = "DELETE FROM HoaDonChiTiet WHERE MaCT=?";
-    String SELECT_ALL_SQL = "SELECT * FROM HoaDonChiTiet";
-    String SELECT_BY_ID_SQL = "SELECT * FROM HoaDonChiTiet WHERE MaCT=?";
-    String SELECT_BY_HOADON_SQL = "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
+    private final String INSERT_SQL =
+            "INSERT INTO HoaDonChiTiet (MaCT, MaHoaDon, MaSanPham, SoLuong, Gia) VALUES (?,?,?,?,?)";
+
+    private final String UPDATE_SQL =
+            "UPDATE HoaDonChiTiet SET MaHoaDon=?, MaSanPham=?, SoLuong=?, Gia=? WHERE MaCT=?";
+
+    private final String DELETE_SQL =
+            "DELETE FROM HoaDonChiTiet WHERE MaCT=?";
+
+    private final String SELECT_ALL_SQL =
+            "SELECT * FROM HoaDonChiTiet";
+
+    private final String SELECT_BY_ID_SQL =
+            "SELECT * FROM HoaDonChiTiet WHERE MaCT=?";
+
+    private final String SELECT_BY_HOADON_SQL =
+            "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
 
     @Override
     public hoadonchitiet create(hoadonchitiet entity) {
-            XJdbc.executeUpdate(INSERT_SQL,
-            entity.getMaCT(),
-            entity.getMaHoaDon(),
-            entity.getMaSanPham(),
-            entity.getSoLuong(),
-            entity.getGia()
-    );
+        XJdbc.executeUpdate(INSERT_SQL,
+                entity.getMaCT(),
+                entity.getMaHoaDon(),
+                entity.getMaSanPham(),
+                entity.getSoLuong(),
+                entity.getGia()
+        );
         return entity;
     }
 
     @Override
     public void update(hoadonchitiet entity) {
         XJdbc.executeUpdate(UPDATE_SQL,
-        entity.getMaHoaDon(),
-        entity.getMaSanPham(),
-        entity.getSoLuong(),
-        entity.getGia(),
-        entity.getMaCT()
+                entity.getMaHoaDon(),
+                entity.getMaSanPham(),
+                entity.getSoLuong(),
+                entity.getGia(),
+                entity.getMaCT()
         );
-
     }
 
     @Override
@@ -64,8 +74,10 @@ public class hoadonchitietDAOImpl implements hoadonchitietDAO {
 
     private List<hoadonchitiet> selectBySql(String sql, Object... args) {
         List<hoadonchitiet> list = new ArrayList<>();
+
         try {
             ResultSet rs = XJdbc.query(sql, args);
+
             while (rs.next()) {
                 hoadonchitiet ct = new hoadonchitiet(
                         rs.getInt("MaCT"),
@@ -76,10 +88,11 @@ public class hoadonchitietDAOImpl implements hoadonchitietDAO {
                 );
                 list.add(ct);
             }
-            rs.getStatement().getConnection().close();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
         return list;
     }
 }

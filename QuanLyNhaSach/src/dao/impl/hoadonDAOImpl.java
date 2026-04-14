@@ -18,7 +18,7 @@ public class hoadonDAOImpl implements hoadonDAO {
 
     @Override
     public hoadon create(hoadon entity) {
-        XJdbc.update(INSERT_SQL,
+        XJdbc.executeUpdate(INSERT_SQL,
                 entity.getMaHoaDon(),
                 entity.getMaKhachHang(),
                 entity.getNgayLap(),
@@ -34,7 +34,7 @@ public class hoadonDAOImpl implements hoadonDAO {
 
     @Override
     public void update(hoadon entity) {
-        XJdbc.update(UPDATE_SQL,
+        XJdbc.executeUpdate(UPDATE_SQL,
                 entity.getMaKhachHang(),
                 entity.getNgayLap(),
                 entity.getPhuongThucThanhToan(),
@@ -49,7 +49,7 @@ public class hoadonDAOImpl implements hoadonDAO {
 
     @Override
     public void deleteById(String id) {
-        XJdbc.update(DELETE_SQL, id);
+        XJdbc.executeUpdate(DELETE_SQL, id);
     }
 
     @Override

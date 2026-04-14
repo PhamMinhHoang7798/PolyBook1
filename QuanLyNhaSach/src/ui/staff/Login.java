@@ -36,7 +36,7 @@ public class Login extends javax.swing.JFrame {
 
         if (user == null) {
             XDialog.alert(this, "Sai tên đăng nhập!");
-        } else if (!password.equals(user.getMatKhau())) {
+        } else if (!password.equals(user.getMatKhau().trim())) {
             XDialog.alert(this, "Sai mật khẩu!");
         } else if (!user.isTrangThai()) {
             XDialog.alert(this, "Tài khoản đã bị khóa!");
@@ -46,11 +46,11 @@ public class Login extends javax.swing.JFrame {
 
             // PHÂN QUYỀN
             switch (user.getVaiTro()) {
-                case 1 ->
+                case 1 -> // admin => vai trò 1
                     new MenuQuanLy().setVisible(true);
-                case 2 ->
+                case 2 -> // user1 => NV vai trò 2
                     new MenuNhanVien().setVisible(true);
-                case 0 ->
+                case 0 -> // user2 => Khách vai trò 0
                     new MenuKhackCheckOut().setVisible(true);
                 default ->
                     XDialog.alert(this, "Không xác định vai trò!");

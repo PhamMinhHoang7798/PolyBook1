@@ -4,12 +4,14 @@
  */
 package ui.manager;
 
+import ui.staff.Login;
+
 /**
  *
  * @author nguye
  */
 public class MenuQuanLy extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuQuanLy.class.getName());
 
     /**
@@ -37,7 +39,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         btnQuanLyNguoiDung = new javax.swing.JButton();
         btnQuanLyDoanhThu = new javax.swing.JButton();
         btnLogOut = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -192,15 +194,15 @@ public class MenuQuanLy extends javax.swing.JFrame {
                 .addGap(31, 31, 31))
         );
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 700, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -210,7 +212,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
@@ -218,7 +220,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
 
@@ -227,31 +229,68 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        if (util.XDialog.confirm(this, "Bạn có muốn đăng xuất không?")) {
+            // 1. Xóa thông tin đăng nhập cũ
+            util.XAuth.logout();
+
+            // 2. Đóng tất cả các cửa sổ đang mở (nếu cần) và giải phóng bộ nhớ
+            this.dispose();
+
+            // 3. Chạy màn hình Login trong EventQueue để đảm bảo an toàn luồng UI
+            java.awt.EventQueue.invokeLater(() -> {
+                new Login().setVisible(true);
+            });
+        }
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnQuanLyDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyDoanhThuActionPerformed
         // TODO add your handling code here:
+        if (util.XAuth.isManager()) {
+            new QLDoanhThu().setVisible(true);
+        } else {
+            util.XDialog.alert(this, "Chỉ quản lý mới được xem doanh thu!");
+        }
     }//GEN-LAST:event_btnQuanLyDoanhThuActionPerformed
 
     private void btnQuanLyNguoiDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyNguoiDungActionPerformed
         // TODO add your handling code here:
+        // Cách 1: Kiểm tra đúng quyền (Khuyên dùng)
+        if (util.XAuth.isManager()) {
+            new QlNguoidung().setVisible(true);
+        } else {
+            util.XDialog.alert(this, "Tài khoản của bạn không có quyền Quản lý!");
+        }
+
+        /* Cách 2: Nếu bạn muốn "mở khóa" luôn để sửa code cho nhanh (Chỉ dùng khi debug):
+    new QlNguoidung().setVisible(true); 
+         */
     }//GEN-LAST:event_btnQuanLyNguoiDungActionPerformed
 
     private void btnQuanLyPhieuBanHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyPhieuBanHangActionPerformed
         // TODO add your handling code here:
+        new Phieubanhangmoi().setVisible(true);
     }//GEN-LAST:event_btnQuanLyPhieuBanHangActionPerformed
 
     private void btnQuanLyTheThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyTheThanhVienActionPerformed
         // TODO add your handling code here:
+        // 1. Kiểm tra quyền hạn (Tùy chọn: Thẻ thành viên thường dành cho Quản lý hoặc Nhân viên)
+    // Nếu bạn muốn chỉ Quản lý mới được vào:
+    if (util.XAuth.isManager()) {
+        new ui.manager.QLthetv().setVisible(true);
+    } else {
+        // Nếu là nhân viên vẫn cho vào thì bỏ câu lệnh if/else này
+        util.XDialog.alert(this, "Chức năng này yêu cầu quyền Quản lý!");
+    }
     }//GEN-LAST:event_btnQuanLyTheThanhVienActionPerformed
 
     private void btnQuanLySPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLySPActionPerformed
         // TODO add your handling code here:
+        new QlSanpham().setVisible(true);
     }//GEN-LAST:event_btnQuanLySPActionPerformed
 
     private void btnQuanlyLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanlyLoaiSPActionPerformed
         // TODO add your handling code here:
+        new QlLoaiSP().setVisible(true);
     }//GEN-LAST:event_btnQuanlyLoaiSPActionPerformed
 
     /**
@@ -289,6 +328,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
     private javax.swing.JButton btnQuanlyLoaiSP;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }

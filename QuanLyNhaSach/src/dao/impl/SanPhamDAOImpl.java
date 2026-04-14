@@ -10,54 +10,60 @@ import java.util.List;
 
 public class SanPhamDAOImpl implements SanPhamDAO {
 
-    @Override
-    public List<SanPham> selectByKeyword(String keyword) {
-        String sql = "SELECT * FROM SanPham WHERE MaSanPham LIKE ? OR TenSanPham LIKE ?";
-        return selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%");
-    }
-
-    @Override
-    public List<SanPham> selectAll() {
-        String sql = "SELECT * FROM SanPham";
-        return selectBySql(sql);
-    }
-
-    @Override
-    public SanPham selectById(String id) {
-        String sql = "SELECT * FROM SanPham WHERE MaSanPham = ?";
-        List<SanPham> list = selectBySql(sql, id);
-        return list.isEmpty() ? null : list.get(0);
-    }
+    String INSERT_SQL = "INSERT INTO SanPham (MaSanPham, TenSanPham, DonGia, SoLuongTon, MaLoai) VALUES (?, ?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE SanPham SET TenSanPham=?, DonGia=?, SoLuongTon=?, MaLoai=? WHERE MaSanPham=?";
+    String DELETE_SQL = "DELETE FROM SanPham WHERE MaSanPham=?";
+    String SELECT_ALL_SQL = "SELECT * FROM SanPham";
+    String SELECT_BY_ID_SQL = "SELECT * FROM SanPham WHERE MaSanPham=?";
+    String SELECT_BY_KEYWORD_SQL = "SELECT * FROM SanPham WHERE MaSanPham LIKE ? OR TenSanPham LIKE ?";
 
     @Override
     public void insert(SanPham sp) {
-        String sql = "INSERT INTO SanPham (MaSanPham, TenSanPham, DonGia, SoLuongTon) VALUES (?, ?, ?, ?)";
-        XJdbc.update(sql,
+        XJdbc.executeUpdate(INSERT_SQL,
                 sp.getMaSanPham(),
                 sp.getTenSanPham(),
                 sp.getDonGia(),
-                sp.getSoLuongTon()
+                sp.getSoLuongTon(),
+                sp.getMaLoai()
         );
     }
 
     @Override
     public void update(SanPham sp) {
-        String sql = "UPDATE SanPham SET TenSanPham=?, DonGia=?, SoLuongTon=? WHERE MaSanPham=?";
-        XJdbc.update(sql,
+        XJdbc.executeUpdate(UPDATE_SQL,
                 sp.getTenSanPham(),
                 sp.getDonGia(),
                 sp.getSoLuongTon(),
+                sp.getMaLoai(),
                 sp.getMaSanPham()
         );
     }
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM SanPham WHERE MaSanPham=?";
-        XJdbc.update(sql, id);
+        XJdbc.executeUpdate(DELETE_SQL, id);
     }
 
-    // ⭐ METHOD CHUNG DUY NHẤT
+    @Override
+    public List<SanPham> selectAll() {
+        return selectBySql(SELECT_ALL_SQL);
+    }
+
+    @Override
+    public SanPham selectById(String id) {
+        List<SanPham> list = selectBySql(SELECT_BY_ID_SQL, id);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    @Override
+    public List<SanPham> selectByKeyword(String keyword) {
+        return selectBySql(
+                SELECT_BY_KEYWORD_SQL,
+                "%" + keyword + "%",
+                "%" + keyword + "%"
+        );
+    }
+
     private List<SanPham> selectBySql(String sql, Object... args) {
         List<SanPham> list = new ArrayList<>();
 
@@ -68,8 +74,9 @@ public class SanPhamDAOImpl implements SanPhamDAO {
                 SanPham sp = new SanPham();
                 sp.setMaSanPham(rs.getString("MaSanPham"));
                 sp.setTenSanPham(rs.getString("TenSanPham"));
-                sp.setDonGia(rs.getDouble("DonGia"));     
+                sp.setDonGia(rs.getDouble("DonGia"));
                 sp.setSoLuongTon(rs.getInt("SoLuongTon"));
+                sp.setMaLoai(rs.getString("MaLoai"));
 
                 list.add(sp);
             }
@@ -77,8 +84,7 @@ public class SanPhamDAOImpl implements SanPhamDAO {
             rs.getStatement().getConnection().close();
 
         } catch (Exception e) {
-            System.out.println("❌ Lỗi truy vấn sản phẩm!");
-            e.printStackTrace();
+            throw new RuntimeException("Lỗi SanPham DAO", e);
         }
 
         return list;
