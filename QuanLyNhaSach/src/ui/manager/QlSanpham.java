@@ -9,7 +9,7 @@ package ui.manager;
  * @author nguye
  */
 public class QlSanpham extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QlSanpham.class.getName());
 
     /**
@@ -17,6 +17,8 @@ public class QlSanpham extends javax.swing.JFrame {
      */
     public QlSanpham() {
         initComponents();
+        setLocationRelativeTo(null);
+        loadTable();
     }
 
     /**
@@ -104,6 +106,7 @@ public class QlSanpham extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Mã sản phẩm");
 
+        txtMaSanPham.setEditable(false);
         txtMaSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaSanPhamActionPerformed(evt);
@@ -111,7 +114,7 @@ public class QlSanpham extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Loại sản phẩm");
+        jLabel3.setText(" Mã loại sản phẩm");
 
         txtLoaiSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,15 +124,35 @@ public class QlSanpham extends javax.swing.JFrame {
 
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnUpdate.setText("Cập nhập");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnTaoMoi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnTaoMoi.setText("Tạo mới");
+        btnTaoMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTaoMoiActionPerformed(evt);
+            }
+        });
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
 
         btnNew.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnNew.setText("Nhập mới");
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
 
         txtSoLuong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -184,7 +207,7 @@ public class QlSanpham extends javax.swing.JFrame {
                         .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap(58, Short.MAX_VALUE)
+                        .addContainerGap(142, Short.MAX_VALUE)
                         .addComponent(btnTaoMoi)
                         .addGap(18, 18, 18)
                         .addComponent(btnUpdate)
@@ -296,6 +319,148 @@ public class QlSanpham extends javax.swing.JFrame {
     private void txtGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtGiaActionPerformed
+
+    private void btnTaoMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoMoiActionPerformed
+        // TODO add your handling code here:
+        insert();
+    }//GEN-LAST:event_btnTaoMoiActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        update();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+        delete();
+    }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        // TODO add your handling code here:
+        clearForm();
+    }//GEN-LAST:event_btnNewActionPerformed
+// Gọi DAO để tương tác DB
+    dao.impl.SanPhamDAOImpl dao = new dao.impl.SanPhamDAOImpl();
+
+    void loadTable() {
+        // Đã đổi jTable1 thành tbldanhsach
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tbldanhsach.getModel();
+        model.setRowCount(0); // Xóa sạch dữ liệu cũ trên bảng
+
+        try {
+            java.util.List<entity.SanPham> list = dao.selectAll();
+            for (entity.SanPham sp : list) {
+                model.addRow(new Object[]{
+                    sp.getMaSanPham(),
+                    sp.getMaLoai(), // Loại SP
+                    sp.getTenSanPham(), // Tên SP
+                    sp.getDonGia(), // Giá
+                    sp.getSoLuongTon() // Số lượng
+                });
+            }
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi tải dữ liệu: " + e.getMessage());
+        }
+    }
+
+    entity.SanPham getForm() {
+        entity.SanPham sp = new entity.SanPham();
+
+        // Lấy dữ liệu từ các ô text mới đổi tên
+        sp.setMaSanPham(txtMaSanPham.getText());
+        sp.setMaLoai(txtLoaiSanPham.getText());
+        sp.setTenSanPham(txtTenSanPham.getText());
+
+        // Xử lý chuyển đổi chữ thành số cho ô Giá và Số lượng
+        try {
+            sp.setSoLuongTon(Integer.parseInt(txtSoLuong.getText()));
+            sp.setDonGia(Double.parseDouble(txtGia.getText()));
+        } catch (NumberFormatException e) {
+            // Nếu người dùng nhập linh tinh (không phải số), tạm gán là 0
+            sp.setSoLuongTon(0);
+            sp.setDonGia(0);
+        }
+        return sp;
+    }
+
+    void clearForm() {
+        // Xóa trắng các ô nhập liệu mới
+        txtMaSanPham.setText("");
+        txtLoaiSanPham.setText("");
+        txtSoLuong.setText("");
+        txtTenSanPham.setText("");
+        txtGia.setText("");
+    }
+
+    void insert() {
+        // Kiểm tra xem có để trống không
+        if (txtTenSanPham.getText().isEmpty() || txtLoaiSanPham.getText().isEmpty()) {
+            util.XDialog.alert(this, "Vui lòng nhập Tên sản phẩm và Mã Loại sản phẩm!");
+            return;
+        }
+
+        try {
+            dao.insert(getForm());
+            loadTable(); // Load lại bảng luôn
+            clearForm(); // Dọn sạch form
+            util.XDialog.alert(this, "Thêm sản phẩm thành công!");
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi thêm sản phẩm: Kiểm tra lại Mã Loại SP xem có tồn tại không! (" + e.getMessage() + ")");
+        }
+    }
+    // ================= CHỨC NĂNG CẬP NHẬT (SỬA) =================
+    void update() {
+        if (txtMaSanPham.getText().isEmpty()) {
+            util.XDialog.alert(this, "Vui lòng chọn sản phẩm cần cập nhật!");
+            return;
+        }
+        try {
+            dao.update(getForm());
+            loadTable(); // Tải lại bảng để xem dữ liệu mới
+            util.XDialog.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
+        }
+    }
+
+    // ================= CHỨC NĂNG XÓA =================
+    void delete() {
+        String ma = txtMaSanPham.getText();
+        if (ma.isEmpty()) {
+            util.XDialog.alert(this, "Vui lòng chọn sản phẩm cần xóa!");
+            return;
+        }
+        
+        // Hỏi lại cho chắc trước khi xóa
+        if (util.XDialog.confirm(this, "Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+            try {
+                dao.delete(ma);
+                loadTable(); 
+                clearForm(); 
+                util.XDialog.alert(this, "Xóa thành công!");
+            } catch (Exception e) {
+                util.XDialog.alert(this, "Lỗi xóa sản phẩm (Có thể do SP này đang nằm trong hóa đơn): " + e.getMessage());
+            }
+        }
+    }
+
+    // ================= CHỨC NĂNG CLICK VÀO BẢNG =================
+    void edit() {
+        int row = tbldanhsach.getSelectedRow();
+        if (row >= 0) {
+            // Lấy dữ liệu từ bảng theo từng cột (0, 1, 2, 3, 4) và đẩy lên form
+            txtMaSanPham.setText(tbldanhsach.getValueAt(row, 0).toString());
+            txtLoaiSanPham.setText(tbldanhsach.getValueAt(row, 1).toString());
+            txtTenSanPham.setText(tbldanhsach.getValueAt(row, 2).toString());
+            txtGia.setText(tbldanhsach.getValueAt(row, 3).toString());
+            txtSoLuong.setText(tbldanhsach.getValueAt(row, 4).toString());
+            
+            // Tự động chuyển sang tab Biểu mẫu (Tab số 1)
+            jTabbedPane1.setSelectedIndex(1); 
+        }
+    }
+
+   
 
     /**
      * @param args the command line arguments

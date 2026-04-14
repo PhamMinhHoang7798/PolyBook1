@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SanPhamDAOImpl implements SanPhamDAO {
 
-    String INSERT_SQL = "INSERT INTO SanPham (MaSanPham, TenSanPham, DonGia, SoLuongTon, MaLoai) VALUES (?, ?, ?, ?, ?)";
+    String INSERT_SQL = "INSERT INTO SanPham (TenSanPham, DonGia, SoLuongTon, MaLoai) VALUES (?, ?, ?, ?)";
     String UPDATE_SQL = "UPDATE SanPham SET TenSanPham=?, DonGia=?, SoLuongTon=?, MaLoai=? WHERE MaSanPham=?";
     String DELETE_SQL = "DELETE FROM SanPham WHERE MaSanPham=?";
     String SELECT_ALL_SQL = "SELECT * FROM SanPham";
@@ -20,7 +20,6 @@ public class SanPhamDAOImpl implements SanPhamDAO {
     @Override
     public void insert(SanPham sp) {
         XJdbc.executeUpdate(INSERT_SQL,
-                sp.getMaSanPham(),
                 sp.getTenSanPham(),
                 sp.getDonGia(),
                 sp.getSoLuongTon(),
