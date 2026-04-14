@@ -399,7 +399,7 @@ private void fillComboBoxLoai() {
         // 2. Lưu vào bảng HoaDonChiTiet (Bảng tổng)
         entity.hoadonchitiet hdct = new entity.hoadonchitiet();
         hdct.setMaHoaDon(maHD);
-        hdct.setMaKhachHang("KH01"); // Tạm thời để mặc định
+        hdct.setMaKhachHang("1"); // Tạm thời để mặc định
         hdct.setNgayLap(new java.util.Date());
         hdct.setPhuongThucThanhToan("Tiền mặt");
         hdct.setTrangThai("Đã thanh toán");

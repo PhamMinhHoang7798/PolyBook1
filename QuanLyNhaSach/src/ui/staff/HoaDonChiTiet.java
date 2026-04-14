@@ -8,7 +8,7 @@ package ui.staff;
  *
  * @author Phong
  */
-class HoaDonChiTiet {
+public class HoaDonChiTiet extends javax.swing.JFrame {
 
     void setSoLuong(int i) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

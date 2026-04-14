@@ -9,7 +9,7 @@ package ui.customer;
  * @author nguye
  */
 public class MenuKhackCheckOut extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuKhackCheckOut.class.getName());
 
     /**
@@ -67,6 +67,11 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
         btnTimKiemVaThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         btnTimKiemVaThanhToan.setForeground(new java.awt.Color(255, 255, 255));
         btnTimKiemVaThanhToan.setLabel("Tìm kiếm & Thanh toán");
+        btnTimKiemVaThanhToan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemVaThanhToanActionPerformed(evt);
+            }
+        });
 
         btnThoat1.setBackground(new java.awt.Color(47, 93, 164));
         btnThoat1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -143,8 +148,15 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
     }//GEN-LAST:event_btnThoat1ActionPerformed
 
     private void btnTraCuuSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraCuuSPActionPerformed
-        // TODO add your handling code here:
+        new ui.staff.Timkiem().setVisible(true);
+        this.dispose();
+
     }//GEN-LAST:event_btnTraCuuSPActionPerformed
+
+    private void btnTimKiemVaThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemVaThanhToanActionPerformed
+        new ui.customer.ThanhToan().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnTimKiemVaThanhToanActionPerformed
 
     /**
      * @param args the command line arguments

@@ -7,7 +7,7 @@ import util.XJdbc;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import ui.staff.HoaDon;
+
 
 public class hoadonDAOImpl implements CrudDAO<hoadon, Integer> {
 
@@ -88,7 +88,4 @@ public class hoadonDAOImpl implements CrudDAO<hoadon, Integer> {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public void insert(HoaDon hd) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

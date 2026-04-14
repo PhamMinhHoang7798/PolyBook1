@@ -7,18 +7,18 @@ import util.XJdbc;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import ui.staff.HoaDonChiTiet;
+import entity.hoadonchitiet;
 
 public class hoadonchitietDAOImpl implements CrudDAO<hoadonchitiet, Integer> {
 
     String INSERT_SQL = "INSERT INTO HoaDonChiTiet (MaHoaDon, MaKhachHang, NgayLap, PhuongThucThanhToan, TrangThai, KhuyenMai, TongTien, MaVoucher, TenDangNhap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
+
     String UPDATE_SQL = "UPDATE HoaDonChiTiet SET MaKhachHang=?, NgayLap=?, PhuongThucThanhToan=?, TrangThai=?, KhuyenMai=?, TongTien=?, MaVoucher=?, TenDangNhap=? WHERE MaHoaDon=?";
-    
+
     String DELETE_SQL = "DELETE FROM HoaDonChiTiet WHERE MaHoaDon=?";
-    
+
     String SELECT_ALL = "SELECT * FROM HoaDonChiTiet";
-    
+
     String SELECT_BY_ID = "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
 
     public void insert(hoadonchitiet entity) {
@@ -107,7 +107,4 @@ public class hoadonchitietDAOImpl implements CrudDAO<hoadonchitiet, Integer> {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public void insert(HoaDonChiTiet ct) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

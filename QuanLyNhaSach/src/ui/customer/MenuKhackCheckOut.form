@@ -153,6 +153,9 @@
             </Property>
             <Property name="label" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m &amp; Thanh to&#xe1;n"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTimKiemVaThanhToanActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnThoat1">
           <Properties>

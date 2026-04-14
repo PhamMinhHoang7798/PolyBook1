@@ -344,26 +344,42 @@ public class TaoHoaDon extends javax.swing.JFrame {
     tinhTongTien();
 }
 
-  private void thanhToan() {
+ private void thanhToan() {
     if (listCTHD.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Chưa có sản phẩm!");
+        JOptionPane.showMessageDialog(this, "Chưa có sản phẩm trong giỏ!");
         return;
     }
 
-    HoaDon hd = new HoaDon();
-    hd.setMaHD("HD" + System.currentTimeMillis());
-    hd.setNgayTao(new Date());
+    // 1. Tạo một mã hóa đơn bằng số nguyên (Vì SQL đang để INT)
+    int maHD = (int) (System.currentTimeMillis() % 1000000);
 
-    hoaDonDAO.insert(hd);
+    try {
+        // 2. Lưu từng sản phẩm trong giỏ hàng vào database
+        for (HoaDonChiTiet ct : listCTHD) {
+            // Sử dụng đúng entity.hoadon (chữ h thường)
+            entity.hoadon hd = new entity.hoadon();
+            
+            hd.setMaHoaDon(maHD);
+            
+            // Ép kiểu về String do bảng hoadon quy định MaSanPham là String
+            hd.setMaSanPham(String.valueOf(ct.getMaSP())); 
+            
+            // Ép kiểu về Int do bảng hoadon quy định SoLuong là Int
+            hd.setSoLuong((int) ct.getSoLuong()); 
+            
+            // Ép kiểu về Double do bảng hoadon quy định DonGia là Double
+            hd.setDonGia((double) ct.getGia());
 
-    for (HoaDonChiTiet ct : listCTHD) {
-        ct.setMaHD("HDTEST");
-        //ctDAO.insert(ct);
+            // Lưu vào DB
+            hoaDonDAO.insert(hd); 
+        }
+
+        JOptionPane.showMessageDialog(this, "Thanh toán thành công! Mã Hóa Đơn: " + maHD);
+        huyhoadon(); // Làm mới lại giỏ hàng
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Lỗi thanh toán: " + e.getMessage());
     }
-
-    JOptionPane.showMessageDialog(this, "Thanh toán thành công!");
-
-    huyhoadon();
 }
 
     private void huyhoadon() {
