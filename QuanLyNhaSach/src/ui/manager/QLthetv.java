@@ -9,7 +9,7 @@ package ui.manager;
  * @author nguye
  */
 public class QLthetv extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QLthetv.class.getName());
 
     /**
@@ -298,19 +298,138 @@ public class QLthetv extends javax.swing.JFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
+        insert();
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
+        edit();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
         // TODO add your handling code here:
+        delete();
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
+        clearForm();
     }//GEN-LAST:event_btnNewActionPerformed
+
+    // Gọi DAO để tương tác DB
+    dao.impl.KhachHangDAOImpl dao = new dao.impl.KhachHangDAOImpl();
+
+    // Biến ngầm để lưu Mã Khách Hàng khi click vào bảng (do trên form không có ô Mã KH)
+    int currentMaKH = -1;
+
+    void loadTable() {
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
+        model.setRowCount(0);
+
+        try {
+            java.util.List<entity.KhachHang> list = dao.selectAll();
+            for (entity.KhachHang kh : list) {
+                model.addRow(new Object[]{
+                    kh.getMaKhachHang(),
+                    kh.getTenKhachHang(),
+                    kh.getSoDienThoai(),
+                    kh.getLoaiThe(),
+                    kh.getDiemTichLuy()
+                });
+            }
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi tải dữ liệu: " + e.getMessage());
+        }
+    }
+
+    entity.KhachHang getForm() {
+        entity.KhachHang kh = new entity.KhachHang();
+
+        if (currentMaKH != -1) {
+            kh.setMaKhachHang(currentMaKH); // Gán mã ngầm để Sửa/Xóa biết đường làm việc
+        }
+
+        kh.setTenKhachHang(txtTenKH.getText());
+        kh.setSoDienThoai(txtSoDT.getText());
+        kh.setLoaiThe(txtLoaiThe.getText());
+
+        try {
+            kh.setDiemTichLuy(Integer.parseInt(TxtDiem.getText()));
+        } catch (NumberFormatException e) {
+            kh.setDiemTichLuy(0); // Nếu để trống hoặc nhập bậy chữ thì cho 0 điểm
+        }
+        return kh;
+    }
+
+    void clearForm() {
+        txtTenKH.setText("");
+        txtSoDT.setText("");
+        txtLoaiThe.setText("");
+        TxtDiem.setText("");
+        currentMaKH = -1; // Reset lại mã ngầm khi tạo mới
+    }
+
+    void insert() {
+        if (txtTenKH.getText().isEmpty() || txtSoDT.getText().isEmpty()) {
+            util.XDialog.alert(this, "Vui lòng nhập Tên KH và Số điện thoại!");
+            return;
+        }
+        try {
+            dao.insert(getForm());
+            loadTable();
+            clearForm();
+            util.XDialog.alert(this, "Thêm khách hàng thành công!");
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi thêm khách hàng: " + e.getMessage());
+        }
+    }
+
+    void update() {
+        if (currentMaKH == -1) {
+            util.XDialog.alert(this, "Vui lòng chọn khách hàng cần cập nhật từ danh sách!");
+            return;
+        }
+        try {
+            dao.update(getForm());
+            loadTable();
+            util.XDialog.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
+        }
+    }
+
+    void delete() {
+        if (currentMaKH == -1) {
+            util.XDialog.alert(this, "Vui lòng chọn khách hàng cần xóa từ danh sách!");
+            return;
+        }
+        if (util.XDialog.confirm(this, "Bạn có chắc chắn muốn xóa khách hàng này không?")) {
+            try {
+                dao.delete(currentMaKH); // Hàm delete truyền ID (số nguyên) thay vì String
+                loadTable();
+                clearForm();
+                util.XDialog.alert(this, "Xóa thành công!");
+            } catch (Exception e) {
+                util.XDialog.alert(this, "Lỗi xóa khách hàng: " + e.getMessage());
+            }
+        }
+    }
+
+    void edit() {
+        int row = tblDanhSach.getSelectedRow();
+        if (row >= 0) {
+            // Lấy ID từ cột đầu tiên của bảng và lưu vào biến ngầm
+            currentMaKH = Integer.parseInt(tblDanhSach.getValueAt(row, 0).toString());
+
+            // Đẩy dữ liệu sang form
+            txtTenKH.setText(tblDanhSach.getValueAt(row, 1) != null ? tblDanhSach.getValueAt(row, 1).toString() : "");
+            txtSoDT.setText(tblDanhSach.getValueAt(row, 2) != null ? tblDanhSach.getValueAt(row, 2).toString() : "");
+            txtLoaiThe.setText(tblDanhSach.getValueAt(row, 3) != null ? tblDanhSach.getValueAt(row, 3).toString() : "");
+            TxtDiem.setText(tblDanhSach.getValueAt(row, 4) != null ? tblDanhSach.getValueAt(row, 4).toString() : "");
+
+            jTabbedPane1.setSelectedIndex(1); // Auto nhảy sang tab Biểu mẫu
+        }
+    }
 
     /**
      * @param args the command line arguments
