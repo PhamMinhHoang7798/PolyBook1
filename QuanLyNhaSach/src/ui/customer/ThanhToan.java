@@ -31,8 +31,8 @@ private double tongTien = 0;
 
 private void init() {
     setLocationRelativeTo(null); // Cho form ra giữa màn hình
-    modelSanPham = (javax.swing.table.DefaultTableModel) jTable3.getModel();
-    modelGioHang = (javax.swing.table.DefaultTableModel) jTable4.getModel();
+    modelSanPham = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
+    modelGioHang = (javax.swing.table.DefaultTableModel) tblGioHang.getModel();
     
     modelGioHang.setRowCount(0); // Xóa trắng giỏ hàng ban đầu
     
@@ -88,20 +88,20 @@ private void fillComboBoxLoai() {
         jPanel1 = new javax.swing.JPanel();
         jLabel39 = new javax.swing.JLabel();
         cboTimeRanges2 = new javax.swing.JComboBox<>();
-        txtBegin4 = new javax.swing.JTextField();
-        btnFilter5 = new javax.swing.JButton();
+        txtTim = new javax.swing.JTextField();
+        btnTim = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tblDanhSach = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        tblGioHang = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnThanhToan = new javax.swing.JButton();
+        btnHuy = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -118,23 +118,23 @@ private void fillComboBoxLoai() {
             }
         });
 
-        txtBegin4.setColumns(8);
-        txtBegin4.addActionListener(new java.awt.event.ActionListener() {
+        txtTim.setColumns(8);
+        txtTim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBegin4ActionPerformed(evt);
+                txtTimActionPerformed(evt);
             }
         });
 
-        btnFilter5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnFilter5.setForeground(new java.awt.Color(12, 66, 139));
-        btnFilter5.setText("Tìm");
-        btnFilter5.addActionListener(new java.awt.event.ActionListener() {
+        btnTim.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTim.setForeground(new java.awt.Color(12, 66, 139));
+        btnTim.setText("Tìm");
+        btnTim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilter5ActionPerformed(evt);
+                btnTimActionPerformed(evt);
             }
         });
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -145,12 +145,12 @@ private void fillComboBoxLoai() {
                 "Mã sản phẩm", "Tên sản phẩm", "Giá", "Thao tác  "
             }
         ));
-        jTable3.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblDanhSach.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable3MouseClicked(evt);
+                tblDanhSachMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(tblDanhSach);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -165,9 +165,9 @@ private void fillComboBoxLoai() {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboTimeRanges2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBegin4, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnFilter5, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 6, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -178,8 +178,8 @@ private void fillComboBoxLoai() {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtBegin4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnFilter5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -218,7 +218,7 @@ private void fillComboBoxLoai() {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Giỏ hàng");
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        tblGioHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -229,7 +229,12 @@ private void fillComboBoxLoai() {
                 "Tên sản phẩm", "Số lượng", "Giá", "Thanh tiền", "Xóa"
             }
         ));
-        jScrollPane4.setViewportView(jTable4);
+        tblGioHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblGioHangMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tblGioHang);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Tổng tiền:");
@@ -237,23 +242,23 @@ private void fillComboBoxLoai() {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setText(" ");
 
-        jButton1.setBackground(new java.awt.Color(96, 147, 104));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("In hóa đơn");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnThanhToan.setBackground(new java.awt.Color(96, 147, 104));
+        btnThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnThanhToan.setForeground(new java.awt.Color(255, 255, 255));
+        btnThanhToan.setText("Thanh Toán");
+        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnThanhToanActionPerformed(evt);
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(209, 98, 98));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Hủy");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnHuy.setBackground(new java.awt.Color(209, 98, 98));
+        btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnHuy.setForeground(new java.awt.Color(255, 255, 255));
+        btnHuy.setText("Hủy");
+        btnHuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnHuyActionPerformed(evt);
             }
         });
 
@@ -274,7 +279,7 @@ private void fillComboBoxLoai() {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(28, 28, 28)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -283,7 +288,7 @@ private void fillComboBoxLoai() {
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
         );
         jPanel3Layout.setVerticalGroup(
@@ -299,8 +304,8 @@ private void fillComboBoxLoai() {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnThanhToan)
+                    .addComponent(btnHuy))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -335,30 +340,30 @@ private void fillComboBoxLoai() {
         // TODO add your handling code here:
     }//GEN-LAST:event_cboTimeRanges2ActionPerformed
 
-    private void txtBegin4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBegin4ActionPerformed
+    private void txtTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBegin4ActionPerformed
+    }//GEN-LAST:event_txtTimActionPerformed
 
-    private void btnFilter5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter5ActionPerformed
+    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
-        String keyword = txtBegin4.getText().trim();
+        String keyword = txtTim.getText().trim();
         // Bạn có thể dùng SpDAO.selectAll() rồi lọc bằng code cho nhanh
         fillTableSanPham(); // Load lại rồi lọc theo keyword ở đây
-    }//GEN-LAST:event_btnFilter5ActionPerformed
+    }//GEN-LAST:event_btnTimActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
         // TODO add your handling code here:
         modelGioHang.setRowCount(0);
         tinhTongTien();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnHuyActionPerformed
 
-    private void jTable3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable3MouseClicked
+    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
         // TODO add your handling code here:
         if (evt.getClickCount() == 2) { // Click đúp để chọn
-        int row = jTable3.getSelectedRow();
-        String maSP = jTable3.getValueAt(row, 0).toString();
-        String tenSP = jTable3.getValueAt(row, 1).toString();
-        double gia = (Double) jTable3.getValueAt(row, 2);
+        int row = tblDanhSach.getSelectedRow();
+        String maSP = tblDanhSach.getValueAt(row, 0).toString();
+        String tenSP = tblDanhSach.getValueAt(row, 1).toString();
+        double gia = (Double) tblDanhSach.getValueAt(row, 2);
 
         // Kiểm tra xem đã có trong giỏ chưa
         boolean found = false;
@@ -378,9 +383,9 @@ private void fillComboBoxLoai() {
         }
         tinhTongTien();
     }
-    }//GEN-LAST:event_jTable3MouseClicked
+    }//GEN-LAST:event_tblDanhSachMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
         if (modelGioHang.getRowCount() == 0) {
         javax.swing.JOptionPane.showMessageDialog(this, "Giỏ hàng đang trống!");
@@ -429,7 +434,11 @@ private void fillComboBoxLoai() {
         e.printStackTrace();
         javax.swing.JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn!");
     }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnThanhToanActionPerformed
+
+    private void tblGioHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGioHangMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblGioHangMouseClicked
 
     /**
      * @param args the command line arguments
@@ -457,10 +466,10 @@ private void fillComboBoxLoai() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnFilter5;
+    private javax.swing.JButton btnHuy;
+    private javax.swing.JButton btnThanhToan;
+    private javax.swing.JButton btnTim;
     private javax.swing.JComboBox<String> cboTimeRanges2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -471,8 +480,8 @@ private void fillComboBoxLoai() {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTextField txtBegin4;
+    private javax.swing.JTable tblDanhSach;
+    private javax.swing.JTable tblGioHang;
+    private javax.swing.JTextField txtTim;
     // End of variables declaration//GEN-END:variables
 }
