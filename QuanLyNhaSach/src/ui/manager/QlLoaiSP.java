@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package ui.manager;
+
 import dao.impl.LoaiSPDAOImpl;
 import entity.LoaiSP;
 import javax.swing.table.DefaultTableModel;
@@ -13,7 +14,7 @@ import util.XDialog;
  * @author nguye
  */
 public class QlLoaiSP extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QlLoaiSP.class.getName());
 
     /**
@@ -24,17 +25,18 @@ public class QlLoaiSP extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         loadTable();
     }
-    void loadTable() {
-    DefaultTableModel model = (DefaultTableModel) tlbLoaiSanPham.getModel();
-    model.setRowCount(0);
 
-    for (LoaiSP l : dao.selectAll()) {
-        model.addRow(new Object[]{
-            l.getMaLoai(),
-            l.getTenLoai()
-        });
+    void loadTable() {
+        DefaultTableModel model = (DefaultTableModel) tlbLoaiSanPham.getModel();
+        model.setRowCount(0);
+
+        for (LoaiSP l : dao.selectAll()) {
+            model.addRow(new Object[]{
+                l.getMaLoai(),
+                l.getTenLoai()
+            });
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -307,13 +309,13 @@ public class QlLoaiSP extends javax.swing.JFrame {
     private void tlbLoaiSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tlbLoaiSanPhamMouseClicked
         // TODO add your handling code here:
         tlbLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-        edit();
-    }
-});
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                edit();
+            }
+        });
 
     }//GEN-LAST:event_tlbLoaiSanPhamMouseClicked
-    
+
     LoaiSPDAOImpl dao = new LoaiSPDAOImpl();
 
     /**
@@ -340,72 +342,87 @@ public class QlLoaiSP extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new QlLoaiSP().setVisible(true));
     }
+
     LoaiSP getForm() {
-    LoaiSP l = new LoaiSP();
-    l.setMaLoai(txtMaLoai.getText());
-    l.setTenLoai(txtTenloai.getText());
-    return l;
-    }
-    
-    void clearForm() {
-    txtMaLoai.setText("");
-    txtTenloai.setText("");
-    }
-    
-    void insert() {
-    if (txtMaLoai.getText().isEmpty() || txtTenloai.getText().isEmpty()) {
-        XDialog.alert(this, "Không được để trống!");
-        return;
+        LoaiSP l = new LoaiSP();
+        l.setMaLoai(txtMaLoai.getText()); // Giữ nguyên kiểu chuỗi để nhận "a1"
+        l.setTenLoai(txtTenloai.getText()); // Đã sửa lại đúng tên biến của ông
+        return l;
     }
 
-    dao.insert(getForm());
-    loadTable();
-    XDialog.alert(this, "Thêm thành công!");
-}
+    void insert() {
+        // Bây giờ bắt buộc phải nhập cả 2 ô
+        if (txtMaLoai.getText().isEmpty() || txtTenloai.getText().isEmpty()) {
+            XDialog.alert(this, "Không được để trống Mã loại và Tên loại!");
+            return;
+        }
+
+        try {
+            dao.insert(getForm());
+            loadTable();
+            clearForm();
+            XDialog.alert(this, "Thêm thành công!");
+        } catch (Exception e) {
+            XDialog.alert(this, "Lỗi thêm mới: " + e.getMessage());
+        }
+    }
 
     void update() {
-    dao.update(getForm());
-    loadTable();
-    XDialog.alert(this, "Cập nhật thành công!");
-}
+        if (txtMaLoai.getText().isEmpty()) {
+            XDialog.alert(this, "Vui lòng nhập mã loại cần cập nhật!");
+            return;
+        }
+
+        try {
+            dao.update(getForm());
+            loadTable(); // Load lại bảng sau khi sửa
+            XDialog.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
+        }
+    }
+
+    void clearForm() {
+        txtMaLoai.setText("");
+        txtTenloai.setText("");
+    }
 
     void delete() {
-    String ma = txtMaLoai.getText();
+        String ma = txtMaLoai.getText();
 
-    if (ma.isEmpty()) {
-        XDialog.alert(this, "Chưa nhập mã!");
-        return;
-    }
+        if (ma.isEmpty()) {
+            XDialog.alert(this, "Chưa nhập mã!");
+            return;
+        }
 
-    if (XDialog.confirm(this, "Bạn chắc chắn muốn xóa?")) {
-        dao.delete(ma);
-        loadTable();
-        XDialog.alert(this, "Xóa thành công!");
+        if (XDialog.confirm(this, "Bạn chắc chắn muốn xóa?")) {
+            dao.delete(ma);
+            loadTable();
+            XDialog.alert(this, "Xóa thành công!");
+        }
     }
-}
 
     void find() {
-    String ma = txtNhapMaLoai.getText();
-    LoaiSP l = dao.findById(ma);
+        String ma = txtNhapMaLoai.getText();
+        LoaiSP l = dao.findById(ma);
 
-    if (l != null) {
-        txtMaLoai.setText(l.getMaLoai());
-        txtTenloai.setText(l.getTenLoai());
-        jTabbedPane1.setSelectedIndex(1);
-    } else {
-        XDialog.alert(this, "Không tìm thấy!");
+        if (l != null) {
+            txtMaLoai.setText(l.getMaLoai());
+            txtTenloai.setText(l.getTenLoai());
+            jTabbedPane1.setSelectedIndex(1);
+        } else {
+            XDialog.alert(this, "Không tìm thấy!");
+        }
     }
-}
 
     void edit() {
-    int row = tlbLoaiSanPham.getSelectedRow();
-    if (row >= 0) {
-        txtMaLoai.setText(tlbLoaiSanPham.getValueAt(row, 0).toString());
-        txtTenloai.setText(tlbLoaiSanPham.getValueAt(row, 1).toString());
-        jTabbedPane1.setSelectedIndex(1);
+        int row = tlbLoaiSanPham.getSelectedRow();
+        if (row >= 0) {
+            txtMaLoai.setText(tlbLoaiSanPham.getValueAt(row, 0).toString());
+            txtTenloai.setText(tlbLoaiSanPham.getValueAt(row, 1).toString());
+            jTabbedPane1.setSelectedIndex(1);
+        }
     }
-}
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
