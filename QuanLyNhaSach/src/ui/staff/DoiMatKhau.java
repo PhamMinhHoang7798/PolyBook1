@@ -166,60 +166,64 @@ public class DoiMatKhau extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        this.save();
+        this.doiMatKhau();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         // TODO add your handling code here:
         this.close();
     }//GEN-LAST:event_btnCloseActionPerformed
-    private void save() {
-    String password = new String(txtPassword.getPassword());
-    String newPass = new String(txtNewpass.getPassword());
-    String confirm = new String(txtConfirm.getPassword());
+    private void doiMatKhau() {
+        // 1. Kiểm tra xem đã có user đăng nhập chưa
+        if (XAuth.user == null) {
+            XDialog.alert(this, "Vui lòng đăng nhập!");
+            return;
+        }
 
-    // ✅ check đăng nhập
-    if (XAuth.user == null) {
-        XDialog.alert(this,"Vui lòng đăng nhập!");
-        return;
+        // 2. Lấy dữ liệu từ UI
+        String manv = txtTenDangNhap.getText().trim();
+        String matKhau = new String(txtPassword.getPassword()); // Mật khẩu cũ
+        String matKhauMoi = new String(txtNewpass.getPassword()).trim(); 
+        String xacNhanMatKhau = new String(txtConfirm.getPassword()).trim();
+
+        // 3. Validation - Kiểm tra rỗng
+        if (manv.isEmpty() || matKhau.isEmpty() || matKhauMoi.isEmpty() || xacNhanMatKhau.isEmpty()) {
+            XDialog.alert(this, "Vui lòng nhập đầy đủ thông tin!");
+            return;
+        }
+
+        // 4. Validation - Kiểm tra tính chính xác
+        if (!manv.equalsIgnoreCase(XAuth.user.getTenDangNhap())) {
+            XDialog.alert(this, "Sai tên đăng nhập!");
+            return;
+        } 
+        
+        if (!matKhau.equals(XAuth.user.getMatKhau())) {
+            XDialog.alert(this, "Mật khẩu hiện tại không đúng!");
+            return;
+        } 
+        
+        if (matKhauMoi.length() < 6) {
+            XDialog.alert(this, "Mật khẩu mới phải >= 6 ký tự!");
+            return;
+        }
+        
+        if (!matKhauMoi.equals(xacNhanMatKhau)) {
+            XDialog.alert(this, "Xác nhận mật khẩu không khớp!");
+            return;
+        } 
+        
+        // 5. Mọi thứ OK -> Cập nhật xuống DB
+        try {
+            XAuth.user.setMatKhau(matKhauMoi);
+            dao.update(XAuth.user);
+            XDialog.alert(this, "Đổi mật khẩu thành công!");
+            this.dispose();
+        } catch (Exception e) {
+            XDialog.alert(this, "Lỗi cập nhật mật khẩu!");
+            e.printStackTrace(); // In lỗi ra console để dễ debug nếu có sự cố
+        }
     }
-
-    // ✅ validate rỗng
-    if (password.isEmpty() || newPass.isEmpty() || confirm.isEmpty()) {
-        XDialog.alert(this,"Vui lòng nhập đầy đủ thông tin!");
-        return;
-    }
-
-    // ✅ check mật khẩu hiện tại
-    if (!XAuth.user.getMatKhau().equals(password)) {
-        XDialog.alert(this,"Mật khẩu hiện tại không đúng!");
-        return;
-    }
-
-    // ✅ check xác nhận
-    if (!newPass.equals(confirm)) {
-        XDialog.alert(this,"Xác nhận mật khẩu không khớp!");
-        return;
-    }
-
-    // ✅ check độ dài
-    if (newPass.length() < 6) {
-        XDialog.alert(this,"Mật khẩu mới phải >= 6 ký tự!");
-        return;
-    }
-
-    // ✅ cập nhật
-    try {
-        XAuth.user.setMatKhau(newPass);
-        dao.update(XAuth.user);
-
-        XDialog.alert(this,"Đổi mật khẩu thành công!");
-        this.dispose();
-
-    } catch (Exception e) {
-        XDialog.alert(this,"Lỗi cập nhật mật khẩu!");
-    }
-}
 
 
     private void close() {

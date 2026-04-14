@@ -5,7 +5,7 @@ public class User {
     private String matKhau;
     private String hoTen;
     private String hinhAnh;
-    private int vaiTro; // 0 khách, 1 nhân viên, 2 quản lý
+    private int vaiTro; // 0 khách, 2 nhân viên, 1 quản lý
     private boolean trangThai;
 
     public User() {
