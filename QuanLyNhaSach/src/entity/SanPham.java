@@ -4,15 +4,18 @@ public class SanPham {
     private String maSanPham;
     private String tenSanPham;
     private int soLuongTon;
-    private double dongia;
+    private double donGia;
+    private String maLoai;
 
-    public SanPham() {}
+    public SanPham() {
+    }
 
-    public SanPham(String maSanPham, String tenSanPham, int soLuongTon, double dongia) {
+    public SanPham(String maSanPham, String tenSanPham, int soLuongTon, double donGia, String maLoai) {
         this.maSanPham = maSanPham;
         this.tenSanPham = tenSanPham;
         this.soLuongTon = soLuongTon;
-        this.dongia = dongia;
+        this.donGia = donGia;
+        this.maLoai = maLoai;
     }
 
     public String getMaSanPham() {
@@ -40,10 +43,18 @@ public class SanPham {
     }
 
     public double getDonGia() {
-        return dongia;
+        return donGia;
     }
 
-    public void setDonGia(double dongia) {
-        this.dongia = dongia;
+    public void setDonGia(double donGia) {
+        this.donGia = donGia;
+    }
+
+    public String getMaLoai() {
+        return maLoai;
+    }
+
+    public void setMaLoai(String maLoai) {
+        this.maLoai = maLoai;
     }
 }
