@@ -1,6 +1,6 @@
 package dao.impl;
 
-import dao.CrudDAO;
+import dao.hoadonDAO;
 import entity.hoadon;
 import util.XJdbc;
 
@@ -8,56 +8,77 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class hoadonDAOImpl implements CrudDAO<hoadon, Integer> {
+public class hoadonDAOImpl implements hoadonDAO {
 
-    String INSERT_SQL = "INSERT INTO HoaDon (MaHoaDon, MaSanPham, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
-    String UPDATE_SQL = "UPDATE HoaDon SET MaSanPham=?, SoLuong=?, DonGia=? WHERE MaHoaDon=?";
+    String INSERT_SQL = "INSERT INTO HoaDon VALUES (?,?,?,?,?,?,?,?,?)";
+    String UPDATE_SQL = "UPDATE HoaDon SET MaKhachHang=?, NgayLap=?, PhuongThucThanhToan=?, TrangThai=?, KhuyenMai=?, TongTien=?, MaVoucher=?, TenDangNhap=? WHERE MaHoaDon=?";
     String DELETE_SQL = "DELETE FROM HoaDon WHERE MaHoaDon=?";
-    String SELECT_ALL = "SELECT * FROM HoaDon";
-    String SELECT_BY_ID = "SELECT * FROM HoaDon WHERE MaHoaDon=?";
+    String SELECT_ALL_SQL = "SELECT * FROM HoaDon";
+    String SELECT_BY_ID_SQL = "SELECT * FROM HoaDon WHERE MaHoaDon=?";
 
-    public void insert(hoadon entity) {
-        XJdbc.executeUpdate(INSERT_SQL,
+    @Override
+    public hoadon create(hoadon entity) {
+        XJdbc.update(INSERT_SQL,
                 entity.getMaHoaDon(),
-                entity.getMaSanPham(),
-                entity.getSoLuong(),
-                entity.getDonGia()
+                entity.getMaKhachHang(),
+                entity.getNgayLap(),
+                entity.getPhuongThucThanhToan(),
+                entity.getTrangThai(),
+                entity.getKhuyenMai(),
+                entity.getTongTien(),
+                entity.getMaVoucher(),
+                entity.getTenDangNhap()
         );
+        return entity;
     }
 
     @Override
     public void update(hoadon entity) {
-        XJdbc.executeUpdate(UPDATE_SQL,
-                entity.getMaSanPham(),
-                entity.getSoLuong(),
-                entity.getDonGia(),
+        XJdbc.update(UPDATE_SQL,
+                entity.getMaKhachHang(),
+                entity.getNgayLap(),
+                entity.getPhuongThucThanhToan(),
+                entity.getTrangThai(),
+                entity.getKhuyenMai(),
+                entity.getTongTien(),
+                entity.getMaVoucher(),
+                entity.getTenDangNhap(),
                 entity.getMaHoaDon()
         );
     }
 
-    public void delete(Integer maHoaDon) {
-        XJdbc.executeUpdate(DELETE_SQL, maHoaDon);
+    @Override
+    public void deleteById(String id) {
+        XJdbc.update(DELETE_SQL, id);
     }
 
-    public List<hoadon> selectAll() {
-        return selectBySql(SELECT_ALL);
+    @Override
+    public List<hoadon> findAll() {
+        return selectBySql(SELECT_ALL_SQL);
     }
 
-    public hoadon selectById(Integer maHoaDon) {
-        List<hoadon> list = selectBySql(SELECT_BY_ID, maHoaDon);
+    @Override
+    public hoadon findById(String id) {
+        List<hoadon> list = selectBySql(SELECT_BY_ID_SQL, id);
         return list.isEmpty() ? null : list.get(0);
     }
 
     private List<hoadon> selectBySql(String sql, Object... args) {
         List<hoadon> list = new ArrayList<>();
         try {
-            ResultSet rs = XJdbc.executeQuery(sql, args);
+            ResultSet rs = XJdbc.query(sql, args);
             while (rs.next()) {
-                hoadon hd = new hoadon();
-                hd.setMaHoaDon(rs.getInt("MaHoaDon"));
-                hd.setMaSanPham(rs.getString("MaSanPham"));
-                hd.setSoLuong(rs.getInt("SoLuong"));
-                hd.setDonGia(rs.getDouble("DonGia"));
+                hoadon hd = new hoadon(
+                        rs.getString("MaHoaDon"),
+                        rs.getString("MaKhachHang"),
+                        rs.getDate("NgayLap"),
+                        rs.getString("PhuongThucThanhToan"),
+                        rs.getString("TrangThai"),
+                        rs.getDouble("KhuyenMai"),
+                        rs.getDouble("TongTien"),
+                        rs.getString("MaVoucher"),
+                        rs.getString("TenDangNhap")
+                );
                 list.add(hd);
             }
             rs.getStatement().getConnection().close();
@@ -65,25 +86,5 @@ public class hoadonDAOImpl implements CrudDAO<hoadon, Integer> {
             throw new RuntimeException(e);
         }
         return list;
-    }
-
-    @Override
-    public hoadon create(hoadon entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<hoadon> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public hoadon findById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

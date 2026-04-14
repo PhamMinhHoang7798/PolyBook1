@@ -3,32 +3,47 @@ package entity;
 public class SanPham {
     private String maSanPham;
     private String tenSanPham;
-    private double donGia;
     private int soLuongTon;
-    private String maLoai;
+    private double dongia;
 
     public SanPham() {}
 
-    public SanPham(String maSanPham, String tenSanPham, double donGia, int soLuongTon, String maLoai) {
+    public SanPham(String maSanPham, String tenSanPham, int soLuongTon, double dongia) {
         this.maSanPham = maSanPham;
         this.tenSanPham = tenSanPham;
-        this.donGia = donGia;
         this.soLuongTon = soLuongTon;
-        this.maLoai = maLoai;
+        this.dongia = dongia;
     }
 
-    public String getMaSanPham() { return maSanPham; }
-    public void setMaSanPham(String maSanPham) { this.maSanPham = maSanPham; }
+    public String getMaSanPham() {
+        return maSanPham;
+    }
 
-    public String getTenSanPham() { return tenSanPham; }
-    public void setTenSanPham(String tenSanPham) { this.tenSanPham = tenSanPham; }
+    public void setMaSanPham(String maSanPham) {
+        this.maSanPham = maSanPham;
+    }
 
-    public double getDonGia() { return donGia; }
-    public void setDonGia(double donGia) { this.donGia = donGia; }
+    public String getTenSanPham() {
+        return tenSanPham;
+    }
 
-    public int getSoLuongTon() { return soLuongTon; }
-    public void setSoLuongTon(int soLuongTon) { this.soLuongTon = soLuongTon; }
+    public void setTenSanPham(String tenSanPham) {
+        this.tenSanPham = tenSanPham;
+    }
 
-    public String getMaLoai() { return maLoai; }
-    public void setMaLoai(String maLoai) { this.maLoai = maLoai; }
+    public int getSoLuongTon() {
+        return soLuongTon;
+    }
+
+    public void setSoLuongTon(int soLuongTon) {
+        this.soLuongTon = soLuongTon;
+    }
+
+    public double getDonGia() {
+        return dongia;
+    }
+
+    public void setDonGia(double dongia) {
+        this.dongia = dongia;
+    }
 }

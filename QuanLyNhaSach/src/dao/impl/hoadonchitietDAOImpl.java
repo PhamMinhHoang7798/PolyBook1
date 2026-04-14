@@ -1,6 +1,6 @@
 package dao.impl;
 
-import dao.CrudDAO;
+import dao.hoadonchitietDAO;
 import entity.hoadonchitiet;
 import util.XJdbc;
 
@@ -8,101 +8,78 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class hoadonchitietDAOImpl implements CrudDAO<hoadonchitiet, Integer> {
+public class hoadonchitietDAOImpl implements hoadonchitietDAO {
 
-    String INSERT_SQL = "INSERT INTO HoaDonChiTiet (MaHoaDon, MaKhachHang, NgayLap, PhuongThucThanhToan, TrangThai, KhuyenMai, TongTien, MaVoucher, TenDangNhap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
-    String UPDATE_SQL = "UPDATE HoaDonChiTiet SET MaKhachHang=?, NgayLap=?, PhuongThucThanhToan=?, TrangThai=?, KhuyenMai=?, TongTien=?, MaVoucher=?, TenDangNhap=? WHERE MaHoaDon=?";
-    
-    String DELETE_SQL = "DELETE FROM HoaDonChiTiet WHERE MaHoaDon=?";
-    
-    String SELECT_ALL = "SELECT * FROM HoaDonChiTiet";
-    
-    String SELECT_BY_ID = "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
+    String INSERT_SQL = "INSERT INTO HoaDonChiTiet VALUES (?,?,?,?,?)";
+    String UPDATE_SQL = "UPDATE HoaDonChiTiet SET MaHoaDon=?, MaSanPham=?, SoLuong=?, Gia=? WHERE MaCT=?";
+    String DELETE_SQL = "DELETE FROM HoaDonChiTiet WHERE MaCT=?";
+    String SELECT_ALL_SQL = "SELECT * FROM HoaDonChiTiet";
+    String SELECT_BY_ID_SQL = "SELECT * FROM HoaDonChiTiet WHERE MaCT=?";
+    String SELECT_BY_HOADON_SQL = "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
 
-    public void insert(hoadonchitiet entity) {
-        XJdbc.executeUpdate(INSERT_SQL,
-                entity.getMaHoaDon(),
-                entity.getMaKhachHang(),
-                entity.getNgayLap(),
-                entity.getPhuongThucThanhToan(),
-                entity.getTrangThai(),
-                entity.getKhuyenMai(),
-                entity.getTongTien(),
-                entity.getMaVoucher(),
-                entity.getTenDangNhap()
-        );
+    @Override
+    public hoadonchitiet create(hoadonchitiet entity) {
+            XJdbc.executeUpdate(INSERT_SQL,
+            entity.getMaCT(),
+            entity.getMaHoaDon(),
+            entity.getMaSanPham(),
+            entity.getSoLuong(),
+            entity.getGia()
+    );
+        return entity;
     }
 
     @Override
     public void update(hoadonchitiet entity) {
         XJdbc.executeUpdate(UPDATE_SQL,
-                entity.getMaKhachHang(),
-                entity.getNgayLap(),
-                entity.getPhuongThucThanhToan(),
-                entity.getTrangThai(),
-                entity.getKhuyenMai(),
-                entity.getTongTien(),
-                entity.getMaVoucher(),
-                entity.getTenDangNhap(),
-                entity.getMaHoaDon()
+        entity.getMaHoaDon(),
+        entity.getMaSanPham(),
+        entity.getSoLuong(),
+        entity.getGia(),
+        entity.getMaCT()
         );
+
     }
 
-    public void delete(Integer maHoaDon) {
-        XJdbc.executeUpdate(DELETE_SQL, maHoaDon);
+    @Override
+    public void deleteById(Integer id) {
+        XJdbc.executeUpdate(DELETE_SQL, id);
     }
 
-    public List<hoadonchitiet> selectAll() {
-        return selectBySql(SELECT_ALL);
+    @Override
+    public List<hoadonchitiet> findAll() {
+        return selectBySql(SELECT_ALL_SQL);
     }
 
-    public hoadonchitiet selectById(Integer maHoaDon) {
-        List<hoadonchitiet> list = selectBySql(SELECT_BY_ID, maHoaDon);
+    @Override
+    public hoadonchitiet findById(Integer id) {
+        List<hoadonchitiet> list = selectBySql(SELECT_BY_ID_SQL, id);
         return list.isEmpty() ? null : list.get(0);
+    }
+
+    @Override
+    public List<hoadonchitiet> findByHoaDon(String maHoaDon) {
+        return selectBySql(SELECT_BY_HOADON_SQL, maHoaDon);
     }
 
     private List<hoadonchitiet> selectBySql(String sql, Object... args) {
         List<hoadonchitiet> list = new ArrayList<>();
         try {
-            ResultSet rs = XJdbc.executeQuery(sql, args);
+            ResultSet rs = XJdbc.query(sql, args);
             while (rs.next()) {
-                hoadonchitiet hd = new hoadonchitiet();
-                hd.setMaHoaDon(rs.getInt("MaHoaDon"));
-                hd.setMaKhachHang(rs.getString("MaKhachHang"));
-                hd.setNgayLap(rs.getDate("NgayLap"));
-                hd.setPhuongThucThanhToan(rs.getString("PhuongThucThanhToan"));
-                hd.setTrangThai(rs.getString("TrangThai"));
-                hd.setKhuyenMai(rs.getDouble("KhuyenMai"));
-                hd.setTongTien(rs.getDouble("TongTien"));
-                hd.setMaVoucher(rs.getString("MaVoucher"));
-                hd.setTenDangNhap(rs.getString("TenDangNhap"));
-                list.add(hd);
+                hoadonchitiet ct = new hoadonchitiet(
+                        rs.getInt("MaCT"),
+                        rs.getString("MaHoaDon"),
+                        rs.getString("MaSanPham"),
+                        rs.getInt("SoLuong"),
+                        rs.getDouble("Gia")
+                );
+                list.add(ct);
             }
             rs.getStatement().getConnection().close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return list;
-    }
-
-    @Override
-    public hoadonchitiet create(hoadonchitiet entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<hoadonchitiet> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public hoadonchitiet findById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

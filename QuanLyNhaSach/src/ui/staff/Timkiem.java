@@ -2,8 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package ui.staff;
+package ui.staff;                              
 
+import dao.impl.SanPhamDAOImpl;
+import dao.impl.TheThanhVienDAOImpl;
+import entity.SanPham;
+import entity.TheThanhVien;
+import util.XJdbc;
+import java.util.List;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author nguye
@@ -17,7 +26,157 @@ public class Timkiem extends javax.swing.JFrame {
      */
     public Timkiem() {
         initComponents();
+        fillTableHoaDon("");
+        fillTableSanPham();
+        tblTimTheThanhVien.setModel(new javax.swing.table.DefaultTableModel(
+    new Object [][] {},
+    new String [] {
+        "SĐT", "Tên khách hàng", "Loại thẻ", "Điểm"
     }
+) {
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+});
+
+        fillTableThanhVien("");
+        setPlaceholder(txtMaHoaDon, "Nhập mã hóa đơn...");
+        setPlaceholder(txtTuNgay, "yyyy-MM-dd");
+        setPlaceholder(txtDenNgay, "yyyy-MM-dd");
+        setPlaceholder(txtMaSanPham, "Nhập mã hoặc tên sản phẩm...");
+        setPlaceholder(txtSDTThanhVien, "Nhập số điện thoại...");
+        tblTimKiemHoaDon.setDefaultEditor(Object.class, null);
+        tblTimKiemSanPham.setDefaultEditor(Object.class, null);
+        tblTimTheThanhVien.setDefaultEditor(Object.class, null);
+        
+
+    }
+    
+    void fillTableHoaDon(String keyword) {
+    DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
+    model.setRowCount(0);
+
+    String sql = """
+        SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia
+        FROM HoaDon hd
+        JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon
+        JOIN SanPham sp ON ct.MaSanPham = sp.MaSanPham
+        JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKhachHang
+        WHERE hd.MaHoaDon LIKE ?
+    """;
+
+    try {
+        ResultSet rs = XJdbc.query(sql, "%" + keyword + "%");
+        while (rs.next()) {
+            Object[] row = {
+                rs.getString("MaHoaDon"),
+                rs.getString("TenKhachHang"),
+                rs.getString("TenSanPham"),
+                rs.getInt("SoLuong"),
+                rs.getDouble("Gia")
+            };
+            model.addRow(row);
+        }
+        rs.getStatement().getConnection().close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+    void setPlaceholder(javax.swing.JTextField txt, String text) {
+    txt.setText(text);
+    txt.setForeground(java.awt.Color.GRAY); 
+
+    txt.addFocusListener(new java.awt.event.FocusAdapter() {
+        public void focusGained(java.awt.event.FocusEvent evt) {
+            if (txt.getText().equals(text)) {
+                txt.setText("");
+                txt.setForeground(java.awt.Color.BLACK);
+            }
+        }
+
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            if (txt.getText().isEmpty()) {
+                txt.setText(text);
+                txt.setForeground(java.awt.Color.GRAY);
+            }
+        }
+    });
+}
+    boolean isValidDate(String date) {
+    try {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        sdf.parse(date);
+        return true;
+    } catch (Exception e) {
+        return false;
+    }
+}
+    
+    void fillTableSanPham() {
+    DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
+    model.setRowCount(0); 
+
+    String sql = "SELECT MaSanPham, TenSanPham, SoLuongTon, DonGia FROM SanPham";
+
+    try {
+        ResultSet rs = XJdbc.query(sql);
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getString("MaSanPham"),
+                rs.getString("TenSanPham"),
+                rs.getInt("SoLuongTon"),
+                rs.getDouble("DonGia")
+            });
+        }
+
+        rs.getStatement().getConnection().close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+    
+    void fillTableThanhVien(String keyword) {
+    DefaultTableModel model = (DefaultTableModel) tblTimTheThanhVien.getModel();
+    model.setRowCount(0);
+
+    try {
+        TheThanhVienDAOImpl dao = new TheThanhVienDAOImpl();
+        List<TheThanhVien> list = dao.selectByKeyword(keyword);
+
+        boolean hasData = false;
+
+        for (TheThanhVien tv : list) {
+            hasData = true;
+
+            int diem = tv.getDiemTichLuy();
+
+            String loaiThe;
+            if (diem >= 200) loaiThe = " Vàng";
+            else if (diem >= 150) loaiThe = " Bạc";
+            else if (diem >= 100) loaiThe = " Đồng";
+            else loaiThe = "Thường";
+
+            model.addRow(new Object[]{
+                tv.getSdt(),
+                tv.getTenKhachHang(),
+                loaiThe,
+                diem
+            });
+        }
+
+        if (!hasData) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thành viên!");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Lỗi truy vấn!");
+        e.printStackTrace();
+    }
+}
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,27 +192,27 @@ public class Timkiem extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblTimKiemHoaDon = new javax.swing.JTable();
         jLabel34 = new javax.swing.JLabel();
-        txtBegin1 = new javax.swing.JTextField();
+        txtTuNgay = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
-        txtEnd1 = new javax.swing.JTextField();
-        btnFilter2 = new javax.swing.JButton();
+        txtDenNgay = new javax.swing.JTextField();
+        btnLoc = new javax.swing.JButton();
         jLabel35 = new javax.swing.JLabel();
-        txtBegin2 = new javax.swing.JTextField();
-        btnFilter3 = new javax.swing.JButton();
+        txtMaHoaDon = new javax.swing.JTextField();
+        btnTimHoaDon = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        txtBegin3 = new javax.swing.JTextField();
+        tblTimKiemSanPham = new javax.swing.JTable();
+        txtMaSanPham = new javax.swing.JTextField();
         jLabel36 = new javax.swing.JLabel();
-        btnFilter4 = new javax.swing.JButton();
+        btnTimSP = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        tblTimTheThanhVien = new javax.swing.JTable();
         jLabel37 = new javax.swing.JLabel();
-        txtBegin4 = new javax.swing.JTextField();
-        btnFilter5 = new javax.swing.JButton();
+        txtSDTThanhVien = new javax.swing.JTextField();
+        btnTimSDTthanhVien = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,7 +224,8 @@ public class Timkiem extends javax.swing.JFrame {
 
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblTimKiemHoaDon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tblTimKiemHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -76,57 +236,62 @@ public class Timkiem extends javax.swing.JFrame {
                 "Mã hóa đơn", "Tên Khách hàng", "Tên sản phẩm", "Số lượng", "Giá"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(1).setHeaderValue("Tên Khách hàng");
+        tblTimKiemHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTimKiemHoaDonMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblTimKiemHoaDon);
+        if (tblTimKiemHoaDon.getColumnModel().getColumnCount() > 0) {
+            tblTimKiemHoaDon.getColumnModel().getColumn(1).setHeaderValue("Tên Khách hàng");
         }
 
         jLabel34.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel34.setText("Từ ngày: ");
 
-        txtBegin1.setColumns(8);
-        txtBegin1.addActionListener(new java.awt.event.ActionListener() {
+        txtTuNgay.setColumns(8);
+        txtTuNgay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBegin1ActionPerformed(evt);
+                txtTuNgayActionPerformed(evt);
             }
         });
 
         jLabel43.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel43.setText("Đến ngày: ");
 
-        txtEnd1.setColumns(8);
-        txtEnd1.addActionListener(new java.awt.event.ActionListener() {
+        txtDenNgay.setColumns(8);
+        txtDenNgay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEnd1ActionPerformed(evt);
+                txtDenNgayActionPerformed(evt);
             }
         });
 
-        btnFilter2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnFilter2.setForeground(new java.awt.Color(12, 66, 139));
-        btnFilter2.setText("Lọc");
-        btnFilter2.addActionListener(new java.awt.event.ActionListener() {
+        btnLoc.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnLoc.setForeground(new java.awt.Color(12, 66, 139));
+        btnLoc.setText("Lọc");
+        btnLoc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilter2ActionPerformed(evt);
+                btnLocActionPerformed(evt);
             }
         });
 
         jLabel35.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel35.setText("Mã hóa đơn:");
 
-        txtBegin2.setColumns(8);
-        txtBegin2.addActionListener(new java.awt.event.ActionListener() {
+        txtMaHoaDon.setColumns(8);
+        txtMaHoaDon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBegin2ActionPerformed(evt);
+                txtMaHoaDonActionPerformed(evt);
             }
         });
 
-        btnFilter3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnFilter3.setForeground(new java.awt.Color(12, 66, 139));
-        btnFilter3.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
-        btnFilter3.setText("Tìm");
-        btnFilter3.addActionListener(new java.awt.event.ActionListener() {
+        btnTimHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTimHoaDon.setForeground(new java.awt.Color(12, 66, 139));
+        btnTimHoaDon.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
+        btnTimHoaDon.setText("Tìm");
+        btnTimHoaDon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilter3ActionPerformed(evt);
+                btnTimHoaDonActionPerformed(evt);
             }
         });
 
@@ -134,29 +299,27 @@ public class Timkiem extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addComponent(jLabel35)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBegin2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnFilter3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addComponent(btnTimHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel34)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBegin1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTuNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel43)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtEnd1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtDenNgay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnFilter2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(36, 36, 36))
+                        .addComponent(btnLoc, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,12 +328,12 @@ public class Timkiem extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel34)
                     .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtEnd1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBegin1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFilter2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDenNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTuNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLoc, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel35)
-                    .addComponent(txtBegin2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFilter3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(163, 163, 163))
@@ -178,7 +341,7 @@ public class Timkiem extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Tìm kiếm hóa đơn", jPanel2);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tblTimKiemSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -189,25 +352,30 @@ public class Timkiem extends javax.swing.JFrame {
                 "Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Giá"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        tblTimKiemSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTimKiemSanPhamMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblTimKiemSanPham);
 
-        txtBegin3.setColumns(8);
-        txtBegin3.addActionListener(new java.awt.event.ActionListener() {
+        txtMaSanPham.setColumns(8);
+        txtMaSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBegin3ActionPerformed(evt);
+                txtMaSanPhamActionPerformed(evt);
             }
         });
 
         jLabel36.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel36.setText("Mã sản phẩm:");
 
-        btnFilter4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnFilter4.setForeground(new java.awt.Color(12, 66, 139));
-        btnFilter4.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
-        btnFilter4.setText("Tìm");
-        btnFilter4.addActionListener(new java.awt.event.ActionListener() {
+        btnTimSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTimSP.setForeground(new java.awt.Color(12, 66, 139));
+        btnTimSP.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
+        btnTimSP.setText("Tìm");
+        btnTimSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilter4ActionPerformed(evt);
+                btnTimSPActionPerformed(evt);
             }
         });
 
@@ -223,9 +391,9 @@ public class Timkiem extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addComponent(jLabel36)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBegin3, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMaSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnFilter4, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnTimSP, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -234,8 +402,8 @@ public class Timkiem extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel36)
-                    .addComponent(txtBegin3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFilter4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimSP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                 .addContainerGap())
@@ -243,7 +411,7 @@ public class Timkiem extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Tìm kiếm sản phẩm", jPanel3);
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        tblTimTheThanhVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -254,25 +422,30 @@ public class Timkiem extends javax.swing.JFrame {
                 "Số điện thoại thành viên:", "Tên Khách hàng", "Loại thẻ", "Điểm hiện có"
             }
         ));
-        jScrollPane4.setViewportView(jTable4);
+        tblTimTheThanhVien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTimTheThanhVienMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tblTimTheThanhVien);
 
         jLabel37.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel37.setText("Số điện thoại thành viên:");
 
-        txtBegin4.setColumns(8);
-        txtBegin4.addActionListener(new java.awt.event.ActionListener() {
+        txtSDTThanhVien.setColumns(8);
+        txtSDTThanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBegin4ActionPerformed(evt);
+                txtSDTThanhVienActionPerformed(evt);
             }
         });
 
-        btnFilter5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnFilter5.setForeground(new java.awt.Color(12, 66, 139));
-        btnFilter5.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
-        btnFilter5.setText("Tìm");
-        btnFilter5.addActionListener(new java.awt.event.ActionListener() {
+        btnTimSDTthanhVien.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTimSDTthanhVien.setForeground(new java.awt.Color(12, 66, 139));
+        btnTimSDTthanhVien.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
+        btnTimSDTthanhVien.setText("Tìm");
+        btnTimSDTthanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilter5ActionPerformed(evt);
+                btnTimSDTthanhVienActionPerformed(evt);
             }
         });
 
@@ -288,9 +461,9 @@ public class Timkiem extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addComponent(jLabel37)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBegin4, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSDTThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnFilter5, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnTimSDTthanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -300,10 +473,10 @@ public class Timkiem extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel37)
-                        .addComponent(btnFilter5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnTimSDTthanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(txtBegin4)))
+                        .addComponent(txtSDTThanhVien)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                 .addContainerGap())
@@ -355,41 +528,202 @@ public class Timkiem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtBegin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBegin1ActionPerformed
+    private void txtTuNgayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTuNgayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBegin1ActionPerformed
+    }//GEN-LAST:event_txtTuNgayActionPerformed
 
-    private void txtEnd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEnd1ActionPerformed
+    private void txtDenNgayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDenNgayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEnd1ActionPerformed
+    }//GEN-LAST:event_txtDenNgayActionPerformed
 
-    private void btnFilter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnFilter2ActionPerformed
+    private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
+                                     
+    String tuNgay = txtTuNgay.getText();
+String denNgay = txtDenNgay.getText();
 
-    private void txtBegin2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBegin2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBegin2ActionPerformed
+// bỏ placeholder
+if (tuNgay.equals("yyyy-MM-dd")) tuNgay = "";
+if (denNgay.equals("yyyy-MM-dd")) denNgay = "";
 
-    private void btnFilter3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnFilter3ActionPerformed
+// validate
+if (!tuNgay.isEmpty() && !isValidDate(tuNgay)) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Từ ngày không hợp lệ (đúng dạng yyyy-MM-dd)");
+    txtTuNgay.requestFocus();
+    return;
+}
 
-    private void txtBegin3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBegin3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBegin3ActionPerformed
+if (!denNgay.isEmpty() && !isValidDate(denNgay)) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Đến ngày không hợp lệ (đúng dạng yyyy-MM-dd)");
+    txtDenNgay.requestFocus();
+    return;
+}
 
-    private void btnFilter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnFilter4ActionPerformed
+DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
+model.setRowCount(0);
 
-    private void txtBegin4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBegin4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBegin4ActionPerformed
+String sql = """
+    SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia
+    FROM HoaDon hd
+    JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon
+    JOIN SanPham sp ON ct.MaSanPham = sp.MaSanPham
+    JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKhachHang
+    WHERE (hd.NgayLap >= ? OR ? IS NULL)
+      AND (hd.NgayLap <= ? OR ? IS NULL)
+""";
 
-    private void btnFilter5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter5ActionPerformed
+try {
+    String tuNgayParam = tuNgay.isEmpty() ? null : tuNgay;
+String denNgayParam = denNgay.isEmpty() ? null : denNgay;
+
+ResultSet rs = XJdbc.query(sql,
+    tuNgayParam, tuNgayParam,
+    denNgayParam, denNgayParam
+);
+
+
+    boolean hasData = false;
+
+    while (rs.next()) {
+        hasData = true;
+        model.addRow(new Object[]{
+            rs.getString("MaHoaDon"),
+            rs.getString("TenKhachHang"),
+            rs.getString("TenSanPham"),
+            rs.getInt("SoLuong"),
+            rs.getDouble("Gia")
+        });
+    }
+
+    if (!hasData) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Không có dữ liệu trong khoảng ngày này!");
+    }
+
+    rs.getStatement().getConnection().close();
+} catch (Exception e) {
+    e.printStackTrace();
+}
+    }//GEN-LAST:event_btnLocActionPerformed
+
+    private void txtMaHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaHoaDonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnFilter5ActionPerformed
+    }//GEN-LAST:event_txtMaHoaDonActionPerformed
+
+    private void btnTimHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimHoaDonActionPerformed
+        // TODO add your handling code here:
+        String ma = txtMaHoaDon.getText().trim();
+
+if (ma.isEmpty() || ma.startsWith("Nhập")) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập mã hóa đơn!");
+    txtMaHoaDon.requestFocus();
+    return;
+}
+
+DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
+model.setRowCount(0);
+
+String sql = """
+    SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia
+    FROM HoaDon hd
+    JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon
+    JOIN SanPham sp ON ct.MaSanPham = sp.MaSanPham
+    JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKhachHang
+    WHERE hd.MaHoaDon LIKE ?
+""";
+
+try {
+    ResultSet rs = XJdbc.query(sql, "%" + ma + "%");
+
+    boolean hasData = false;
+
+    while (rs.next()) {
+        hasData = true;
+        model.addRow(new Object[]{
+            rs.getString("MaHoaDon"),
+            rs.getString("TenKhachHang"),
+            rs.getString("TenSanPham"),
+            rs.getInt("SoLuong"),
+            rs.getDouble("Gia")
+        });
+    }
+
+    if (!hasData) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Mã hóa đơn không tồn tại!");
+    }
+
+    rs.getStatement().getConnection().close();
+} catch (Exception e) {
+    e.printStackTrace();
+}
+    }//GEN-LAST:event_btnTimHoaDonActionPerformed
+
+    private void txtMaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaSanPhamActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMaSanPhamActionPerformed
+
+    private void btnTimSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimSPActionPerformed
+        // TODO add your handling code here:
+        try {
+        SanPhamDAOImpl dao = new SanPhamDAOImpl();
+
+        String keyword = txtMaSanPham.getText();
+
+        if (keyword.equals("Nhập mã hoặc tên sản phẩm...")) {
+            keyword = "";
+        }
+
+        List<SanPham> list = dao.selectByKeyword(keyword);
+
+        DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
+        model.setRowCount(0);
+
+        if (list.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
+            return;
+        }
+
+        for (SanPham sp : list) {
+            model.addRow(new Object[]{
+                sp.getMaSanPham(),
+                sp.getTenSanPham(),
+                sp.getSoLuongTon(),  
+                sp.getDonGia()
+            });
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Lỗi truy vấn sản phẩm!");
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_btnTimSPActionPerformed
+
+    private void txtSDTThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTThanhVienActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSDTThanhVienActionPerformed
+
+    private void btnTimSDTthanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimSDTthanhVienActionPerformed
+        // TODO add your handling code here:
+        String sdt = txtSDTThanhVien.getText();
+
+    if (sdt.equals("Nhập số điện thoại...") || sdt.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại!");
+        txtSDTThanhVien.requestFocus();
+        return;
+    }
+
+    fillTableThanhVien(sdt);
+    }//GEN-LAST:event_btnTimSDTthanhVienActionPerformed
+
+    private void tblTimTheThanhVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTimTheThanhVienMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblTimTheThanhVienMouseClicked
+
+    private void tblTimKiemSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTimKiemSanPhamMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblTimKiemSanPhamMouseClicked
+
+    private void tblTimKiemHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTimKiemHoaDonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblTimKiemHoaDonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -417,10 +751,10 @@ public class Timkiem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnFilter2;
-    private javax.swing.JButton btnFilter3;
-    private javax.swing.JButton btnFilter4;
-    private javax.swing.JButton btnFilter5;
+    private javax.swing.JButton btnLoc;
+    private javax.swing.JButton btnTimHoaDon;
+    private javax.swing.JButton btnTimSDTthanhVien;
+    private javax.swing.JButton btnTimSP;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
@@ -435,13 +769,13 @@ public class Timkiem extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTextField txtBegin1;
-    private javax.swing.JTextField txtBegin2;
-    private javax.swing.JTextField txtBegin3;
-    private javax.swing.JTextField txtBegin4;
-    private javax.swing.JTextField txtEnd1;
+    private javax.swing.JTable tblTimKiemHoaDon;
+    private javax.swing.JTable tblTimKiemSanPham;
+    private javax.swing.JTable tblTimTheThanhVien;
+    private javax.swing.JTextField txtDenNgay;
+    private javax.swing.JTextField txtMaHoaDon;
+    private javax.swing.JTextField txtMaSanPham;
+    private javax.swing.JTextField txtSDTThanhVien;
+    private javax.swing.JTextField txtTuNgay;
     // End of variables declaration//GEN-END:variables
 }

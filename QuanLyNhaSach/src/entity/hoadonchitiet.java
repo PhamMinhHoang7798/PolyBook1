@@ -1,43 +1,34 @@
 package entity;
 
-import java.util.Date;
-
 public class hoadonchitiet {
-    private int maHoaDon;
-    private String maKhachHang;
-    private Date ngayLap;
-    private String phuongThucThanhToan;
-    private String trangThai;
-    private double khuyenMai;
-    private double tongTien;
-    private String maVoucher;
-    private String tenDangNhap;
+    private int maCT;
+    private String maHoaDon;
+    private String maSanPham;
+    private int soLuong;
+    private double gia;
 
-    // Getter Setter
-    public int getMaHoaDon() { return maHoaDon; }
-    public void setMaHoaDon(int maHoaDon) { this.maHoaDon = maHoaDon; }
+    public hoadonchitiet() {}
 
-    public String getMaKhachHang() { return maKhachHang; }
-    public void setMaKhachHang(String maKhachHang) { this.maKhachHang = maKhachHang; }
+    public hoadonchitiet(int maCT, String maHoaDon, String maSanPham, int soLuong, double gia) {
+        this.maCT = maCT;
+        this.maHoaDon = maHoaDon;
+        this.maSanPham = maSanPham;
+        this.soLuong = soLuong;
+        this.gia = gia;
+    }
 
-    public Date getNgayLap() { return ngayLap; }
-    public void setNgayLap(Date ngayLap) { this.ngayLap = ngayLap; }
+    public int getMaCT() { return maCT; }
+    public void setMaCT(int maCT) { this.maCT = maCT; }
 
-    public String getPhuongThucThanhToan() { return phuongThucThanhToan; }
-    public void setPhuongThucThanhToan(String phuongThucThanhToan) { this.phuongThucThanhToan = phuongThucThanhToan; }
+    public String getMaHoaDon() { return maHoaDon; }
+    public void setMaHoaDon(String maHoaDon) { this.maHoaDon = maHoaDon; }
 
-    public String getTrangThai() { return trangThai; }
-    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
+    public String getMaSanPham() { return maSanPham; }
+    public void setMaSanPham(String maSanPham) { this.maSanPham = maSanPham; }
 
-    public double getKhuyenMai() { return khuyenMai; }
-    public void setKhuyenMai(double khuyenMai) { this.khuyenMai = khuyenMai; }
+    public int getSoLuong() { return soLuong; }
+    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
 
-    public double getTongTien() { return tongTien; }
-    public void setTongTien(double tongTien) { this.tongTien = tongTien; }
-
-    public String getMaVoucher() { return maVoucher; }
-    public void setMaVoucher(String maVoucher) { this.maVoucher = maVoucher; }
-
-    public String getTenDangNhap() { return tenDangNhap; }
-    public void setTenDangNhap(String tenDangNhap) { this.tenDangNhap = tenDangNhap; }
+    public double getGia() { return gia; }
+    public void setGia(double gia) { this.gia = gia; }
 }

@@ -133,8 +133,7 @@ public class QlNguoidung extends javax.swing.JFrame {
     }
 }
 
-
-    private void clearForm() {
+private void clearForm() {
     txtTenDangNhap.setText("");
     txtMatkhau.setText("");
     txtXacNhanMatKhau.setText("");
@@ -145,7 +144,11 @@ public class QlNguoidung extends javax.swing.JFrame {
     rbtKhachHang.setSelected(false);
 
     rbtHoatDong.setSelected(true);
+
+    lblHinh.setIcon(null);  
+    hinhAnh = null;          
 }
+
     private String getValueSafe(int row, int col) {
     Object value = tblQLNguoiDung.getValueAt(row, col);
     return value == null ? "" : value.toString();
@@ -550,18 +553,31 @@ public class QlNguoidung extends javax.swing.JFrame {
         txtMatkhau.setText(getValueSafe(row, 1));
         txtHoten.setText(getValueSafe(row, 2));
 
-        String role = getValueSafe(row, 4);
-        if (role.equals("Quản lý")) rbtQuanLy.setSelected(true);
-        else if (role.equals("Nhân viên")) rbtNhanVien.setSelected(true);
-        else rbtKhachHang.setSelected(true);
+        String img = getValueSafe(row, 3);
+hinhAnh = img;
 
-        String status = getValueSafe(row, 5);
-        if (status.equals("Hoạt động")) rbtHoatDong.setSelected(true);
-        else rbtTamDung.setSelected(true);
+if (img != null && !img.isEmpty()) {
+    java.io.File file = new java.io.File("src/img/" + img);
 
-        // 🔥 thêm dòng này
-        jTabbedPane1.setSelectedIndex(1);
+    if (file.exists()) {
+        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
+
+        java.awt.Image scaled = icon.getImage().getScaledInstance(
+                lblHinh.getWidth(),
+                lblHinh.getHeight(),
+                java.awt.Image.SCALE_SMOOTH
+        );
+
+        lblHinh.setIcon(new javax.swing.ImageIcon(scaled));
+    } else {
+        lblHinh.setIcon(null);
     }
+} else {
+    lblHinh.setIcon(null);
+}
+        }
+        jTabbedPane1.setSelectedIndex(1);
+
     }//GEN-LAST:event_tblQLNguoiDungMouseClicked
 
     private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked

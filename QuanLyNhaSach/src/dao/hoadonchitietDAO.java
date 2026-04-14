@@ -1,10 +1,8 @@
 package dao;
 
-import dao.impl.hoadonchitietDAOImpl;
-import java.util.List;
 import entity.hoadonchitiet;
+import java.util.List;
 
-public interface hoadonchitietDAO extends CrudDAO<hoadonchitiet, Long>{
-    public List<hoadonchitiet> findByBillId(Long billId);
-    public List<hoadonchitiet> findByDrinkId(String drinkId);
+public interface hoadonchitietDAO extends CrudDAO<hoadonchitiet, Integer> {
+    List<hoadonchitiet> findByHoaDon(String maHoaDon);
 }
