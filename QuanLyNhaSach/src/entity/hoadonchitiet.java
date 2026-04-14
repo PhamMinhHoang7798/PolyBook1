@@ -7,53 +7,18 @@ public class hoadonchitiet {
     private int soLuong;
     private double gia;
 
-    public hoadonchitiet() {}
+    public int getMaCT() { return maCT; }
+    public void setMaCT(int maCT) { this.maCT = maCT; }
 
-    public hoadonchitiet(int maCT, String maHoaDon, String maSanPham, int soLuong, double gia) {
-        this.maCT = maCT;
-        this.maHoaDon = maHoaDon;
-        this.maSanPham = maSanPham;
-        this.soLuong = soLuong;
-        this.gia = gia;
-    }
+    public String getMaHoaDon() { return maHoaDon; }
+    public void setMaHoaDon(String maHoaDon) { this.maHoaDon = maHoaDon; }
 
-    public int getMaCT() {
-        return maCT;
-    }
+    public String getMaSanPham() { return maSanPham; }
+    public void setMaSanPham(String maSanPham) { this.maSanPham = maSanPham; }
 
-    public void setMaCT(int maCT) {
-        this.maCT = maCT;
-    }
+    public int getSoLuong() { return soLuong; }
+    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
 
-    public String getMaHoaDon() {
-        return maHoaDon;
-    }
-
-    public void setMaHoaDon(String maHoaDon) {
-        this.maHoaDon = maHoaDon;
-    }
-
-    public String getMaSanPham() {
-        return maSanPham;
-    }
-
-    public void setMaSanPham(String maSanPham) {
-        this.maSanPham = maSanPham;
-    }
-
-    public int getSoLuong() {
-        return soLuong;
-    }
-
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
-    }
-
-    public double getGia() {
-        return gia;
-    }
-
-    public void setGia(double gia) {
-        this.gia = gia;
-    }
+    public double getGia() { return gia; }
+    public void setGia(double gia) { this.gia = gia; }
 }

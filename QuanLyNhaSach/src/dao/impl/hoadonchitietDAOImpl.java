@@ -10,89 +10,65 @@ import java.util.List;
 
 public class hoadonchitietDAOImpl implements hoadonchitietDAO {
 
-    private final String INSERT_SQL =
-            "INSERT INTO HoaDonChiTiet (MaCT, MaHoaDon, MaSanPham, SoLuong, Gia) VALUES (?,?,?,?,?)";
+    String INSERT = "INSERT INTO HoaDonChiTiet VALUES (?,?,?,?,?)";
+    String UPDATE = "UPDATE HoaDonChiTiet SET MaHoaDon=?, MaSanPham=?, SoLuong=?, Gia=? WHERE MaCT=?";
+    String DELETE = "DELETE FROM HoaDonChiTiet WHERE MaCT=?";
+    String SELECT_ALL = "SELECT * FROM HoaDonChiTiet";
+    String SELECT_ID = "SELECT * FROM HoaDonChiTiet WHERE MaCT=?";
+    String SELECT_HD = "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
 
-    private final String UPDATE_SQL =
-            "UPDATE HoaDonChiTiet SET MaHoaDon=?, MaSanPham=?, SoLuong=?, Gia=? WHERE MaCT=?";
-
-    private final String DELETE_SQL =
-            "DELETE FROM HoaDonChiTiet WHERE MaCT=?";
-
-    private final String SELECT_ALL_SQL =
-            "SELECT * FROM HoaDonChiTiet";
-
-    private final String SELECT_BY_ID_SQL =
-            "SELECT * FROM HoaDonChiTiet WHERE MaCT=?";
-
-    private final String SELECT_BY_HOADON_SQL =
-            "SELECT * FROM HoaDonChiTiet WHERE MaHoaDon=?";
-
-    @Override
-    public hoadonchitiet create(hoadonchitiet entity) {
-        XJdbc.executeUpdate(INSERT_SQL,
-                entity.getMaCT(),
-                entity.getMaHoaDon(),
-                entity.getMaSanPham(),
-                entity.getSoLuong(),
-                entity.getGia()
+    public hoadonchitiet create(hoadonchitiet ct) {
+        XJdbc.executeUpdate(INSERT,
+                ct.getMaCT(),
+                ct.getMaHoaDon(),
+                ct.getMaSanPham(),
+                ct.getSoLuong(),
+                ct.getGia()
         );
-        return entity;
+        return ct;
     }
 
-    @Override
-    public void update(hoadonchitiet entity) {
-        XJdbc.executeUpdate(UPDATE_SQL,
-                entity.getMaHoaDon(),
-                entity.getMaSanPham(),
-                entity.getSoLuong(),
-                entity.getGia(),
-                entity.getMaCT()
+    public void update(hoadonchitiet ct) {
+        XJdbc.executeUpdate(UPDATE,
+                ct.getMaHoaDon(),
+                ct.getMaSanPham(),
+                ct.getSoLuong(),
+                ct.getGia(),
+                ct.getMaCT()
         );
     }
 
-    @Override
-    public void deleteById(Integer id) {
-        XJdbc.executeUpdate(DELETE_SQL, id);
+    public void deleteById(int id) {
+        XJdbc.executeUpdate(DELETE, id);
     }
 
-    @Override
-    public List<hoadonchitiet> findAll() {
-        return selectBySql(SELECT_ALL_SQL);
-    }
+    public List<hoadonchitiet> findAll() { return selectBySql(SELECT_ALL); }
 
-    @Override
-    public hoadonchitiet findById(Integer id) {
-        List<hoadonchitiet> list = selectBySql(SELECT_BY_ID_SQL, id);
+    public hoadonchitiet findById(int id) {
+        List<hoadonchitiet> list = selectBySql(SELECT_ID, id);
         return list.isEmpty() ? null : list.get(0);
     }
 
-    @Override
-    public List<hoadonchitiet> findByHoaDon(String maHoaDon) {
-        return selectBySql(SELECT_BY_HOADON_SQL, maHoaDon);
+    public List<hoadonchitiet> findByHoaDon(String maHD) {
+        return selectBySql(SELECT_HD, maHD);
     }
 
     private List<hoadonchitiet> selectBySql(String sql, Object... args) {
         List<hoadonchitiet> list = new ArrayList<>();
-
         try {
             ResultSet rs = XJdbc.query(sql, args);
-
             while (rs.next()) {
-                hoadonchitiet ct = new hoadonchitiet(
-                        rs.getInt("MaCT"),
-                        rs.getString("MaHoaDon"),
-                        rs.getString("MaSanPham"),
-                        rs.getInt("SoLuong"),
-                        rs.getDouble("Gia")
-                );
+                hoadonchitiet ct = new hoadonchitiet();
+                ct.setMaCT(rs.getInt(1));
+                ct.setMaHoaDon(rs.getString(2));
+                ct.setMaSanPham(rs.getString(3));
+                ct.setSoLuong(rs.getInt(4));
+                ct.setGia(rs.getDouble(5));
                 list.add(ct);
             }
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
         return list;
     }
 }

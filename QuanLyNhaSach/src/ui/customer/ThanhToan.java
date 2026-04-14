@@ -4,6 +4,9 @@
  */
 package ui.customer;
 
+import entity.hoadon;
+import entity.hoadonchitiet;
+
 /**
  *
  * @author nguye
@@ -387,53 +390,36 @@ private void fillComboBoxLoai() {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-        if (modelGioHang.getRowCount() == 0) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Giỏ hàng đang trống!");
-        return;
-    }
+        String maHD = String.valueOf(System.currentTimeMillis());
 
-    try {
-        // 1. Tạo Mã hóa đơn (Dựa trên thời gian để tránh trùng)
-        int maHD = (int) (System.currentTimeMillis() % 1000000); 
+// INSERT HÓA ĐƠN
+hoadon hd = new hoadon();
+hd.setMaHoaDon(maHD);
+hd.setMaKhachHang("KH001");
+hd.setNgayLap(new java.util.Date());
+hd.setPhuongThucThanhToan("Tiền mặt");
+hd.setTrangThai("Đã thanh toán");
+hd.setTongTien(tongTien);
+hd.setTenDangNhap("admin");
 
-        // 2. Lưu vào bảng HoaDonChiTiet (Bảng tổng)
-        entity.hoadonchitiet hdct = new entity.hoadonchitiet();
-        hdct.setMaHoaDon(maHD);
-        hdct.setMaKhachHang("1"); // Tạm thời để mặc định
-        hdct.setNgayLap(new java.util.Date());
-        hdct.setPhuongThucThanhToan("Tiền mặt");
-        hdct.setTrangThai("Đã thanh toán");
-        hdct.setTongTien(tongTien);
-        hdct.setTenDangNhap("admin"); // Đạt có thể thay bằng user đang đăng nhập
+hdDAO.create(hd);
 
-        hdctDAO.insert(hdct);
+// INSERT CHI TIẾT
+for (int i = 0; i < modelGioHang.getRowCount(); i++) {
 
-        // 3. Lưu chi tiết từng món vào bảng HoaDon (Bảng chi tiết)
-        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
-            String temp = modelGioHang.getValueAt(i, 0).toString();
-            String maSP = temp.split(" - ")[0]; // Tách lấy mã SP từ chuỗi "Mã - Tên"
-            int sl = (Integer) modelGioHang.getValueAt(i, 1);
-            double gia = (Double) modelGioHang.getValueAt(i, 2);
+    String temp = modelGioHang.getValueAt(i, 0).toString();
+    String maSP = temp.split(" - ")[0];
 
-            entity.hoadon hd = new entity.hoadon();
-            hd.setMaHoaDon(maHD);
-            hd.setMaSanPham(maSP);
-            hd.setSoLuong(sl);
-            hd.setDonGia(gia);
+    hoadonchitiet ct = new hoadonchitiet();
+    ct.setMaCT((int) System.currentTimeMillis());
+    ct.setMaHoaDon(maHD);
+    ct.setMaSanPham(maSP);
+    ct.setSoLuong((Integer) modelGioHang.getValueAt(i, 1));
+    ct.setGia((Double) modelGioHang.getValueAt(i, 2));
 
-            hdDAO.insert(hd);
-        }
+    hdctDAO.create(ct);
+}
 
-        javax.swing.JOptionPane.showMessageDialog(this, "Thanh toán thành công! Mã HĐ: " + maHD);
-        
-        // Reset giỏ hàng
-        modelGioHang.setRowCount(0);
-        tinhTongTien();
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        javax.swing.JOptionPane.showMessageDialog(this, "Lỗi khi lưu hóa đơn!");
-    }
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void tblGioHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGioHangMouseClicked

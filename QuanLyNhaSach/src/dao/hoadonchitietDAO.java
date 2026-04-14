@@ -3,6 +3,11 @@ package dao;
 import entity.hoadonchitiet;
 import java.util.List;
 
-public interface hoadonchitietDAO extends CrudDAO<hoadonchitiet, Integer> {
-    List<hoadonchitiet> findByHoaDon(String maHoaDon);
+public interface hoadonchitietDAO {
+    hoadonchitiet create(hoadonchitiet entity);
+    void update(hoadonchitiet entity);
+    void deleteById(int id);
+    List<hoadonchitiet> findAll();
+    hoadonchitiet findById(int id);
+    List<hoadonchitiet> findByHoaDon(String maHD);
 }
