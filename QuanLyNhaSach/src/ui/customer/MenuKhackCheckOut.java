@@ -53,9 +53,9 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 32)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel1.setText("Quầy Checkout tự động");
+        jLabel1.setText("Quầy Self-Checkout");
 
         btnTraCuuSP.setBackground(new java.awt.Color(23, 33, 98));
         btnTraCuuSP.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
@@ -70,7 +70,7 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
         btnTimKiemVaThanhToan.setBackground(new java.awt.Color(23, 33, 98));
         btnTimKiemVaThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         btnTimKiemVaThanhToan.setForeground(new java.awt.Color(255, 255, 255));
-        btnTimKiemVaThanhToan.setLabel("Tìm kiếm & Thanh toán");
+        btnTimKiemVaThanhToan.setText("Thanh toán");
         btnTimKiemVaThanhToan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemVaThanhToanActionPerformed(evt);
@@ -97,17 +97,16 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnThoat1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnTimKiemVaThanhToan)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(235, 235, 235)
-                                    .addComponent(jLabel1))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(220, 220, 220)
-                                    .addComponent(btnTraCuuSP, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(220, 220, 220)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnTimKiemVaThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTraCuuSP, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 233, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(256, 256, 256)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

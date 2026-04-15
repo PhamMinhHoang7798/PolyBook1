@@ -106,7 +106,7 @@ public class TraCuuSP extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(TblDanhSach);
 
-        btnFilter4.setBackground(new java.awt.Color(220, 220, 220));
+        btnFilter4.setBackground(new java.awt.Color(255, 0, 51));
         btnFilter4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnFilter4.setText("Trở lại");
         btnFilter4.addActionListener(new java.awt.event.ActionListener() {

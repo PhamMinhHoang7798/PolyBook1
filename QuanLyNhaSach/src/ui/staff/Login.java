@@ -91,7 +91,7 @@ public class Login extends javax.swing.JFrame {
 
         txtUserName.setText("admin");
 
-        btnThoat.setBackground(new java.awt.Color(47, 93, 164));
+        btnThoat.setBackground(new java.awt.Color(255, 51, 51));
         btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnThoat.setForeground(new java.awt.Color(255, 255, 255));
         btnThoat.setText("Thoát");
@@ -118,9 +118,9 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btnDangNhapKhach.setBackground(new java.awt.Color(47, 93, 164));
+        btnDangNhapKhach.setBackground(new java.awt.Color(102, 255, 102));
         btnDangNhapKhach.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnDangNhapKhach.setForeground(new java.awt.Color(255, 255, 255));
+        btnDangNhapKhach.setForeground(new java.awt.Color(0, 0, 0));
         btnDangNhapKhach.setText("Customer");
         btnDangNhapKhach.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,7 +151,7 @@ public class Login extends javax.swing.JFrame {
                         .addGap(57, 57, 57))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(btnDangNhapKhach, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(129, 129, 129))))
+                        .addGap(126, 126, 126))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

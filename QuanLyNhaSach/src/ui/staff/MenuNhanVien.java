@@ -197,7 +197,18 @@ public class MenuNhanVien extends javax.swing.JFrame {
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        if (util.XDialog.confirm(this, "Bạn có muốn đăng xuất không?")) {
+            // 1. Xóa thông tin đăng nhập cũ
+            util.XAuth.logout();
+
+            // 2. Đóng tất cả các cửa sổ đang mở (nếu cần) và giải phóng bộ nhớ
+            this.dispose();
+
+            // 3. Chạy màn hình Login trong EventQueue để đảm bảo an toàn luồng UI
+            java.awt.EventQueue.invokeLater(() -> {
+                new Login().setVisible(true);
+            });
+        }
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnLichSuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLichSuActionPerformed
