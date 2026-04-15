@@ -69,13 +69,13 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel34" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtBegin1" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="txtBegin" min="-2" pref="110" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jLabel43" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtEnd1" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="txtEnd" min="-2" pref="110" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="btnFilter2" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="btnFilter" min="-2" pref="100" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -94,9 +94,9 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel34" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel43" alignment="3" max="32767" attributes="0"/>
-                      <Component id="txtEnd1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                      <Component id="txtBegin1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                      <Component id="btnFilter2" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="txtEnd" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="txtBegin" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="btnFilter" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -122,12 +122,12 @@
             <Property name="text" type="java.lang.String" value="T&#x1eeb; ng&#xe0;y: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtBegin1">
+        <Component class="javax.swing.JTextField" name="txtBegin">
           <Properties>
             <Property name="columns" type="int" value="8"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtBegin1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtBeginActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel43">
@@ -138,12 +138,12 @@
             <Property name="text" type="java.lang.String" value="&#x110;&#x1ebf;n ng&#xe0;y: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtEnd1">
+        <Component class="javax.swing.JTextField" name="txtEnd">
           <Properties>
             <Property name="columns" type="int" value="8"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtEnd1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtEndActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
@@ -154,7 +154,7 @@
             <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xfd; doanh thu"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnFilter2">
+        <Component class="javax.swing.JButton" name="btnFilter">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="9c" green="56" red="1c" type="rgb"/>
@@ -168,7 +168,7 @@
             <Property name="text" type="java.lang.String" value="L&#x1ecd;c"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFilter2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFilterActionPerformed"/>
           </Events>
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel2">

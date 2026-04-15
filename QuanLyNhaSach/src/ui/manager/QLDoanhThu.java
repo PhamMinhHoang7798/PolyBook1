@@ -32,11 +32,11 @@ public class QLDoanhThu extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
-        txtBegin1 = new javax.swing.JTextField();
+        txtBegin = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
-        txtEnd1 = new javax.swing.JTextField();
+        txtEnd = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        btnFilter2 = new javax.swing.JButton();
+        btnFilter = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -60,33 +60,33 @@ public class QLDoanhThu extends javax.swing.JFrame {
         jLabel34.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel34.setText("Từ ngày: ");
 
-        txtBegin1.setColumns(8);
-        txtBegin1.addActionListener(new java.awt.event.ActionListener() {
+        txtBegin.setColumns(8);
+        txtBegin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBegin1ActionPerformed(evt);
+                txtBeginActionPerformed(evt);
             }
         });
 
         jLabel43.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel43.setText("Đến ngày: ");
 
-        txtEnd1.setColumns(8);
-        txtEnd1.addActionListener(new java.awt.event.ActionListener() {
+        txtEnd.setColumns(8);
+        txtEnd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEnd1ActionPerformed(evt);
+                txtEndActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         jLabel1.setText("Quản lý doanh thu");
 
-        btnFilter2.setBackground(new java.awt.Color(28, 86, 156));
-        btnFilter2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnFilter2.setForeground(new java.awt.Color(255, 255, 255));
-        btnFilter2.setText("Lọc");
-        btnFilter2.addActionListener(new java.awt.event.ActionListener() {
+        btnFilter.setBackground(new java.awt.Color(28, 86, 156));
+        btnFilter.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnFilter.setForeground(new java.awt.Color(255, 255, 255));
+        btnFilter.setText("Lọc");
+        btnFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilter2ActionPerformed(evt);
+                btnFilterActionPerformed(evt);
             }
         });
 
@@ -97,7 +97,6 @@ public class QLDoanhThu extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Tổng doanh thu");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\increase.png")); // NOI18N
         jLabel3.setText(" ");
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -139,7 +138,6 @@ public class QLDoanhThu extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Tổng đơn hàng");
 
-        jLabel5.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\checklist (1).png")); // NOI18N
         jLabel5.setText(" ");
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -182,7 +180,6 @@ public class QLDoanhThu extends javax.swing.JFrame {
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Tổng đơn hàng");
 
-        jLabel11.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\logistics.png")); // NOI18N
         jLabel11.setText(" ");
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -250,13 +247,13 @@ public class QLDoanhThu extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel34)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtBegin1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtBegin, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel43)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtEnd1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
-                                .addComponent(btnFilter2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -269,9 +266,9 @@ public class QLDoanhThu extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel34)
                     .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtEnd1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBegin1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnFilter2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBegin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -299,17 +296,17 @@ public class QLDoanhThu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnFilter2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter2ActionPerformed
+    private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnFilter2ActionPerformed
+    }//GEN-LAST:event_btnFilterActionPerformed
 
-    private void txtEnd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEnd1ActionPerformed
+    private void txtEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEndActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEnd1ActionPerformed
+    }//GEN-LAST:event_txtEndActionPerformed
 
-    private void txtBegin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBegin1ActionPerformed
+    private void txtBeginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBeginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBegin1ActionPerformed
+    }//GEN-LAST:event_txtBeginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -337,7 +334,7 @@ public class QLDoanhThu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnFilter2;
+    private javax.swing.JButton btnFilter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -350,19 +347,13 @@ public class QLDoanhThu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtBegin1;
-    private javax.swing.JTextField txtEnd1;
+    private javax.swing.JTextField txtBegin;
+    private javax.swing.JTextField txtEnd;
     // End of variables declaration//GEN-END:variables
 }
