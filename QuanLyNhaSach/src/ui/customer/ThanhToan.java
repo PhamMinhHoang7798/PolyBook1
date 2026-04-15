@@ -103,14 +103,15 @@ public class ThanhToan extends javax.swing.JFrame {
         tblDanhSach = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        btnBack = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblGioHang = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        btnThanhToan = new javax.swing.JButton();
         btnHuy = new javax.swing.JButton();
+        btnThanhToan1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -205,21 +206,34 @@ public class ThanhToan extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Tìm kiếm & Thanh toán");
 
+        btnBack.setBackground(new java.awt.Color(255, 0, 51));
+        btnBack.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnBack.setText("Trở lại");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(258, Short.MAX_VALUE)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(243, 243, 243))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(19, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(17, 17, 17))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -251,16 +265,6 @@ public class ThanhToan extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setText(" ");
 
-        btnThanhToan.setBackground(new java.awt.Color(96, 147, 104));
-        btnThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnThanhToan.setForeground(new java.awt.Color(255, 255, 255));
-        btnThanhToan.setText("Thanh Toán");
-        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThanhToanActionPerformed(evt);
-            }
-        });
-
         btnHuy.setBackground(new java.awt.Color(209, 98, 98));
         btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnHuy.setForeground(new java.awt.Color(255, 255, 255));
@@ -268,6 +272,16 @@ public class ThanhToan extends javax.swing.JFrame {
         btnHuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHuyActionPerformed(evt);
+            }
+        });
+
+        btnThanhToan1.setBackground(new java.awt.Color(96, 147, 104));
+        btnThanhToan1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnThanhToan1.setForeground(new java.awt.Color(255, 255, 255));
+        btnThanhToan1.setText("Thanh Toán");
+        btnThanhToan1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThanhToan1ActionPerformed(evt);
             }
         });
 
@@ -288,7 +302,7 @@ public class ThanhToan extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(28, 28, 28)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnThanhToan1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -313,8 +327,8 @@ public class ThanhToan extends javax.swing.JFrame {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnThanhToan)
-                    .addComponent(btnHuy))
+                    .addComponent(btnHuy)
+                    .addComponent(btnThanhToan1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -339,7 +353,7 @@ public class ThanhToan extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 4, Short.MAX_VALUE))
         );
 
         pack();
@@ -394,43 +408,21 @@ public class ThanhToan extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tblDanhSachMouseClicked
 
-    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-        // TODO add your handling code here:
-        String maHD = String.valueOf(System.currentTimeMillis());
-
-// INSERT HÓA ĐƠN
-        hoadon hd = new hoadon();
-        hd.setMaHoaDon(maHD);
-        hd.setMaKhachHang("KH001");
-        hd.setNgayLap(new java.util.Date());
-        hd.setPhuongThucThanhToan("Tiền mặt");
-        hd.setTrangThai("Đã thanh toán");
-        hd.setTongTien(tongTien);
-        hd.setTenDangNhap("admin");
-
-        hdDAO.create(hd);
-
-// INSERT CHI TIẾT
-        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
-
-            String temp = modelGioHang.getValueAt(i, 0).toString();
-            String maSP = temp.split(" - ")[0];
-
-            hoadonchitiet ct = new hoadonchitiet();
-            ct.setMaCT((int) System.currentTimeMillis());
-            ct.setMaHoaDon(maHD);
-            ct.setMaSanPham(maSP);
-            ct.setSoLuong((Integer) modelGioHang.getValueAt(i, 1));
-            ct.setGia((Double) modelGioHang.getValueAt(i, 2));
-
-            hdctDAO.create(ct);
-        }
-
-    }//GEN-LAST:event_btnThanhToanActionPerformed
-
     private void tblGioHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGioHangMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tblGioHangMouseClicked
+
+    private void btnThanhToan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToan1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnThanhToan1ActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        this.dispose(); // Tắt form TraSP hiện tại
+
+        // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
+        new MenuKhackCheckOut().setVisible(true);
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -458,8 +450,9 @@ public class ThanhToan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnHuy;
-    private javax.swing.JButton btnThanhToan;
+    private javax.swing.JButton btnThanhToan1;
     private javax.swing.JButton btnTim;
     private javax.swing.JComboBox<String> cboTimeRanges2;
     private javax.swing.JLabel jLabel1;
