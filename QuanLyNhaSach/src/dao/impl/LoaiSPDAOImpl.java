@@ -69,4 +69,10 @@ public class LoaiSPDAOImpl implements LoaiSPDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<LoaiSP> selectByKeyword(String keyword) {
+        String sql = "SELECT * FROM LoaiSanPham WHERE MaLoai LIKE ? OR TenLoai LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%");
+    }
 }

@@ -13,6 +13,7 @@ import util.XDialog;
  *
  * @author nguye
  */
+
 public class QlLoaiSP extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QlLoaiSP.class.getName());
@@ -22,17 +23,25 @@ public class QlLoaiSP extends javax.swing.JFrame {
      */
     public QlLoaiSP() {
         initComponents();
-        
-
         setLocationRelativeTo(null);
-        loadTable();
+        loadTable("");
     }
 
-    void loadTable() {
+    // Nâng cấp loadTable: Có hỗ trợ lọc theo từ khóa
+    void loadTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tlbLoaiSanPham.getModel();
         model.setRowCount(0);
 
-        for (LoaiSP l : dao.selectAll()) {
+        java.util.List<LoaiSP> list;
+
+        // Nếu không gõ gì thì lấy tất cả, nếu có gõ thì tìm theo từ khóa
+        if (keyword == null || keyword.trim().isEmpty()) {
+            list = dao.selectAll();
+        } else {
+            list = dao.selectByKeyword(keyword);
+        }
+
+        for (LoaiSP l : list) {
             model.addRow(new Object[]{
                 l.getMaLoai(),
                 l.getTenLoai()
@@ -78,6 +87,12 @@ public class QlLoaiSP extends javax.swing.JFrame {
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtNhapMaLoai.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNhapMaLoaiKeyReleased(evt);
+            }
+        });
 
         btnTim.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnTim.setText("Tìm");
@@ -155,7 +170,6 @@ public class QlLoaiSP extends javax.swing.JFrame {
         });
 
         btnCapNhat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCapNhat.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Edit.png")); // NOI18N
         btnCapNhat.setText("Cập nhập");
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,7 +178,6 @@ public class QlLoaiSP extends javax.swing.JFrame {
         });
 
         btnTaoMoi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnTaoMoi.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Accept.png")); // NOI18N
         btnTaoMoi.setText("Tạo mới");
         btnTaoMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,7 +186,6 @@ public class QlLoaiSP extends javax.swing.JFrame {
         });
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnXoa.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Delete.png")); // NOI18N
         btnXoa.setText("Xóa");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,7 +194,6 @@ public class QlLoaiSP extends javax.swing.JFrame {
         });
 
         btnNhapMoi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnNhapMoi.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Add.png")); // NOI18N
         btnNhapMoi.setText("Nhập mới");
         btnNhapMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,7 +296,8 @@ public class QlLoaiSP extends javax.swing.JFrame {
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
-        find();
+        String keyword = txtNhapMaLoai.getText().trim();
+        loadTable(keyword); // Gọi hàm load lại bảng với từ khóa vừa nhập
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void btnTaoMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoMoiActionPerformed
@@ -318,113 +330,140 @@ public class QlLoaiSP extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tlbLoaiSanPhamMouseClicked
 
+    private void txtNhapMaLoaiKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNhapMaLoaiKeyReleased
+        // TODO add your handling code here:
+        String keyword = txtNhapMaLoai.getText().trim();
+        loadTable(keyword);
+    }//GEN-LAST:event_txtNhapMaLoaiKeyReleased
+
     LoaiSPDAOImpl dao = new LoaiSPDAOImpl();
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+    } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+        logger.log(java.util.logging.Level.SEVERE, null, ex);
+    }
+    //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new QlLoaiSP().setVisible(true));
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(() -> new QlLoaiSP().setVisible(true));
+}
+
+LoaiSP getForm() {
+    LoaiSP l = new LoaiSP();
+    l.setMaLoai(txtMaLoai.getText()); // Giữ nguyên kiểu chuỗi để nhận "a1"
+    l.setTenLoai(txtTenloai.getText()); // Đã sửa lại đúng tên biến của ông
+    return l;
+}
+
+void insert() {
+    // Bây giờ bắt buộc phải nhập cả 2 ô
+    if (txtMaLoai.getText().isEmpty() || txtTenloai.getText().isEmpty()) {
+        XDialog.alert(this, "Không được để trống Mã loại và Tên loại!");
+        return;
     }
 
-    LoaiSP getForm() {
-        LoaiSP l = new LoaiSP();
-        l.setMaLoai(txtMaLoai.getText()); // Giữ nguyên kiểu chuỗi để nhận "a1"
-        l.setTenLoai(txtTenloai.getText()); // Đã sửa lại đúng tên biến của ông
-        return l;
+    try {
+        dao.insert(getForm());
+        loadTable("");
+        clearForm();
+        XDialog.alert(this, "Thêm thành công!");
+    } catch (Exception e) {
+        XDialog.alert(this, "Lỗi thêm mới: " + e.getMessage());
+    }
+}
+
+void update() {
+    String ma = txtMaLoai.getText();
+
+    if (ma.isEmpty()) {
+        XDialog.alert(this, "Vui lòng nhập mã loại cần cập nhật!");
+        return;
     }
 
-    void insert() {
-        // Bây giờ bắt buộc phải nhập cả 2 ô
-        if (txtMaLoai.getText().isEmpty() || txtTenloai.getText().isEmpty()) {
-            XDialog.alert(this, "Không được để trống Mã loại và Tên loại!");
-            return;
-        }
+    // KIỂM TRA TỒN TẠI TRƯỚC KHI CẬP NHẬT
+    LoaiSP checkTonTai = dao.findById(ma);
+    if (checkTonTai == null) {
+        XDialog.alert(this, "Chưa có sản phẩm trong danh sách để chỉnh sửa!");
+        return; // Dừng lại, không chạy code update phía dưới nữa
+    }
 
+    try {
+        dao.update(getForm());
+        loadTable("");
+        XDialog.alert(this, "Cập nhật thành công!");
+    } catch (Exception e) {
+        XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
+    }
+}
+
+void clearForm() {
+    txtMaLoai.setText("");
+    txtTenloai.setText("");
+}
+
+void delete() {
+    String ma = txtMaLoai.getText();
+
+    if (ma.isEmpty()) {
+        XDialog.alert(this, "Chưa nhập mã để xóa!");
+        return;
+    }
+
+    // KIỂM TRA TỒN TẠI TRƯỚC KHI XÓA
+    LoaiSP checkTonTai = dao.findById(ma);
+    if (checkTonTai == null) {
+        XDialog.alert(this, "Không có sản phẩm này trong danh sách để xóa!");
+        return; // Dừng lại, không chạy code delete phía dưới nữa
+    }
+
+    if (XDialog.confirm(this, "Bạn chắc chắn muốn xóa?")) {
         try {
-            dao.insert(getForm());
-            loadTable();
-            clearForm();
-            XDialog.alert(this, "Thêm thành công!");
-        } catch (Exception e) {
-            XDialog.alert(this, "Lỗi thêm mới: " + e.getMessage());
-        }
-    }
-
-    void update() {
-        if (txtMaLoai.getText().isEmpty()) {
-            XDialog.alert(this, "Vui lòng nhập mã loại cần cập nhật!");
-            return;
-        }
-
-        try {
-            dao.update(getForm());
-            loadTable(); // Load lại bảng sau khi sửa
-            XDialog.alert(this, "Cập nhật thành công!");
-        } catch (Exception e) {
-            XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
-        }
-    }
-
-    void clearForm() {
-        txtMaLoai.setText("");
-        txtTenloai.setText("");
-    }
-
-    void delete() {
-        String ma = txtMaLoai.getText();
-
-        if (ma.isEmpty()) {
-            XDialog.alert(this, "Chưa nhập mã!");
-            return;
-        }
-
-        if (XDialog.confirm(this, "Bạn chắc chắn muốn xóa?")) {
             dao.delete(ma);
-            loadTable();
+            loadTable("");
+            clearForm(); // Nên xóa trắng các ô nhập liệu sau khi đã xóa thành công
             XDialog.alert(this, "Xóa thành công!");
+        } catch (Exception e) {
+            XDialog.alert(this, "Lỗi khi xóa: " + e.getMessage());
         }
     }
+}
 
-    void find() {
-        String ma = txtNhapMaLoai.getText();
-        LoaiSP l = dao.findById(ma);
+void find() {
+    String ma = txtNhapMaLoai.getText();
+    LoaiSP l = dao.findById(ma);
 
-        if (l != null) {
-            txtMaLoai.setText(l.getMaLoai());
-            txtTenloai.setText(l.getTenLoai());
-            jTabbedPane1.setSelectedIndex(1);
-        } else {
-            XDialog.alert(this, "Không tìm thấy!");
-        }
+    if (l != null) {
+        txtMaLoai.setText(l.getMaLoai());
+        txtTenloai.setText(l.getTenLoai());
+        jTabbedPane1.setSelectedIndex(1);
+    } else {
+        XDialog.alert(this, "Không tìm thấy!");
     }
+}
 
-    void edit() {
-        int row = tlbLoaiSanPham.getSelectedRow();
-        if (row >= 0) {
-            txtMaLoai.setText(tlbLoaiSanPham.getValueAt(row, 0).toString());
-            txtTenloai.setText(tlbLoaiSanPham.getValueAt(row, 1).toString());
-            jTabbedPane1.setSelectedIndex(1);
-        }
+void edit() {
+    int row = tlbLoaiSanPham.getSelectedRow();
+    if (row >= 0) {
+        txtMaLoai.setText(tlbLoaiSanPham.getValueAt(row, 0).toString());
+        txtTenloai.setText(tlbLoaiSanPham.getValueAt(row, 1).toString());
+        jTabbedPane1.setSelectedIndex(1);
     }
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -10,14 +10,14 @@ import ui.staff.Login;
  *
  * @author nguye
  */
-public class MenuKhackCheckOut extends javax.swing.JFrame {
+public class MenuKhackCheckout extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuKhackCheckOut.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuKhackCheckout.class.getName());
 
     /**
      * Creates new form CheckOut
      */
-    public MenuKhackCheckOut() {
+    public MenuKhackCheckout() {
         initComponents();
         // Lệnh này ép Cửa sổ Menu tự động nhảy ra chính giữa màn hình
         this.setLocationRelativeTo(null);
@@ -186,7 +186,7 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MenuKhackCheckOut().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new MenuKhackCheckout().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

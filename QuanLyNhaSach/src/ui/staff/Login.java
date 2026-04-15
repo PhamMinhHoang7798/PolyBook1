@@ -7,7 +7,7 @@ package ui.staff;
 import dao.UserDAO;
 import dao.impl.UserDAOImpl;
 import entity.User;
-import ui.customer.MenuKhackCheckOut;
+import ui.customer.MenuKhackCheckout;
 import ui.manager.MenuQuanLy;
 import util.XAuth;
 import util.XDialog;
@@ -51,7 +51,7 @@ public class Login extends javax.swing.JFrame {
                 case 2 -> // nv => NV vai trò 2
                     new MenuNhanVien().setVisible(true);
                 case 0 -> // user2 => Khách vai trò 0
-                    new MenuKhackCheckOut().setVisible(true);
+                    new MenuKhackCheckout().setVisible(true);
                 default ->
                     XDialog.alert(this, "Không xác định vai trò!");
             }
@@ -206,7 +206,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btnDangNhapKhachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapKhachActionPerformed
         // TODO add your handling code here:
-        new ui.customer.MenuKhackCheckOut().setVisible(true);
+        new ui.customer.MenuKhackCheckout().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnDangNhapKhachActionPerformed
 

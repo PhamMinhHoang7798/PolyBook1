@@ -222,7 +222,7 @@ public class TraCuuSP extends javax.swing.JFrame {
         this.dispose(); // Tắt form TraCuuSP hiện tại
 
         // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
-        new MenuKhackCheckOut().setVisible(true);
+        new MenuKhackCheckout().setVisible(true);
     }//GEN-LAST:event_btnFilter4ActionPerformed
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed

@@ -13,4 +13,5 @@ public interface LoaiSPDAO {
     void delete(String maLoai);
     List<LoaiSP> selectAll();
     LoaiSP findById(String maLoai);
+    List<LoaiSP> selectByKeyword(String keyword);
 }
