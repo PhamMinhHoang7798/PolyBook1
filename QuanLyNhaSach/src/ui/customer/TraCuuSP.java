@@ -8,9 +8,9 @@ package ui.customer;
  *
  * @author nguye
  */
-public class TraSP extends javax.swing.JFrame {
+public class TraCuuSP extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TraSP.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TraCuuSP.class.getName());
     // 1. Khai báo DAO và Model
     private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
     private javax.swing.table.DefaultTableModel modelSanPham;
@@ -18,7 +18,7 @@ public class TraSP extends javax.swing.JFrame {
     /**
      * Creates new form TráP
      */
-    public TraSP() {
+    public TraCuuSP() {
         initComponents();
         
 
@@ -219,7 +219,7 @@ public class TraSP extends javax.swing.JFrame {
 
     private void btnFilter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter4ActionPerformed
         // TODO add your handling code here:
-        this.dispose(); // Tắt form TraSP hiện tại
+        this.dispose(); // Tắt form TraCuuSP hiện tại
 
         // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
         new MenuKhackCheckOut().setVisible(true);
@@ -227,7 +227,7 @@ public class TraSP extends javax.swing.JFrame {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-        this.dispose(); // Tắt form TraSP hiện tại
+        this.dispose(); // Tắt form TraCuuSP hiện tại
 
         // Mở form Thanh Toán lên
         new ThanhToan().setVisible(true);
@@ -255,7 +255,7 @@ public class TraSP extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TraSP().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new TraCuuSP().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
