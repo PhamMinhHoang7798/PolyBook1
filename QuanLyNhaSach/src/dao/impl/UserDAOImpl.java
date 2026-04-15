@@ -71,10 +71,16 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public List<User> selectByKeyword(String keyword) {
+        String sql = "SELECT * FROM NguoiDung WHERE TenDangNhap LIKE ? OR HoTen LIKE ?";
+        // Phải dùng XQuery.getBeanList mới đúng bộ thư viện ông đang xài
+        return util.XQuery.getBeanList(User.class, sql, "%" + keyword + "%", "%" + keyword + "%");
+    }
+
+    @Override
     public void insert(User user) {
         create(user);
     }
-
 
     @Override
     public void delete(String tenDangNhap) {
@@ -91,9 +97,4 @@ public class UserDAOImpl implements UserDAO {
         return findAll();
     }
 
-
-    @Override
-    public List<User> selectByKeyword(String keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

@@ -23,9 +23,8 @@ public class QlNguoidung extends javax.swing.JFrame {
      */
     public QlNguoidung() {
         initComponents();
-        
 
-        loadTable();
+        loadTable("");
         javax.swing.ButtonGroup roleGroup = new javax.swing.ButtonGroup();
         roleGroup.add(rbtQuanLy);
         roleGroup.add(rbtNhanVien);
@@ -60,11 +59,18 @@ public class QlNguoidung extends javax.swing.JFrame {
         return u;
     }
 
-    private void loadTable() {
+    private void loadTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblQLNguoiDung.getModel();
         model.setRowCount(0);
 
-        List<User> list = dao.selectAll();
+        List<User> list;
+        // Nếu ô tìm kiếm trống thì lấy tất cả, ngược lại thì tìm theo từ khóa
+        if (keyword == null || keyword.trim().isEmpty()) {
+            list = dao.selectAll();
+        } else {
+            list = dao.selectByKeyword(keyword);
+        }
+
         for (User u : list) {
             model.addRow(new Object[]{
                 u.getTenDangNhap() == null ? "" : u.getTenDangNhap(),
@@ -92,7 +98,7 @@ public class QlNguoidung extends javax.swing.JFrame {
 
             dao.insert(getForm());
             XDialog.alert(this, "Thêm thành công!");
-            loadTable();
+            loadTable("");
             clearForm();
 
         } catch (Exception e) {
@@ -110,7 +116,7 @@ public class QlNguoidung extends javax.swing.JFrame {
 
             dao.update(getForm());
             XDialog.alert(this, "Cập nhật thành công!");
-            loadTable();
+            loadTable("");
 
         } catch (Exception e) {
             XDialog.alert(this, "Cập nhật thất bại!");
@@ -133,7 +139,7 @@ public class QlNguoidung extends javax.swing.JFrame {
             if (confirm == javax.swing.JOptionPane.YES_OPTION) {
                 dao.delete(id);
                 XDialog.alert(this, "Xóa thành công!");
-                loadTable();
+                loadTable("");
                 clearForm();
             }
 
@@ -204,7 +210,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         btnNhapMoi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(716, 630));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(716, 630));
@@ -214,8 +219,19 @@ public class QlNguoidung extends javax.swing.JFrame {
 
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        txtTim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKeyReleased(evt);
+            }
+        });
+
         btnTim.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnTim.setText("Tìm");
+        btnTim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimActionPerformed(evt);
+            }
+        });
 
         tblQLNguoiDung.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -367,7 +383,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         );
 
         btnTaoMoi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnTaoMoi.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Accept.png")); // NOI18N
         btnTaoMoi.setText("Tạo mới");
         btnTaoMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -376,7 +391,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         });
 
         btnCapNhat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnCapNhat.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Edit.png")); // NOI18N
         btnCapNhat.setText("Cập nhập");
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -385,7 +399,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         });
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnXoa.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Delete.png")); // NOI18N
         btnXoa.setText("Xóa");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -394,7 +407,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         });
 
         btnNhapMoi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnNhapMoi.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\Add.png")); // NOI18N
         btnNhapMoi.setText("Nhập mới");
         btnNhapMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -614,7 +626,6 @@ public class QlNguoidung extends javax.swing.JFrame {
             // chuyển tab sang form
             jTabbedPane1.setSelectedIndex(1);
         }
-
     }//GEN-LAST:event_tblQLNguoiDungMouseClicked
 
     private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
@@ -657,6 +668,16 @@ public class QlNguoidung extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_lblHinhMouseClicked
+
+    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
+        // TODO add your handling code here:
+        loadTable(txtTim.getText().trim());
+    }//GEN-LAST:event_btnTimActionPerformed
+
+    private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
+        // TODO add your handling code here:
+        loadTable(txtTim.getText().trim());
+    }//GEN-LAST:event_txtTimKeyReleased
 
     /**
      * @param args the command line arguments
