@@ -17,11 +17,10 @@ public class TaoHoaDon extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TaoHoaDon.class.getName());
     private DefaultTableModel model;
-    private List<HoaDonChiTiet> listCTHD = new ArrayList<>();
-
+    private List<hoadonchitiet> listCTHD = new ArrayList<>();
     private SanPhamDAOImpl sanPhamDAO = new SanPhamDAOImpl();
     private hoadonDAOImpl hoaDonDAO = new hoadonDAOImpl();
-    private HoaDonChiTietDAOImpl ctDAO = new HoaDonChiTietDAOImpl();
+    private hoadonchitietDAOImpl ctDAO = new hoadonchitietDAOImpl();
     /**
      * Creates new form TaoHoaDon
      */
@@ -316,7 +315,7 @@ public class TaoHoaDon extends javax.swing.JFrame {
 
     if (maSP == null || maSP.isEmpty()) return;
 
-    SanPham sp = sanPhamDAO.findById(maSP);
+    SanPham sp = sanPhamDAO.selectById(maSP);
 
     if (sp == null) {
         JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
@@ -324,18 +323,20 @@ public class TaoHoaDon extends javax.swing.JFrame {
     }
 
     // nếu đã có thì tăng số lượng
-    for (HoaDonChiTiet ct : listCTHD) {
-        if (ct.getMaSP().equals(maSP)) {
-            ct.setSoLuong((int)ct.getSoLuong() + 1);
-            loadTable();
-            tinhTongTien();
-            return;
-        }
+    for (hoadonchitiet ct : listCTHD) {
+    if (maSP.equalsIgnoreCase(ct.getMaSanPham())) { // không phân biệt hoa thường
+        ct.setSoLuong(ct.getSoLuong() + 1);
+        loadTable();
+        tinhTongTien();
+        return;
     }
+}
+ 
+   
 
-    HoaDonChiTiet ct = new HoaDonChiTiet();
-    ct.setMaSP();
-    ct.setGia(10000);
+    hoadonchitiet ct = new hoadonchitiet();
+    ct.setMaSanPham(sp.getMaSanPham());
+    ct.setGia(sp.getDonGia());
     ct.setSoLuong(1);
 
     listCTHD.add(ct);
@@ -344,39 +345,41 @@ public class TaoHoaDon extends javax.swing.JFrame {
     tinhTongTien();
 }
 
- private void thanhToan() {
+private void thanhToan() {
     if (listCTHD.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Chưa có sản phẩm trong giỏ!");
         return;
     }
 
-    // 1. Tạo một mã hóa đơn bằng số nguyên (Vì SQL đang để INT)
-    int maHD = (int) (System.currentTimeMillis() % 1000000);
-
     try {
-        // 2. Lưu từng sản phẩm trong giỏ hàng vào database
-        for (HoaDonChiTiet ct : listCTHD) {
-            // Sử dụng đúng entity.hoadon (chữ h thường)
-            entity.hoadon hd = new entity.hoadon();
-            
-            hd.setMaHoaDon(maHD);
-            
-            // Ép kiểu về String do bảng hoadon quy định MaSanPham là String
-            hd.setMaSanPham(String.valueOf(ct.getMaSP())); 
-            
-            // Ép kiểu về Int do bảng hoadon quy định SoLuong là Int
-            hd.setSoLuong((int) ct.getSoLuong()); 
-            
-            // Ép kiểu về Double do bảng hoadon quy định DonGia là Double
-            hd.setDonGia((double) ct.getGia());
+        // 1. Tạo mã hóa đơn (STRING cho đúng entity)
+        String maHD = String.valueOf(System.currentTimeMillis());
 
-            // Lưu vào DB
-            hoaDonDAO.insert(hd); 
+        // 2. Tạo HOÁ ĐƠN (header)
+        hoadon hd = new hoadon();
+        hd.setMaHoaDon(maHD);
+        hd.setNgayLap(new Date());
+        hd.setTongTien(Double.parseDouble(jLabel7.getText()));
+        hd.setTrangThai("Đã thanh toán");
+
+        hoaDonDAO.create(hd);
+
+        // 3. Lưu CHI TIẾT HOÁ ĐƠN
+        for (hoadonchitiet ct : listCTHD) {
+            hoadonchitiet ctEntity = new hoadonchitiet();
+
+            ctEntity.setMaHoaDon(maHD);
+            ctEntity.setMaSanPham(ct.getMaSanPham());
+            ctEntity.setSoLuong(ct.getSoLuong());
+            ctEntity.setGia(ct.getGia());
+
+            ctDAO.create(ctEntity);
         }
 
-        JOptionPane.showMessageDialog(this, "Thanh toán thành công! Mã Hóa Đơn: " + maHD);
-        huyhoadon(); // Làm mới lại giỏ hàng
-        
+        JOptionPane.showMessageDialog(this, "Thanh toán thành công! Mã HD: " + maHD);
+
+        huyhoadon();
+
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Lỗi thanh toán: " + e.getMessage());
     }
@@ -392,12 +395,12 @@ public class TaoHoaDon extends javax.swing.JFrame {
  private void loadTable() {
     model.setRowCount(0);
 
-    for (HoaDonChiTiet ct : listCTHD) {
+    for (hoadonchitiet ct : listCTHD) {
         model.addRow(new Object[]{
-            ct.getMaSP(),
-            ct.getTenSP(),
+            ct.getMaSanPham(),
             ct.getGia(),
             ct.getSoLuong(),
+
             "Xóa"
         });
     }
@@ -405,17 +408,11 @@ public class TaoHoaDon extends javax.swing.JFrame {
  private void tinhTongTien() {
     double tong = 0;
 
-    for (HoaDonChiTiet ct : listCTHD) {
+    for (hoadonchitiet ct : listCTHD) {
         tong +=(double) ct.getGia() * (int)ct.getSoLuong();
     }
 
     jLabel4.setText(String.valueOf(tong));
     jLabel7.setText(String.valueOf(tong));
 }
-
-    private static class HoaDonChiTietDAOImpl {
-
-        public HoaDonChiTietDAOImpl() {
-        }
-    }
 }

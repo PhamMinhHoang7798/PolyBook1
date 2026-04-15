@@ -545,15 +545,16 @@ private void clearForm() {
 
     private void tblQLNguoiDungMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQLNguoiDungMouseClicked
         // TODO add your handling code here:
-        if (evt.getClickCount() == 2) { // double click
-        int row = tblQLNguoiDung.getSelectedRow();
-        if (row < 0) return;
+        if (evt.getClickCount() == 2) {
+    int row = tblQLNguoiDung.getSelectedRow();
+    if (row < 0) return;
 
-        txtTenDangNhap.setText(getValueSafe(row, 0));
-        txtMatkhau.setText(getValueSafe(row, 1));
-        txtHoten.setText(getValueSafe(row, 2));
+    txtTenDangNhap.setText(getValueSafe(row, 0));
+    txtMatkhau.setText(getValueSafe(row, 1));
+    txtHoten.setText(getValueSafe(row, 2));
 
-        String img = getValueSafe(row, 3);
+    // ===== HÌNH ẢNH =====
+    String img = getValueSafe(row, 3);
 hinhAnh = img;
 
 if (img != null && !img.isEmpty()) {
@@ -570,37 +571,80 @@ if (img != null && !img.isEmpty()) {
 
         lblHinh.setIcon(new javax.swing.ImageIcon(scaled));
     } else {
+        System.out.println("Không tìm thấy ảnh: " + file.getAbsolutePath());
         lblHinh.setIcon(null);
     }
 } else {
     lblHinh.setIcon(null);
 }
-        }
-        jTabbedPane1.setSelectedIndex(1);
+    // ===== VAI TRÒ =====
+    String vaiTro = getValueSafe(row, 4);
+    rbtQuanLy.setSelected(false);
+    rbtNhanVien.setSelected(false);
+    rbtKhachHang.setSelected(false);
+
+    if (vaiTro.equals("Quản lý")) {
+        rbtQuanLy.setSelected(true);
+    } else if (vaiTro.equals("Nhân viên")) {
+        rbtNhanVien.setSelected(true);
+    } else {
+        rbtKhachHang.setSelected(true);
+    }
+
+    // ===== TRẠNG THÁI =====
+    String trangThai = getValueSafe(row, 5);
+    rbtHoatDong.setSelected(false);
+    rbtTamDung.setSelected(false);
+
+    if (trangThai.equals("Hoạt động")) {
+        rbtHoatDong.setSelected(true);
+    } else {
+        rbtTamDung.setSelected(true);
+    }
+
+    // chuyển tab sang form
+    jTabbedPane1.setSelectedIndex(1);
+}
 
     }//GEN-LAST:event_tblQLNguoiDungMouseClicked
 
     private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
         // TODO add your handling code here:
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+         javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
 
     if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
         java.io.File file = fileChooser.getSelectedFile();
 
-        // lưu tên hoặc path (khuyên dùng tên nếu có folder images)
-        hinhAnh = file.getName();
+        // thư mục lưu ảnh trong project
+        java.io.File dir = new java.io.File("src/img");
+        if (!dir.exists()) dir.mkdirs();
 
-        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
+        // file đích
+        java.io.File dest = new java.io.File(dir, file.getName());
 
-        java.awt.Image img = icon.getImage().getScaledInstance(
-                lblHinh.getWidth(),
-                lblHinh.getHeight(),
-                java.awt.Image.SCALE_SMOOTH
-        );
+        try {
+            java.nio.file.Files.copy(
+                file.toPath(),
+                dest.toPath(),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING
+            );
 
-        lblHinh.setIcon(new javax.swing.ImageIcon(img));
+            // lưu tên ảnh
+            hinhAnh = file.getName();
+
+            // hiển thị lên label
+            javax.swing.ImageIcon icon = new javax.swing.ImageIcon(dest.getAbsolutePath());
+            java.awt.Image img = icon.getImage().getScaledInstance(
+                    lblHinh.getWidth(),
+                    lblHinh.getHeight(),
+                    java.awt.Image.SCALE_SMOOTH
+            );
+            lblHinh.setIcon(new javax.swing.ImageIcon(img));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
     }//GEN-LAST:event_lblHinhMouseClicked
     
     /**

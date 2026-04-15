@@ -16,4 +16,6 @@ public interface SanPhamDAO {
     List<SanPham> selectAll();
 
     List<SanPham> selectByKeyword(String keyword);
+    
+    
 }
