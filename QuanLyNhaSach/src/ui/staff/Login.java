@@ -48,7 +48,7 @@ public class Login extends javax.swing.JFrame {
             switch (user.getVaiTro()) {
                 case 1 -> // admin => vai trò 1
                     new MenuQuanLy().setVisible(true);
-                case 2 -> // user1 => NV vai trò 2
+                case 2 -> // nv => NV vai trò 2
                     new MenuNhanVien().setVisible(true);
                 case 0 -> // user2 => Khách vai trò 0
                     new MenuKhackCheckOut().setVisible(true);
@@ -74,7 +74,7 @@ public class Login extends javax.swing.JFrame {
         btnThoat = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         btnDangNhap1 = new javax.swing.JButton();
-        btnDangNhapKH = new javax.swing.JButton();
+        btnDangNhapKhach = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -118,15 +118,13 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btnDangNhapKH.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        btnDangNhapKH.setForeground(new java.awt.Color(0, 51, 255));
-        btnDangNhapKH.setText("Đăng nhập vai trò khách hàng");
-        btnDangNhapKH.setBorder(null);
-        btnDangNhapKH.setBorderPainted(false);
-        btnDangNhapKH.setContentAreaFilled(false);
-        btnDangNhapKH.addActionListener(new java.awt.event.ActionListener() {
+        btnDangNhapKhach.setBackground(new java.awt.Color(47, 93, 164));
+        btnDangNhapKhach.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDangNhapKhach.setForeground(new java.awt.Color(255, 255, 255));
+        btnDangNhapKhach.setText("Customer");
+        btnDangNhapKhach.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDangNhapKHActionPerformed(evt);
+                btnDangNhapKhachActionPerformed(evt);
             }
         });
 
@@ -134,6 +132,10 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(125, 125, 125)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(65, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,16 +148,10 @@ public class Login extends javax.swing.JFrame {
                         .addComponent(btnDangNhap1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(btnDangNhapKH)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(57, 57, 57))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnDangNhapKhach, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(129, 129, 129))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,9 +166,9 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDangNhap1)
                     .addComponent(btnThoat))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnDangNhapKH)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(btnDangNhapKhach)
+                .addGap(14, 14, 14))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -208,11 +204,11 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPasswordActionPerformed
 
-    private void btnDangNhapKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapKHActionPerformed
+    private void btnDangNhapKhachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapKhachActionPerformed
         // TODO add your handling code here:
         new ui.customer.MenuKhackCheckOut().setVisible(true);
-    this.dispose();
-    }//GEN-LAST:event_btnDangNhapKHActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnDangNhapKhachActionPerformed
 
     /**
      * @param args the command line arguments
@@ -239,7 +235,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangNhap1;
-    private javax.swing.JButton btnDangNhapKH;
+    private javax.swing.JButton btnDangNhapKhach;
     private javax.swing.JButton btnThoat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

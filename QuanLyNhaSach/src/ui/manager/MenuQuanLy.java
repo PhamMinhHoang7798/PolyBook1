@@ -189,7 +189,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
                 .addComponent(btnQuanLyNguoiDung)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuanLyDoanhThu)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
                 .addComponent(btnLogOut)
                 .addGap(31, 31, 31))
         );
@@ -198,11 +198,11 @@ public class MenuQuanLy extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 757, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -211,17 +211,16 @@ public class MenuQuanLy extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -318,13 +317,28 @@ public class MenuQuanLy extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new MenuQuanLy().setVisible(true));
     }
 
-    // Hàm hỗ trợ nhúng Form con vào jPanel2
+    // Tuyệt chiêu "Bóc tách ruột" - Chấp mọi loại lỗi Layout của NetBeans
     private void showPanel(javax.swing.JFrame form) {
-        jPanel2.removeAll(); // Xóa trắng chức năng cũ đang hiển thị
-        jPanel2.setLayout(new java.awt.BorderLayout()); // Chuyển layout để tự động lấp đầy
-        jPanel2.add(form.getContentPane()); // Lấy "phần ruột" của form con nhét vào jPanel2
-        jPanel2.revalidate(); // Tải lại cấu trúc giao diện
-        jPanel2.repaint();    // Vẽ lại giao diện
+        jPanel2.removeAll();
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        try {
+            // 1. Bóc trực tiếp cái nền (jPanel1) từ form con ra, vứt bỏ lớp vỏ JFrame đi
+            javax.swing.JPanel mainPanel = (javax.swing.JPanel) form.getContentPane().getComponent(0);
+
+            // 2. Phủ màu trắng tinh cho nền để khử sạch mọi mảng xám
+            mainPanel.setBackground(java.awt.Color.WHITE);
+
+            // 3. Nhét thẳng cái ruột đó vào jPanel2 của Menu
+            jPanel2.add(mainPanel, java.awt.BorderLayout.CENTER);
+
+        } catch (Exception e) {
+            // Dự phòng nếu form bị lỗi thiết kế thì dùng cách cũ
+            jPanel2.add(form.getContentPane(), java.awt.BorderLayout.CENTER);
+        }
+
+        jPanel2.revalidate();
+        jPanel2.repaint();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogOut;

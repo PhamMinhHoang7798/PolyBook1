@@ -294,7 +294,6 @@ public class Timkiem extends javax.swing.JFrame {
 
         btnTimHoaDon.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTimHoaDon.setForeground(new java.awt.Color(12, 66, 139));
-        btnTimHoaDon.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
         btnTimHoaDon.setText("Tìm");
         btnTimHoaDon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -378,7 +377,6 @@ public class Timkiem extends javax.swing.JFrame {
 
         btnTimSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTimSP.setForeground(new java.awt.Color(12, 66, 139));
-        btnTimSP.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
         btnTimSP.setText("Tìm");
         btnTimSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -448,7 +446,6 @@ public class Timkiem extends javax.swing.JFrame {
 
         btnTimSDTthanhVien.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTimSDTthanhVien.setForeground(new java.awt.Color(12, 66, 139));
-        btnTimSDTthanhVien.setIcon(new javax.swing.ImageIcon("D:\\Java\\JavaApplication5\\src\\img\\img\\search.png")); // NOI18N
         btnTimSDTthanhVien.setText("Tìm");
         btnTimSDTthanhVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -521,9 +518,7 @@ public class Timkiem extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

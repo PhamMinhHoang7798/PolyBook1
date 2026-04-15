@@ -4,12 +4,17 @@
  */
 package ui.staff;
 
+import ui.staff.Timkiem;
+import ui.staff.TaoHoaDon;
+import ui.staff.LichSu;
+import ui.staff.DoiMatKhau;
+
 /**
  *
  * @author nguye
  */
 public class MenuNhanVien extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuNhanVien.class.getName());
 
     /**
@@ -151,23 +156,13 @@ public class MenuNhanVien extends javax.swing.JFrame {
                 .addComponent(btnLichSu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDoiMatKhau)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnLogOut)
                 .addGap(29, 29, 29))
         );
 
         jPanel2.setPreferredSize(new java.awt.Dimension(716, 630));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 716, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -175,13 +170,13 @@ public class MenuNhanVien extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -189,10 +184,13 @@ public class MenuNhanVien extends javax.swing.JFrame {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
+        showPanel(new Timkiem());
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnTaoHoaDonMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHoaDonMoiActionPerformed
         // TODO add your handling code here:
+        showPanel(new TaoHoaDon());
+
     }//GEN-LAST:event_btnTaoHoaDonMoiActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
@@ -202,10 +200,12 @@ public class MenuNhanVien extends javax.swing.JFrame {
 
     private void btnLichSuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLichSuActionPerformed
         // TODO add your handling code here:
+        showPanel(new LichSu());
     }//GEN-LAST:event_btnLichSuActionPerformed
 
     private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMatKhauActionPerformed
         // TODO add your handling code here:
+        showPanel(new DoiMatKhau());
     }//GEN-LAST:event_btnDoiMatKhauActionPerformed
 
     /**
@@ -232,7 +232,29 @@ public class MenuNhanVien extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new MenuNhanVien().setVisible(true));
     }
-
+// Tuyệt chiêu "Bóc tách ruột" - Chấp mọi loại lỗi Layout của NetBeans
+    private void showPanel(javax.swing.JFrame form) {
+        jPanel2.removeAll(); 
+        jPanel2.setLayout(new java.awt.BorderLayout()); 
+        
+        try {
+            // 1. Bóc trực tiếp cái nền (jPanel1) từ form con ra, vứt bỏ lớp vỏ JFrame đi
+            javax.swing.JPanel mainPanel = (javax.swing.JPanel) form.getContentPane().getComponent(0);
+            
+            // 2. Phủ màu trắng tinh cho nền để khử sạch mọi mảng xám
+            mainPanel.setBackground(java.awt.Color.WHITE);
+            
+            // 3. Nhét thẳng cái ruột đó vào jPanel2 của Menu
+            jPanel2.add(mainPanel, java.awt.BorderLayout.CENTER);
+            
+        } catch (Exception e) {
+            // Dự phòng nếu form bị lỗi thiết kế thì dùng cách cũ
+            jPanel2.add(form.getContentPane(), java.awt.BorderLayout.CENTER);
+        }
+        
+        jPanel2.revalidate();
+        jPanel2.repaint();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDoiMatKhau;
     private javax.swing.JButton btnLichSu;
