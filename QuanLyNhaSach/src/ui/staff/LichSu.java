@@ -3,24 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package ui.staff;
+
 import dao.BillDAO;
 import dao.impl.BillDAOImpl;
 import entity.Bill;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author nguye
  */
 public class LichSu extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LichSu.class.getName());
 
     /**
      * Creates new form LichSu
      */
-   public LichSu() {
+    public LichSu() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         loadTable();
 
         addPlaceholder(txtTuNgay, "yyyy-MM-dd");
@@ -30,73 +34,74 @@ public class LichSu extends javax.swing.JFrame {
         // 🔥 CHẶN NHẬP CHỮ
         addDateInputFilter(txtTuNgay);
         addDateInputFilter(txtDenNgay);
-}
+    }
 
     private BillDAO dao = new BillDAOImpl();
-    
+
     private void loadTable() {
-    DefaultTableModel model = (DefaultTableModel) tblLichSuGiaoDich.getModel();
-    model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tblLichSuGiaoDich.getModel();
+        model.setRowCount(0);
 
-    List<Bill> list = dao.getAll();
+        List<Bill> list = dao.getAll();
 
-    for (Bill b : list) {
-        model.addRow(new Object[]{
-            b.getMaHoaDon(),
-            b.getTenKhachHang(),
-            b.getTenSanPham(),
-            b.getSoLuong(),
-            b.getKhuyenMai(),
-            String.format("%,.0f VNĐ", b.getTongTien()),
-            b.getNgayLap()
-        });
+        for (Bill b : list) {
+            model.addRow(new Object[]{
+                b.getMaHoaDon(),
+                b.getTenKhachHang(),
+                b.getTenSanPham(),
+                b.getSoLuong(),
+                b.getKhuyenMai(),
+                String.format("%,.0f VNĐ", b.getTongTien()),
+                b.getNgayLap()
+            });
+        }
     }
-}
 
     private boolean isFutureDate(String dateStr) {
-    try {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
 
-        java.util.Date inputDate = sdf.parse(dateStr);
-        java.util.Date today = new java.util.Date();
+            java.util.Date inputDate = sdf.parse(dateStr);
+            java.util.Date today = new java.util.Date();
 
-        return inputDate.after(today); // ngày lớn hơn hiện tại
-    } catch (Exception e) {
-        return false;
+            return inputDate.after(today); // ngày lớn hơn hiện tại
+        } catch (Exception e) {
+            return false;
+        }
     }
-}
 
-private boolean isFromAfterTo(String from, String to) {
-    try {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date d1 = sdf.parse(from);
-        java.util.Date d2 = sdf.parse(to);
+    private boolean isFromAfterTo(String from, String to) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date d1 = sdf.parse(from);
+            java.util.Date d2 = sdf.parse(to);
 
-        return d1.after(d2); // từ ngày > đến ngày
-    } catch (Exception e) {
-        return false;
+            return d1.after(d2); // từ ngày > đến ngày
+        } catch (Exception e) {
+            return false;
+        }
     }
-}
+
     private boolean isValidSearch(String text) {
         return text.matches("^[a-zA-Z0-9\\sÀ-ỹ]+$");
     }
 
     private boolean isValidDate(String dateStr) {
-    // 🔥 bắt buộc đúng format + chỉ số
-    if (!dateStr.matches("\\d{4}-\\d{2}-\\d{2}")) {
-        return false;
-    }
+        // 🔥 bắt buộc đúng format + chỉ số
+        if (!dateStr.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            return false;
+        }
 
-    try {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
-        sdf.parse(dateStr);
-        return true;
-    } catch (Exception e) {
-        return false;
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            sdf.parse(dateStr);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -281,37 +286,37 @@ private boolean isFromAfterTo(String from, String to) {
 
         if (key.isEmpty() || key.equals("Nhập mã hóa đơn hoặc tên khách hàng...")) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "⚠ Vui lòng nhập mã hóa đơn hoặc tên khách hàng!");
+                    "⚠ Vui lòng nhập mã hóa đơn hoặc tên khách hàng!");
             return;
         }
         if (!isValidSearch(key)) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "⚠ Không được nhập ký tự đặc biệt!");
+                    "⚠ Không được nhập ký tự đặc biệt!");
             return;
         }
 
-    DefaultTableModel model = (DefaultTableModel) tblLichSuGiaoDich.getModel();
-    model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tblLichSuGiaoDich.getModel();
+        model.setRowCount(0);
 
-    List<Bill> list = dao.search(key);
+        List<Bill> list = dao.search(key);
 
-    if (list.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "❗ Không tìm thấy hóa đơn!");
-        return;
-    }
+        if (list.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "❗ Không tìm thấy hóa đơn!");
+            return;
+        }
 
-    for (Bill b : list) {
-        model.addRow(new Object[]{
-            b.getMaHoaDon(),
-            b.getTenKhachHang(),
-            b.getTenSanPham(),
-            b.getSoLuong(),
-            b.getKhuyenMai(),
-            String.format("%,.0f VNĐ", b.getTongTien()),
-            b.getNgayLap()
-        });
-    }
+        for (Bill b : list) {
+            model.addRow(new Object[]{
+                b.getMaHoaDon(),
+                b.getTenKhachHang(),
+                b.getTenSanPham(),
+                b.getSoLuong(),
+                b.getKhuyenMai(),
+                String.format("%,.0f VNĐ", b.getTongTien()),
+                b.getNgayLap()
+            });
+        }
 
     }//GEN-LAST:event_btnTimActionPerformed
 
@@ -325,57 +330,55 @@ private boolean isFromAfterTo(String from, String to) {
 
     private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
         // TODO add your handling code here:           
-    String from = txtTuNgay.getText().trim();
-    String to = txtDenNgay.getText().trim();
+        String from = txtTuNgay.getText().trim();
+        String to = txtDenNgay.getText().trim();
 
-    if (from.equals("yyyy-MM-dd") || to.equals("yyyy-MM-dd")) {
-    javax.swing.JOptionPane.showMessageDialog(this,
-        "⚠ Vui lòng chọn ngày hợp lệ!");
-    return;
-}
+        if (from.equals("yyyy-MM-dd") || to.equals("yyyy-MM-dd")) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "⚠ Vui lòng chọn ngày hợp lệ!");
+            return;
+        }
 
+        if (!isValidDate(from) || !isValidDate(to)) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "⚠ Ngày phải đúng định dạng yyyy-MM-dd!\nVD: 2026-04-11");
+            return;
+        }
 
-    if (!isValidDate(from) || !isValidDate(to)) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "⚠ Ngày phải đúng định dạng yyyy-MM-dd!\nVD: 2026-04-11");
-        return;
-    }
+        if (isFutureDate(from) || isFutureDate(to)) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "⚠ Không được nhập ngày trong tương lai!");
+            return;
+        }
 
-    if (isFutureDate(from) || isFutureDate(to)) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "⚠ Không được nhập ngày trong tương lai!");
-        return;
-    }
+        if (isFromAfterTo(from, to)) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "⚠ Từ ngày không được lớn hơn đến ngày!");
+            return;
+        }
 
-    if (isFromAfterTo(from, to)) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "⚠ Từ ngày không được lớn hơn đến ngày!");
-        return;
-    }
+        DefaultTableModel model = (DefaultTableModel) tblLichSuGiaoDich.getModel();
+        model.setRowCount(0);
 
-    DefaultTableModel model = (DefaultTableModel) tblLichSuGiaoDich.getModel();
-    model.setRowCount(0);
+        List<Bill> list = dao.filter(from, to);
 
-    List<Bill> list = dao.filter(from, to);
+        if (list.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "❗ Không có dữ liệu trong khoảng thời gian này!");
+            return;
+        }
 
-    if (list.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "❗ Không có dữ liệu trong khoảng thời gian này!");
-        return;
-    }
-
-    for (Bill b : list) {
-        model.addRow(new Object[]{
-            b.getMaHoaDon(),
-            b.getTenKhachHang(),
-            b.getTenSanPham(),
-            b.getSoLuong(),
-            b.getKhuyenMai(),
-            String.format("%,.0f VNĐ", b.getTongTien()),
-            b.getNgayLap()
-        });
-    }
-
+        for (Bill b : list) {
+            model.addRow(new Object[]{
+                b.getMaHoaDon(),
+                b.getTenKhachHang(),
+                b.getTenSanPham(),
+                b.getSoLuong(),
+                b.getKhuyenMai(),
+                String.format("%,.0f VNĐ", b.getTongTien()),
+                b.getNgayLap()
+            });
+        }
 
 
     }//GEN-LAST:event_btnLocActionPerformed
@@ -383,13 +386,13 @@ private boolean isFromAfterTo(String from, String to) {
     private void tblLichSuGiaoDichMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichSuGiaoDichMouseClicked
         // TODO add your handling code here:
         if (evt.getClickCount() == 2) {
-        int row = tblLichSuGiaoDich.getSelectedRow();
+            int row = tblLichSuGiaoDich.getSelectedRow();
 
-        String maHD = tblLichSuGiaoDich.getValueAt(row, 0).toString();
+            String maHD = tblLichSuGiaoDich.getValueAt(row, 0).toString();
 
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Bạn chọn hóa đơn: " + maHD);
-    }
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Bạn chọn hóa đơn: " + maHD);
+        }
     }//GEN-LAST:event_tblLichSuGiaoDichMouseClicked
 
     /**
@@ -433,38 +436,39 @@ private boolean isFromAfterTo(String from, String to) {
     // End of variables declaration//GEN-END:variables
 
     private void addPlaceholder(javax.swing.JTextField txt, String placeholder) {
-    txt.setText(placeholder);
-    txt.setForeground(java.awt.Color.GRAY);
+        txt.setText(placeholder);
+        txt.setForeground(java.awt.Color.GRAY);
 
-    txt.addFocusListener(new java.awt.event.FocusAdapter() {
-        @Override
-        public void focusGained(java.awt.event.FocusEvent e) {
-            if (txt.getText().equals(placeholder)) {
-                txt.setText("");
-                txt.setForeground(java.awt.Color.BLACK);
+        txt.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (txt.getText().equals(placeholder)) {
+                    txt.setText("");
+                    txt.setForeground(java.awt.Color.BLACK);
+                }
             }
-        }
 
-        @Override
-        public void focusLost(java.awt.event.FocusEvent e) {
-            if (txt.getText().isEmpty()) {
-                txt.setText(placeholder);
-                txt.setForeground(java.awt.Color.GRAY);
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (txt.getText().isEmpty()) {
+                    txt.setText(placeholder);
+                    txt.setForeground(java.awt.Color.GRAY);
+                }
             }
-        }
-    });
-}
+        });
+    }
+
     private void addDateInputFilter(javax.swing.JTextField txt) {
-    txt.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyTyped(java.awt.event.KeyEvent evt) {
-            char c = evt.getKeyChar();
+        txt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
 
-            // chỉ cho nhập số và dấu -
-            if (!Character.isDigit(c) && c != '-') {
-                evt.consume(); // ❌ chặn
+                // chỉ cho nhập số và dấu -
+                if (!Character.isDigit(c) && c != '-') {
+                    evt.consume(); // ❌ chặn
+                }
             }
-        }
-    });
-}
+        });
+    }
 
 }

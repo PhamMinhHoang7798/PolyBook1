@@ -12,7 +12,7 @@ import entity.hoadonchitiet;
  * @author nguye
  */
 public class ThanhToan extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ThanhToan.class.getName());
     // Khai báo các DAO Implementation
     private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
@@ -23,26 +23,30 @@ public class ThanhToan extends javax.swing.JFrame {
     // Model để quản lý dữ liệu trên Table
     private javax.swing.table.DefaultTableModel modelSanPham;
     private javax.swing.table.DefaultTableModel modelGioHang;
-private double tongTien = 0;
+    private double tongTien = 0;
+
     /**
      * Creates new form ThanhToan
      */
     public ThanhToan() {
-    initComponents();
-    init();
-}
+        initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-private void init() {
-    setLocationRelativeTo(null); // Cho form ra giữa màn hình
-    modelSanPham = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
-    modelGioHang = (javax.swing.table.DefaultTableModel) tblGioHang.getModel();
-    
-    modelGioHang.setRowCount(0); // Xóa trắng giỏ hàng ban đầu
-    
-    fillComboBoxLoai(); // Đổ loại sản phẩm vào ComboBox
-    fillTableSanPham(); // Đổ danh sách sản phẩm vào bảng
-}
-private void fillComboBoxLoai() {
+        init();
+    }
+
+    private void init() {
+        setLocationRelativeTo(null); // Cho form ra giữa màn hình
+        modelSanPham = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
+        modelGioHang = (javax.swing.table.DefaultTableModel) tblGioHang.getModel();
+
+        modelGioHang.setRowCount(0); // Xóa trắng giỏ hàng ban đầu
+
+        fillComboBoxLoai(); // Đổ loại sản phẩm vào ComboBox
+        fillTableSanPham(); // Đổ danh sách sản phẩm vào bảng
+    }
+
+    private void fillComboBoxLoai() {
         javax.swing.DefaultComboBoxModel model = (javax.swing.DefaultComboBoxModel) cboTimeRanges2.getModel();
         model.removeAllElements();
         model.addElement("Tất cả");
@@ -62,9 +66,9 @@ private void fillComboBoxLoai() {
             java.util.List<entity.SanPham> list = spDAO.selectAll();
             for (entity.SanPham sp : list) {
                 modelSanPham.addRow(new Object[]{
-                    sp.getMaSanPham(), 
-                    sp.getTenSanPham(), 
-                    sp.getDonGia(), 
+                    sp.getMaSanPham(),
+                    sp.getTenSanPham(),
+                    sp.getDonGia(),
                     "Chọn"
                 });
             }
@@ -72,13 +76,15 @@ private void fillComboBoxLoai() {
             e.printStackTrace();
         }
     }
+
     private void tinhTongTien() {
-    tongTien = 0;
-    for (int i = 0; i < modelGioHang.getRowCount(); i++) {
-        tongTien += (Double) modelGioHang.getValueAt(i, 3);
+        tongTien = 0;
+        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+            tongTien += (Double) modelGioHang.getValueAt(i, 3);
+        }
+        jLabel4.setText(String.format("%,.0f VNĐ", tongTien));
     }
-    jLabel4.setText(String.format("%,.0f VNĐ", tongTien));
-}
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -363,29 +369,29 @@ private void fillComboBoxLoai() {
     private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
         // TODO add your handling code here:
         if (evt.getClickCount() == 2) { // Click đúp để chọn
-        int row = tblDanhSach.getSelectedRow();
-        String maSP = tblDanhSach.getValueAt(row, 0).toString();
-        String tenSP = tblDanhSach.getValueAt(row, 1).toString();
-        double gia = (Double) tblDanhSach.getValueAt(row, 2);
+            int row = tblDanhSach.getSelectedRow();
+            String maSP = tblDanhSach.getValueAt(row, 0).toString();
+            String tenSP = tblDanhSach.getValueAt(row, 1).toString();
+            double gia = (Double) tblDanhSach.getValueAt(row, 2);
 
-        // Kiểm tra xem đã có trong giỏ chưa
-        boolean found = false;
-        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
-            if (modelGioHang.getValueAt(i, 0).toString().startsWith(maSP)) {
-                int sl = (Integer) modelGioHang.getValueAt(i, 1) + 1;
-                modelGioHang.setValueAt(sl, i, 1);
-                modelGioHang.setValueAt(sl * gia, i, 3);
-                found = true;
-                break;
+            // Kiểm tra xem đã có trong giỏ chưa
+            boolean found = false;
+            for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+                if (modelGioHang.getValueAt(i, 0).toString().startsWith(maSP)) {
+                    int sl = (Integer) modelGioHang.getValueAt(i, 1) + 1;
+                    modelGioHang.setValueAt(sl, i, 1);
+                    modelGioHang.setValueAt(sl * gia, i, 3);
+                    found = true;
+                    break;
+                }
             }
-        }
 
-        if (!found) {
-            // Lưu mã SP vào tên để sau này dễ tách mã ra lưu DB
-            modelGioHang.addRow(new Object[]{maSP + " - " + tenSP, 1, gia, gia, "Xóa"});
+            if (!found) {
+                // Lưu mã SP vào tên để sau này dễ tách mã ra lưu DB
+                modelGioHang.addRow(new Object[]{maSP + " - " + tenSP, 1, gia, gia, "Xóa"});
+            }
+            tinhTongTien();
         }
-        tinhTongTien();
-    }
     }//GEN-LAST:event_tblDanhSachMouseClicked
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
@@ -393,32 +399,32 @@ private void fillComboBoxLoai() {
         String maHD = String.valueOf(System.currentTimeMillis());
 
 // INSERT HÓA ĐƠN
-hoadon hd = new hoadon();
-hd.setMaHoaDon(maHD);
-hd.setMaKhachHang("KH001");
-hd.setNgayLap(new java.util.Date());
-hd.setPhuongThucThanhToan("Tiền mặt");
-hd.setTrangThai("Đã thanh toán");
-hd.setTongTien(tongTien);
-hd.setTenDangNhap("admin");
+        hoadon hd = new hoadon();
+        hd.setMaHoaDon(maHD);
+        hd.setMaKhachHang("KH001");
+        hd.setNgayLap(new java.util.Date());
+        hd.setPhuongThucThanhToan("Tiền mặt");
+        hd.setTrangThai("Đã thanh toán");
+        hd.setTongTien(tongTien);
+        hd.setTenDangNhap("admin");
 
-hdDAO.create(hd);
+        hdDAO.create(hd);
 
 // INSERT CHI TIẾT
-for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
 
-    String temp = modelGioHang.getValueAt(i, 0).toString();
-    String maSP = temp.split(" - ")[0];
+            String temp = modelGioHang.getValueAt(i, 0).toString();
+            String maSP = temp.split(" - ")[0];
 
-    hoadonchitiet ct = new hoadonchitiet();
-    ct.setMaCT((int) System.currentTimeMillis());
-    ct.setMaHoaDon(maHD);
-    ct.setMaSanPham(maSP);
-    ct.setSoLuong((Integer) modelGioHang.getValueAt(i, 1));
-    ct.setGia((Double) modelGioHang.getValueAt(i, 2));
+            hoadonchitiet ct = new hoadonchitiet();
+            ct.setMaCT((int) System.currentTimeMillis());
+            ct.setMaHoaDon(maHD);
+            ct.setMaSanPham(maSP);
+            ct.setSoLuong((Integer) modelGioHang.getValueAt(i, 1));
+            ct.setGia((Double) modelGioHang.getValueAt(i, 2));
 
-    hdctDAO.create(ct);
-}
+            hdctDAO.create(ct);
+        }
 
     }//GEN-LAST:event_btnThanhToanActionPerformed
 

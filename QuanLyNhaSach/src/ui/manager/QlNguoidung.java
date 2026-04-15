@@ -3,17 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package ui.manager;
+
 import dao.impl.UserDAOImpl;
 import entity.User;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import util.XDialog;
+
 /**
  *
  * @author nguye
  */
 public class QlNguoidung extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QlNguoidung.class.getName());
 
     /**
@@ -21,6 +23,8 @@ public class QlNguoidung extends javax.swing.JFrame {
      */
     public QlNguoidung() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         loadTable();
         javax.swing.ButtonGroup roleGroup = new javax.swing.ButtonGroup();
         roleGroup.add(rbtQuanLy);
@@ -36,126 +40,129 @@ public class QlNguoidung extends javax.swing.JFrame {
     private String hinhAnh = null;
 
     private User getForm() {
-    User u = new User();
-    u.setTenDangNhap(txtTenDangNhap.getText());
-    u.setMatKhau(txtMatkhau.getText());
-    u.setHoTen(txtHoten.getText());
+        User u = new User();
+        u.setTenDangNhap(txtTenDangNhap.getText());
+        u.setMatKhau(txtMatkhau.getText());
+        u.setHoTen(txtHoten.getText());
 
-    // Vai trò (int)
-    if (rbtQuanLy.isSelected()) u.setVaiTro(2);
-    else if (rbtNhanVien.isSelected()) u.setVaiTro(1);
-    else u.setVaiTro(0);
-         u.setHinhAnh(hinhAnh);
-    // Trạng thái
-    u.setTrangThai(rbtHoatDong.isSelected());
+        // Vai trò (int)
+        if (rbtQuanLy.isSelected()) {
+            u.setVaiTro(2);
+        } else if (rbtNhanVien.isSelected()) {
+            u.setVaiTro(1);
+        } else {
+            u.setVaiTro(0);
+        }
+        u.setHinhAnh(hinhAnh);
+        // Trạng thái
+        u.setTrangThai(rbtHoatDong.isSelected());
 
-    return u;
-}
+        return u;
+    }
 
     private void loadTable() {
-    DefaultTableModel model = (DefaultTableModel) tblQLNguoiDung.getModel();
-    model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tblQLNguoiDung.getModel();
+        model.setRowCount(0);
 
-    List<User> list = dao.selectAll();
-    for (User u : list) {
-        model.addRow(new Object[]{
-        u.getTenDangNhap() == null ? "" : u.getTenDangNhap(),
-        u.getMatKhau() == null ? "" : u.getMatKhau(),
-        u.getHoTen() == null ? "" : u.getHoTen(),
-        u.getHinhAnh() == null ? "" : u.getHinhAnh(),
-        u.getVaiTro() == 2 ? "Quản lý" :
-        u.getVaiTro() == 1 ? "Nhân viên" : "Khách hàng",
-        u.isTrangThai() ? "Hoạt động" : "Tạm dừng"
-    });
+        List<User> list = dao.selectAll();
+        for (User u : list) {
+            model.addRow(new Object[]{
+                u.getTenDangNhap() == null ? "" : u.getTenDangNhap(),
+                u.getMatKhau() == null ? "" : u.getMatKhau(),
+                u.getHoTen() == null ? "" : u.getHoTen(),
+                u.getHinhAnh() == null ? "" : u.getHinhAnh(),
+                u.getVaiTro() == 2 ? "Quản lý"
+                : u.getVaiTro() == 1 ? "Nhân viên" : "Khách hàng",
+                u.isTrangThai() ? "Hoạt động" : "Tạm dừng"
+            });
+        }
     }
-}
 
     private void insert() {
-    try {
-        if (txtTenDangNhap.getText().isEmpty() || txtMatkhau.getText().isEmpty()) {
-            XDialog.alert(this,"Không được để trống!");
-            return;
-        }
+        try {
+            if (txtTenDangNhap.getText().isEmpty() || txtMatkhau.getText().isEmpty()) {
+                XDialog.alert(this, "Không được để trống!");
+                return;
+            }
 
-        if (!txtMatkhau.getText().equals(txtXacNhanMatKhau.getText())) {
-            XDialog.alert(this,"Mật khẩu không khớp!");
-            return;
-        }
+            if (!txtMatkhau.getText().equals(txtXacNhanMatKhau.getText())) {
+                XDialog.alert(this, "Mật khẩu không khớp!");
+                return;
+            }
 
-        dao.insert(getForm());
-        XDialog.alert(this,"Thêm thành công!");
-        loadTable();
-        clearForm();
-
-    } catch (Exception e) {
-        XDialog.alert(this,"Thêm thất bại!");
-        e.printStackTrace();
-    }
-}
-
-    private void update() {
-    try {
-        if (!txtMatkhau.getText().equals(txtXacNhanMatKhau.getText())) {
-            XDialog.alert(this,"Mật khẩu không khớp!");
-            return;
-        }
-
-        dao.update(getForm());
-        XDialog.alert(this,"Cập nhật thành công!");
-        loadTable();
-
-    } catch (Exception e) {
-        XDialog.alert(this,"Cập nhật thất bại!");
-    }
-}
-    private void delete() {
-    try {
-        String id = txtTenDangNhap.getText();
-        if (id.isEmpty()) {
-            XDialog.alert(this,"Chọn người dùng cần xóa!");
-            return;
-        }
-
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
-                "Bạn chắc chắn muốn xóa?",
-                "Xác nhận",
-                javax.swing.JOptionPane.YES_NO_OPTION);
-
-        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-            dao.delete(id);
-            XDialog.alert(this,"Xóa thành công!");
+            dao.insert(getForm());
+            XDialog.alert(this, "Thêm thành công!");
             loadTable();
             clearForm();
+
+        } catch (Exception e) {
+            XDialog.alert(this, "Thêm thất bại!");
+            e.printStackTrace();
         }
-
-    } catch (Exception e) {
-        XDialog.alert(this,"Xóa thất bại!");
     }
-}
 
-private void clearForm() {
-    txtTenDangNhap.setText("");
-    txtMatkhau.setText("");
-    txtXacNhanMatKhau.setText("");
-    txtHoten.setText("");
+    private void update() {
+        try {
+            if (!txtMatkhau.getText().equals(txtXacNhanMatKhau.getText())) {
+                XDialog.alert(this, "Mật khẩu không khớp!");
+                return;
+            }
 
-    rbtQuanLy.setSelected(false);
-    rbtNhanVien.setSelected(false);
-    rbtKhachHang.setSelected(false);
+            dao.update(getForm());
+            XDialog.alert(this, "Cập nhật thành công!");
+            loadTable();
 
-    rbtHoatDong.setSelected(true);
+        } catch (Exception e) {
+            XDialog.alert(this, "Cập nhật thất bại!");
+        }
+    }
 
-    lblHinh.setIcon(null);  
-    hinhAnh = null;          
-}
+    private void delete() {
+        try {
+            String id = txtTenDangNhap.getText();
+            if (id.isEmpty()) {
+                XDialog.alert(this, "Chọn người dùng cần xóa!");
+                return;
+            }
+
+            int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+                    "Bạn chắc chắn muốn xóa?",
+                    "Xác nhận",
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+
+            if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+                dao.delete(id);
+                XDialog.alert(this, "Xóa thành công!");
+                loadTable();
+                clearForm();
+            }
+
+        } catch (Exception e) {
+            XDialog.alert(this, "Xóa thất bại!");
+        }
+    }
+
+    private void clearForm() {
+        txtTenDangNhap.setText("");
+        txtMatkhau.setText("");
+        txtXacNhanMatKhau.setText("");
+        txtHoten.setText("");
+
+        rbtQuanLy.setSelected(false);
+        rbtNhanVien.setSelected(false);
+        rbtKhachHang.setSelected(false);
+
+        rbtHoatDong.setSelected(true);
+
+        lblHinh.setIcon(null);
+        hinhAnh = null;
+    }
 
     private String getValueSafe(int row, int col) {
-    Object value = tblQLNguoiDung.getValueAt(row, col);
-    return value == null ? "" : value.toString();
-}
+        Object value = tblQLNguoiDung.getValueAt(row, col);
+        return value == null ? "" : value.toString();
+    }
 
-
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -546,107 +553,111 @@ private void clearForm() {
     private void tblQLNguoiDungMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQLNguoiDungMouseClicked
         // TODO add your handling code here:
         if (evt.getClickCount() == 2) {
-    int row = tblQLNguoiDung.getSelectedRow();
-    if (row < 0) return;
+            int row = tblQLNguoiDung.getSelectedRow();
+            if (row < 0) {
+                return;
+            }
 
-    txtTenDangNhap.setText(getValueSafe(row, 0));
-    txtMatkhau.setText(getValueSafe(row, 1));
-    txtHoten.setText(getValueSafe(row, 2));
+            txtTenDangNhap.setText(getValueSafe(row, 0));
+            txtMatkhau.setText(getValueSafe(row, 1));
+            txtHoten.setText(getValueSafe(row, 2));
 
-    // ===== HÌNH ẢNH =====
-    String img = getValueSafe(row, 3);
-hinhAnh = img;
+            // ===== HÌNH ẢNH =====
+            String img = getValueSafe(row, 3);
+            hinhAnh = img;
 
-if (img != null && !img.isEmpty()) {
-    java.io.File file = new java.io.File("src/img/" + img);
+            if (img != null && !img.isEmpty()) {
+                java.io.File file = new java.io.File("src/img/" + img);
 
-    if (file.exists()) {
-        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
+                if (file.exists()) {
+                    javax.swing.ImageIcon icon = new javax.swing.ImageIcon(file.getAbsolutePath());
 
-        java.awt.Image scaled = icon.getImage().getScaledInstance(
-                lblHinh.getWidth(),
-                lblHinh.getHeight(),
-                java.awt.Image.SCALE_SMOOTH
-        );
+                    java.awt.Image scaled = icon.getImage().getScaledInstance(
+                            lblHinh.getWidth(),
+                            lblHinh.getHeight(),
+                            java.awt.Image.SCALE_SMOOTH
+                    );
 
-        lblHinh.setIcon(new javax.swing.ImageIcon(scaled));
-    } else {
-        System.out.println("Không tìm thấy ảnh: " + file.getAbsolutePath());
-        lblHinh.setIcon(null);
-    }
-} else {
-    lblHinh.setIcon(null);
-}
-    // ===== VAI TRÒ =====
-    String vaiTro = getValueSafe(row, 4);
-    rbtQuanLy.setSelected(false);
-    rbtNhanVien.setSelected(false);
-    rbtKhachHang.setSelected(false);
+                    lblHinh.setIcon(new javax.swing.ImageIcon(scaled));
+                } else {
+                    System.out.println("Không tìm thấy ảnh: " + file.getAbsolutePath());
+                    lblHinh.setIcon(null);
+                }
+            } else {
+                lblHinh.setIcon(null);
+            }
+            // ===== VAI TRÒ =====
+            String vaiTro = getValueSafe(row, 4);
+            rbtQuanLy.setSelected(false);
+            rbtNhanVien.setSelected(false);
+            rbtKhachHang.setSelected(false);
 
-    if (vaiTro.equals("Quản lý")) {
-        rbtQuanLy.setSelected(true);
-    } else if (vaiTro.equals("Nhân viên")) {
-        rbtNhanVien.setSelected(true);
-    } else {
-        rbtKhachHang.setSelected(true);
-    }
+            if (vaiTro.equals("Quản lý")) {
+                rbtQuanLy.setSelected(true);
+            } else if (vaiTro.equals("Nhân viên")) {
+                rbtNhanVien.setSelected(true);
+            } else {
+                rbtKhachHang.setSelected(true);
+            }
 
-    // ===== TRẠNG THÁI =====
-    String trangThai = getValueSafe(row, 5);
-    rbtHoatDong.setSelected(false);
-    rbtTamDung.setSelected(false);
+            // ===== TRẠNG THÁI =====
+            String trangThai = getValueSafe(row, 5);
+            rbtHoatDong.setSelected(false);
+            rbtTamDung.setSelected(false);
 
-    if (trangThai.equals("Hoạt động")) {
-        rbtHoatDong.setSelected(true);
-    } else {
-        rbtTamDung.setSelected(true);
-    }
+            if (trangThai.equals("Hoạt động")) {
+                rbtHoatDong.setSelected(true);
+            } else {
+                rbtTamDung.setSelected(true);
+            }
 
-    // chuyển tab sang form
-    jTabbedPane1.setSelectedIndex(1);
-}
+            // chuyển tab sang form
+            jTabbedPane1.setSelectedIndex(1);
+        }
 
     }//GEN-LAST:event_tblQLNguoiDungMouseClicked
 
     private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
         // TODO add your handling code here:
-         javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
 
-    if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-        java.io.File file = fileChooser.getSelectedFile();
+        if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File file = fileChooser.getSelectedFile();
 
-        // thư mục lưu ảnh trong project
-        java.io.File dir = new java.io.File("src/img");
-        if (!dir.exists()) dir.mkdirs();
+            // thư mục lưu ảnh trong project
+            java.io.File dir = new java.io.File("src/img");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
 
-        // file đích
-        java.io.File dest = new java.io.File(dir, file.getName());
+            // file đích
+            java.io.File dest = new java.io.File(dir, file.getName());
 
-        try {
-            java.nio.file.Files.copy(
-                file.toPath(),
-                dest.toPath(),
-                java.nio.file.StandardCopyOption.REPLACE_EXISTING
-            );
+            try {
+                java.nio.file.Files.copy(
+                        file.toPath(),
+                        dest.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
 
-            // lưu tên ảnh
-            hinhAnh = file.getName();
+                // lưu tên ảnh
+                hinhAnh = file.getName();
 
-            // hiển thị lên label
-            javax.swing.ImageIcon icon = new javax.swing.ImageIcon(dest.getAbsolutePath());
-            java.awt.Image img = icon.getImage().getScaledInstance(
-                    lblHinh.getWidth(),
-                    lblHinh.getHeight(),
-                    java.awt.Image.SCALE_SMOOTH
-            );
-            lblHinh.setIcon(new javax.swing.ImageIcon(img));
+                // hiển thị lên label
+                javax.swing.ImageIcon icon = new javax.swing.ImageIcon(dest.getAbsolutePath());
+                java.awt.Image img = icon.getImage().getScaledInstance(
+                        lblHinh.getWidth(),
+                        lblHinh.getHeight(),
+                        java.awt.Image.SCALE_SMOOTH
+                );
+                lblHinh.setIcon(new javax.swing.ImageIcon(img));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-    }
     }//GEN-LAST:event_lblHinhMouseClicked
-    
+
     /**
      * @param args the command line arguments
      */

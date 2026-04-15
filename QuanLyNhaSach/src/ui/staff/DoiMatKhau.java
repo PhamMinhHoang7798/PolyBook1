@@ -7,20 +7,24 @@ package ui.staff;
 import dao.impl.UserDAOImpl;
 import util.XAuth;
 import util.XDialog;
+
 /**
  *
  * @author nguye
  */
 public class DoiMatKhau extends javax.swing.JFrame {
-      UserDAOImpl dao = new UserDAOImpl();
-      private static final java.util.logging.Logger logger =
-        java.util.logging.Logger.getLogger(DoiMatKhau.class.getName());
 
+    UserDAOImpl dao = new UserDAOImpl();
+    private static final java.util.logging.Logger logger
+            = java.util.logging.Logger.getLogger(DoiMatKhau.class.getName());
 
     public DoiMatKhau() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         setLocationRelativeTo(null);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -183,7 +187,7 @@ public class DoiMatKhau extends javax.swing.JFrame {
         // 2. Lấy dữ liệu từ UI
         String manv = txtTenDangNhap.getText().trim();
         String matKhau = new String(txtPassword.getPassword()); // Mật khẩu cũ
-        String matKhauMoi = new String(txtNewpass.getPassword()).trim(); 
+        String matKhauMoi = new String(txtNewpass.getPassword()).trim();
         String xacNhanMatKhau = new String(txtConfirm.getPassword()).trim();
 
         // 3. Validation - Kiểm tra rỗng
@@ -196,23 +200,23 @@ public class DoiMatKhau extends javax.swing.JFrame {
         if (!manv.equalsIgnoreCase(XAuth.user.getTenDangNhap())) {
             XDialog.alert(this, "Sai tên đăng nhập!");
             return;
-        } 
-        
+        }
+
         if (!matKhau.equals(XAuth.user.getMatKhau())) {
             XDialog.alert(this, "Mật khẩu hiện tại không đúng!");
             return;
-        } 
-        
+        }
+
         if (matKhauMoi.length() < 6) {
             XDialog.alert(this, "Mật khẩu mới phải >= 6 ký tự!");
             return;
         }
-        
+
         if (!matKhauMoi.equals(xacNhanMatKhau)) {
             XDialog.alert(this, "Xác nhận mật khẩu không khớp!");
             return;
-        } 
-        
+        }
+
         // 5. Mọi thứ OK -> Cập nhật xuống DB
         try {
             XAuth.user.setMatKhau(matKhauMoi);
@@ -224,7 +228,6 @@ public class DoiMatKhau extends javax.swing.JFrame {
             e.printStackTrace(); // In lỗi ra console để dễ debug nếu có sự cố
         }
     }
-
 
     private void close() {
         this.dispose();

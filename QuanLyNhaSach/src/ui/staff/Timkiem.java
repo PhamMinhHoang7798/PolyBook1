@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package ui.staff;                              
+package ui.staff;
 
 import dao.impl.SanPhamDAOImpl;
 import dao.impl.TheThanhVienDAOImpl;
@@ -13,12 +13,13 @@ import java.util.List;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author nguye
  */
 public class Timkiem extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Timkiem.class.getName());
 
     /**
@@ -26,18 +27,20 @@ public class Timkiem extends javax.swing.JFrame {
      */
     public Timkiem() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         fillTableHoaDon("");
         fillTableSanPham();
         tblTimTheThanhVien.setModel(new javax.swing.table.DefaultTableModel(
-    new Object [][] {},
-    new String [] {
-        "SĐT", "Tên khách hàng", "Loại thẻ", "Điểm"
-    }
-) {
-    public boolean isCellEditable(int row, int column) {
-        return false;
-    }
-});
+                new Object[][]{},
+                new String[]{
+                    "SĐT", "Tên khách hàng", "Loại thẻ", "Điểm"
+                }
+        ) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
 
         fillTableThanhVien("");
         setPlaceholder(txtMaHoaDon, "Nhập mã hóa đơn...");
@@ -48,15 +51,14 @@ public class Timkiem extends javax.swing.JFrame {
         tblTimKiemHoaDon.setDefaultEditor(Object.class, null);
         tblTimKiemSanPham.setDefaultEditor(Object.class, null);
         tblTimTheThanhVien.setDefaultEditor(Object.class, null);
-        
 
     }
-    
-    void fillTableHoaDon(String keyword) {
-    DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
-    model.setRowCount(0);
 
-    String sql = """
+    void fillTableHoaDon(String keyword) {
+        DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
+        model.setRowCount(0);
+
+        String sql = """
         SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia
         FROM HoaDon hd
         JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon
@@ -65,118 +67,123 @@ public class Timkiem extends javax.swing.JFrame {
         WHERE hd.MaHoaDon LIKE ?
     """;
 
-    try {
-        ResultSet rs = XJdbc.query(sql, "%" + keyword + "%");
-        while (rs.next()) {
-            Object[] row = {
-                rs.getString("MaHoaDon"),
-                rs.getString("TenKhachHang"),
-                rs.getString("TenSanPham"),
-                rs.getInt("SoLuong"),
-                rs.getDouble("Gia")
-            };
-            model.addRow(row);
+        try {
+            ResultSet rs = XJdbc.query(sql, "%" + keyword + "%");
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getString("MaHoaDon"),
+                    rs.getString("TenKhachHang"),
+                    rs.getString("TenSanPham"),
+                    rs.getInt("SoLuong"),
+                    rs.getDouble("Gia")
+                };
+                model.addRow(row);
+            }
+            rs.getStatement().getConnection().close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        rs.getStatement().getConnection().close();
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
+
     void setPlaceholder(javax.swing.JTextField txt, String text) {
-    txt.setText(text);
-    txt.setForeground(java.awt.Color.GRAY); 
+        txt.setText(text);
+        txt.setForeground(java.awt.Color.GRAY);
 
-    txt.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusGained(java.awt.event.FocusEvent evt) {
-            if (txt.getText().equals(text)) {
-                txt.setText("");
-                txt.setForeground(java.awt.Color.BLACK);
+        txt.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (txt.getText().equals(text)) {
+                    txt.setText("");
+                    txt.setForeground(java.awt.Color.BLACK);
+                }
             }
-        }
 
-        public void focusLost(java.awt.event.FocusEvent evt) {
-            if (txt.getText().isEmpty()) {
-                txt.setText(text);
-                txt.setForeground(java.awt.Color.GRAY);
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (txt.getText().isEmpty()) {
+                    txt.setText(text);
+                    txt.setForeground(java.awt.Color.GRAY);
+                }
             }
-        }
-    });
-}
+        });
+    }
+
     boolean isValidDate(String date) {
-    try {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        sdf.setLenient(false);
-        sdf.parse(date);
-        return true;
-    } catch (Exception e) {
-        return false;
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            sdf.parse(date);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
-}
-    
+
     void fillTableSanPham() {
-    DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
-    model.setRowCount(0); 
+        DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
+        model.setRowCount(0);
 
-    String sql = "SELECT MaSanPham, TenSanPham, SoLuongTon, DonGia FROM SanPham";
+        String sql = "SELECT MaSanPham, TenSanPham, SoLuongTon, DonGia FROM SanPham";
 
-    try {
-        ResultSet rs = XJdbc.query(sql);
+        try {
+            ResultSet rs = XJdbc.query(sql);
 
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rs.getString("MaSanPham"),
-                rs.getString("TenSanPham"),
-                rs.getInt("SoLuongTon"),
-                rs.getDouble("DonGia")
-            });
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("MaSanPham"),
+                    rs.getString("TenSanPham"),
+                    rs.getInt("SoLuongTon"),
+                    rs.getDouble("DonGia")
+                });
+            }
+
+            rs.getStatement().getConnection().close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        rs.getStatement().getConnection().close();
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
-    
+
     void fillTableThanhVien(String keyword) {
-    DefaultTableModel model = (DefaultTableModel) tblTimTheThanhVien.getModel();
-    model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tblTimTheThanhVien.getModel();
+        model.setRowCount(0);
 
-    try {
-        TheThanhVienDAOImpl dao = new TheThanhVienDAOImpl();
-        List<TheThanhVien> list = dao.selectByKeyword(keyword);
+        try {
+            TheThanhVienDAOImpl dao = new TheThanhVienDAOImpl();
+            List<TheThanhVien> list = dao.selectByKeyword(keyword);
 
-        boolean hasData = false;
+            boolean hasData = false;
 
-        for (TheThanhVien tv : list) {
-            hasData = true;
+            for (TheThanhVien tv : list) {
+                hasData = true;
 
-            int diem = tv.getDiemTichLuy();
+                int diem = tv.getDiemTichLuy();
 
-            String loaiThe;
-            if (diem >= 200) loaiThe = " Vàng";
-            else if (diem >= 150) loaiThe = " Bạc";
-            else if (diem >= 100) loaiThe = " Đồng";
-            else loaiThe = "Thường";
+                String loaiThe;
+                if (diem >= 200) {
+                    loaiThe = " Vàng";
+                } else if (diem >= 150) {
+                    loaiThe = " Bạc";
+                } else if (diem >= 100) {
+                    loaiThe = " Đồng";
+                } else {
+                    loaiThe = "Thường";
+                }
 
-            model.addRow(new Object[]{
-                tv.getSdt(),
-                tv.getTenKhachHang(),
-                loaiThe,
-                diem
-            });
+                model.addRow(new Object[]{
+                    tv.getSdt(),
+                    tv.getTenKhachHang(),
+                    loaiThe,
+                    diem
+                });
+            }
+
+            if (!hasData) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy thành viên!");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi truy vấn!");
+            e.printStackTrace();
         }
-
-        if (!hasData) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy thành viên!");
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi truy vấn!");
-        e.printStackTrace();
     }
-}
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -537,31 +544,35 @@ public class Timkiem extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDenNgayActionPerformed
 
     private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
-                                     
-    String tuNgay = txtTuNgay.getText();
-String denNgay = txtDenNgay.getText();
+
+        String tuNgay = txtTuNgay.getText();
+        String denNgay = txtDenNgay.getText();
 
 // bỏ placeholder
-if (tuNgay.equals("yyyy-MM-dd")) tuNgay = "";
-if (denNgay.equals("yyyy-MM-dd")) denNgay = "";
+        if (tuNgay.equals("yyyy-MM-dd")) {
+            tuNgay = "";
+        }
+        if (denNgay.equals("yyyy-MM-dd")) {
+            denNgay = "";
+        }
 
 // validate
-if (!tuNgay.isEmpty() && !isValidDate(tuNgay)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Từ ngày không hợp lệ (đúng dạng yyyy-MM-dd)");
-    txtTuNgay.requestFocus();
-    return;
-}
+        if (!tuNgay.isEmpty() && !isValidDate(tuNgay)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Từ ngày không hợp lệ (đúng dạng yyyy-MM-dd)");
+            txtTuNgay.requestFocus();
+            return;
+        }
 
-if (!denNgay.isEmpty() && !isValidDate(denNgay)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Đến ngày không hợp lệ (đúng dạng yyyy-MM-dd)");
-    txtDenNgay.requestFocus();
-    return;
-}
+        if (!denNgay.isEmpty() && !isValidDate(denNgay)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Đến ngày không hợp lệ (đúng dạng yyyy-MM-dd)");
+            txtDenNgay.requestFocus();
+            return;
+        }
 
-DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
-model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
+        model.setRowCount(0);
 
-String sql = """
+        String sql = """
     SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia
     FROM HoaDon hd
     JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon
@@ -571,37 +582,36 @@ String sql = """
       AND (hd.NgayLap <= ? OR ? IS NULL)
 """;
 
-try {
-    String tuNgayParam = tuNgay.isEmpty() ? null : tuNgay;
-String denNgayParam = denNgay.isEmpty() ? null : denNgay;
+        try {
+            String tuNgayParam = tuNgay.isEmpty() ? null : tuNgay;
+            String denNgayParam = denNgay.isEmpty() ? null : denNgay;
 
-ResultSet rs = XJdbc.query(sql,
-    tuNgayParam, tuNgayParam,
-    denNgayParam, denNgayParam
-);
+            ResultSet rs = XJdbc.query(sql,
+                    tuNgayParam, tuNgayParam,
+                    denNgayParam, denNgayParam
+            );
 
+            boolean hasData = false;
 
-    boolean hasData = false;
+            while (rs.next()) {
+                hasData = true;
+                model.addRow(new Object[]{
+                    rs.getString("MaHoaDon"),
+                    rs.getString("TenKhachHang"),
+                    rs.getString("TenSanPham"),
+                    rs.getInt("SoLuong"),
+                    rs.getDouble("Gia")
+                });
+            }
 
-    while (rs.next()) {
-        hasData = true;
-        model.addRow(new Object[]{
-            rs.getString("MaHoaDon"),
-            rs.getString("TenKhachHang"),
-            rs.getString("TenSanPham"),
-            rs.getInt("SoLuong"),
-            rs.getDouble("Gia")
-        });
-    }
+            if (!hasData) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Không có dữ liệu trong khoảng ngày này!");
+            }
 
-    if (!hasData) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Không có dữ liệu trong khoảng ngày này!");
-    }
-
-    rs.getStatement().getConnection().close();
-} catch (Exception e) {
-    e.printStackTrace();
-}
+            rs.getStatement().getConnection().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnLocActionPerformed
 
     private void txtMaHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaHoaDonActionPerformed
@@ -612,16 +622,16 @@ ResultSet rs = XJdbc.query(sql,
         // TODO add your handling code here:
         String ma = txtMaHoaDon.getText().trim();
 
-if (ma.isEmpty() || ma.startsWith("Nhập")) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập mã hóa đơn!");
-    txtMaHoaDon.requestFocus();
-    return;
-}
+        if (ma.isEmpty() || ma.startsWith("Nhập")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập mã hóa đơn!");
+            txtMaHoaDon.requestFocus();
+            return;
+        }
 
-DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
-model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
+        model.setRowCount(0);
 
-String sql = """
+        String sql = """
     SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia
     FROM HoaDon hd
     JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon
@@ -630,30 +640,30 @@ String sql = """
     WHERE hd.MaHoaDon LIKE ?
 """;
 
-try {
-    ResultSet rs = XJdbc.query(sql, "%" + ma + "%");
+        try {
+            ResultSet rs = XJdbc.query(sql, "%" + ma + "%");
 
-    boolean hasData = false;
+            boolean hasData = false;
 
-    while (rs.next()) {
-        hasData = true;
-        model.addRow(new Object[]{
-            rs.getString("MaHoaDon"),
-            rs.getString("TenKhachHang"),
-            rs.getString("TenSanPham"),
-            rs.getInt("SoLuong"),
-            rs.getDouble("Gia")
-        });
-    }
+            while (rs.next()) {
+                hasData = true;
+                model.addRow(new Object[]{
+                    rs.getString("MaHoaDon"),
+                    rs.getString("TenKhachHang"),
+                    rs.getString("TenSanPham"),
+                    rs.getInt("SoLuong"),
+                    rs.getDouble("Gia")
+                });
+            }
 
-    if (!hasData) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Mã hóa đơn không tồn tại!");
-    }
+            if (!hasData) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Mã hóa đơn không tồn tại!");
+            }
 
-    rs.getStatement().getConnection().close();
-} catch (Exception e) {
-    e.printStackTrace();
-}
+            rs.getStatement().getConnection().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnTimHoaDonActionPerformed
 
     private void txtMaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaSanPhamActionPerformed
@@ -663,37 +673,37 @@ try {
     private void btnTimSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimSPActionPerformed
         // TODO add your handling code here:
         try {
-        SanPhamDAOImpl dao = new SanPhamDAOImpl();
+            SanPhamDAOImpl dao = new SanPhamDAOImpl();
 
-        String keyword = txtMaSanPham.getText();
+            String keyword = txtMaSanPham.getText();
 
-        if (keyword.equals("Nhập mã hoặc tên sản phẩm...")) {
-            keyword = "";
+            if (keyword.equals("Nhập mã hoặc tên sản phẩm...")) {
+                keyword = "";
+            }
+
+            List<SanPham> list = dao.selectByKeyword(keyword);
+
+            DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
+            model.setRowCount(0);
+
+            if (list.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
+                return;
+            }
+
+            for (SanPham sp : list) {
+                model.addRow(new Object[]{
+                    sp.getMaSanPham(),
+                    sp.getTenSanPham(),
+                    sp.getSoLuongTon(),
+                    sp.getDonGia()
+                });
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi truy vấn sản phẩm!");
+            e.printStackTrace();
         }
-
-        List<SanPham> list = dao.selectByKeyword(keyword);
-
-        DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
-        model.setRowCount(0);
-
-        if (list.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
-            return;
-        }
-
-        for (SanPham sp : list) {
-            model.addRow(new Object[]{
-                sp.getMaSanPham(),
-                sp.getTenSanPham(),
-                sp.getSoLuongTon(),  
-                sp.getDonGia()
-            });
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi truy vấn sản phẩm!");
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_btnTimSPActionPerformed
 
     private void txtSDTThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTThanhVienActionPerformed
@@ -704,13 +714,13 @@ try {
         // TODO add your handling code here:
         String sdt = txtSDTThanhVien.getText();
 
-    if (sdt.equals("Nhập số điện thoại...") || sdt.trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại!");
-        txtSDTThanhVien.requestFocus();
-        return;
-    }
+        if (sdt.equals("Nhập số điện thoại...") || sdt.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại!");
+            txtSDTThanhVien.requestFocus();
+            return;
+        }
 
-    fillTableThanhVien(sdt);
+        fillTableThanhVien(sdt);
     }//GEN-LAST:event_btnTimSDTthanhVienActionPerformed
 
     private void tblTimTheThanhVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTimTheThanhVienMouseClicked

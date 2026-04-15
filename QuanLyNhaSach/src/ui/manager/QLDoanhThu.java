@@ -9,7 +9,7 @@ package ui.manager;
  * @author nguye
  */
 public class QLDoanhThu extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QLDoanhThu.class.getName());
 
     /**
@@ -17,6 +17,8 @@ public class QLDoanhThu extends javax.swing.JFrame {
      */
     public QLDoanhThu() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
     }
 
     /**

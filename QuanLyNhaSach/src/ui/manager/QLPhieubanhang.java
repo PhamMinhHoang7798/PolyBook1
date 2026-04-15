@@ -9,7 +9,7 @@ package ui.manager;
  * @author nguye
  */
 public class QLPhieubanhang extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QLPhieubanhang.class.getName());
 
     /**
@@ -17,6 +17,8 @@ public class QLPhieubanhang extends javax.swing.JFrame {
      */
     public QLPhieubanhang() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
     }
 
     /**

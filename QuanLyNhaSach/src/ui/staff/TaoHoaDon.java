@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package ui.staff;
+
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,18 +15,21 @@ import dao.impl.*;
  * @author nguye
  */
 public class TaoHoaDon extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TaoHoaDon.class.getName());
     private DefaultTableModel model;
     private List<hoadonchitiet> listCTHD = new ArrayList<>();
     private SanPhamDAOImpl sanPhamDAO = new SanPhamDAOImpl();
     private hoadonDAOImpl hoaDonDAO = new hoadonDAOImpl();
     private hoadonchitietDAOImpl ctDAO = new hoadonchitietDAOImpl();
+
     /**
      * Creates new form TaoHoaDon
      */
     public TaoHoaDon() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         model = (DefaultTableModel) jTable1.getModel();
 
         jButton2.addActionListener(e -> themSanPham());
@@ -310,109 +314,109 @@ public class TaoHoaDon extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 
-  private void themSanPham() {
-    String maSP = JOptionPane.showInputDialog(this, "Nhập mã sản phẩm:");
+    private void themSanPham() {
+        String maSP = JOptionPane.showInputDialog(this, "Nhập mã sản phẩm:");
 
-    if (maSP == null || maSP.isEmpty()) return;
-
-    SanPham sp = sanPhamDAO.selectById(maSP);
-
-    if (sp == null) {
-        JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
-        return;
-    }
-
-    // nếu đã có thì tăng số lượng
-    for (hoadonchitiet ct : listCTHD) {
-    if (maSP.equalsIgnoreCase(ct.getMaSanPham())) { // không phân biệt hoa thường
-        ct.setSoLuong(ct.getSoLuong() + 1);
-        loadTable();
-        tinhTongTien();
-        return;
-    }
-}
- 
-   
-
-    hoadonchitiet ct = new hoadonchitiet();
-    ct.setMaSanPham(sp.getMaSanPham());
-    ct.setGia(sp.getDonGia());
-    ct.setSoLuong(1);
-
-    listCTHD.add(ct);
-
-    loadTable();
-    tinhTongTien();
-}
-
-private void thanhToan() {
-    if (listCTHD.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Chưa có sản phẩm trong giỏ!");
-        return;
-    }
-
-    try {
-        // 1. Tạo mã hóa đơn (STRING cho đúng entity)
-        String maHD = String.valueOf(System.currentTimeMillis());
-
-        // 2. Tạo HOÁ ĐƠN (header)
-        hoadon hd = new hoadon();
-        hd.setMaHoaDon(maHD);
-        hd.setNgayLap(new Date());
-        hd.setTongTien(Double.parseDouble(jLabel7.getText()));
-        hd.setTrangThai("Đã thanh toán");
-
-        hoaDonDAO.create(hd);
-
-        // 3. Lưu CHI TIẾT HOÁ ĐƠN
-        for (hoadonchitiet ct : listCTHD) {
-            hoadonchitiet ctEntity = new hoadonchitiet();
-
-            ctEntity.setMaHoaDon(maHD);
-            ctEntity.setMaSanPham(ct.getMaSanPham());
-            ctEntity.setSoLuong(ct.getSoLuong());
-            ctEntity.setGia(ct.getGia());
-
-            ctDAO.create(ctEntity);
+        if (maSP == null || maSP.isEmpty()) {
+            return;
         }
 
-        JOptionPane.showMessageDialog(this, "Thanh toán thành công! Mã HD: " + maHD);
+        SanPham sp = sanPhamDAO.selectById(maSP);
 
-        huyhoadon();
+        if (sp == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
+            return;
+        }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi thanh toán: " + e.getMessage());
+        // nếu đã có thì tăng số lượng
+        for (hoadonchitiet ct : listCTHD) {
+            if (maSP.equalsIgnoreCase(ct.getMaSanPham())) { // không phân biệt hoa thường
+                ct.setSoLuong(ct.getSoLuong() + 1);
+                loadTable();
+                tinhTongTien();
+                return;
+            }
+        }
+
+        hoadonchitiet ct = new hoadonchitiet();
+        ct.setMaSanPham(sp.getMaSanPham());
+        ct.setGia(sp.getDonGia());
+        ct.setSoLuong(1);
+
+        listCTHD.add(ct);
+
+        loadTable();
+        tinhTongTien();
     }
-}
+
+    private void thanhToan() {
+        if (listCTHD.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Chưa có sản phẩm trong giỏ!");
+            return;
+        }
+
+        try {
+            // 1. Tạo mã hóa đơn (STRING cho đúng entity)
+            String maHD = String.valueOf(System.currentTimeMillis());
+
+            // 2. Tạo HOÁ ĐƠN (header)
+            hoadon hd = new hoadon();
+            hd.setMaHoaDon(maHD);
+            hd.setNgayLap(new Date());
+            hd.setTongTien(Double.parseDouble(jLabel7.getText()));
+            hd.setTrangThai("Đã thanh toán");
+
+            hoaDonDAO.create(hd);
+
+            // 3. Lưu CHI TIẾT HOÁ ĐƠN
+            for (hoadonchitiet ct : listCTHD) {
+                hoadonchitiet ctEntity = new hoadonchitiet();
+
+                ctEntity.setMaHoaDon(maHD);
+                ctEntity.setMaSanPham(ct.getMaSanPham());
+                ctEntity.setSoLuong(ct.getSoLuong());
+                ctEntity.setGia(ct.getGia());
+
+                ctDAO.create(ctEntity);
+            }
+
+            JOptionPane.showMessageDialog(this, "Thanh toán thành công! Mã HD: " + maHD);
+
+            huyhoadon();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi thanh toán: " + e.getMessage());
+        }
+    }
 
     private void huyhoadon() {
-    listCTHD.clear();
-    model.setRowCount(0);
-    jLabel4.setText("0");
-    jLabel7.setText("0");
-}
-
- private void loadTable() {
-    model.setRowCount(0);
-
-    for (hoadonchitiet ct : listCTHD) {
-        model.addRow(new Object[]{
-            ct.getMaSanPham(),
-            ct.getGia(),
-            ct.getSoLuong(),
-
-            "Xóa"
-        });
-    }
-}
- private void tinhTongTien() {
-    double tong = 0;
-
-    for (hoadonchitiet ct : listCTHD) {
-        tong +=(double) ct.getGia() * (int)ct.getSoLuong();
+        listCTHD.clear();
+        model.setRowCount(0);
+        jLabel4.setText("0");
+        jLabel7.setText("0");
     }
 
-    jLabel4.setText(String.valueOf(tong));
-    jLabel7.setText(String.valueOf(tong));
-}
+    private void loadTable() {
+        model.setRowCount(0);
+
+        for (hoadonchitiet ct : listCTHD) {
+            model.addRow(new Object[]{
+                ct.getMaSanPham(),
+                ct.getGia(),
+                ct.getSoLuong(),
+                "Xóa"
+            });
+        }
+    }
+
+    private void tinhTongTien() {
+        double tong = 0;
+
+        for (hoadonchitiet ct : listCTHD) {
+            tong += (double) ct.getGia() * (int) ct.getSoLuong();
+        }
+
+        jLabel4.setText(String.valueOf(tong));
+        jLabel7.setText(String.valueOf(tong));
+    }
 }

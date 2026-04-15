@@ -153,9 +153,6 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="8b" green="42" red="c" type="rgb"/>
             </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\Java\JavaApplication5\src\img\img\search.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="T&#xec;m"/>
           </Properties>
           <Events>

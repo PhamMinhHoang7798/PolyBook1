@@ -17,9 +17,12 @@ public class QlSanpham extends javax.swing.JFrame {
      */
     public QlSanpham() {
         initComponents();
-        setLocationRelativeTo(null);
-        loadTable();
+        // Thêm dòng này ngay bên dưới để ghi đè lệnh tắt:
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null); 
+        loadTable(); 
     }
+//   
 
     /**
      * This method is called from within the constructor to initialize the form.

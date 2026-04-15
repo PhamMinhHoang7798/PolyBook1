@@ -9,22 +9,26 @@ package ui.customer;
  * @author nguye
  */
 public class TraSP extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TraSP.class.getName());
     // 1. Khai báo DAO và Model
     private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
     private javax.swing.table.DefaultTableModel modelSanPham;
+
     /**
      * Creates new form TráP
      */
     public TraSP() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         init();
     }
+
     private void init() {
         setLocationRelativeTo(null); // Cho form ra giữa màn hình
         modelSanPham = (javax.swing.table.DefaultTableModel) TblDanhSach.getModel();
-        
+
         loadDataToTable(); // Đổ dữ liệu lên bảng khi vừa mở form
     }
 
@@ -35,9 +39,9 @@ public class TraSP extends javax.swing.JFrame {
             java.util.List<entity.SanPham> list = spDAO.selectAll();
             for (entity.SanPham sp : list) {
                 modelSanPham.addRow(new Object[]{
-                    sp.getMaSanPham(), 
-                    sp.getTenSanPham(), 
-                    sp.getDonGia(), 
+                    sp.getMaSanPham(),
+                    sp.getTenSanPham(),
+                    sp.getDonGia(),
                     "Xem"
                 });
             }
@@ -46,6 +50,7 @@ public class TraSP extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Lỗi kết nối cơ sở dữ liệu!");
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -190,32 +195,32 @@ public class TraSP extends javax.swing.JFrame {
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
         String keyword = txtTim.getText().trim().toLowerCase();
-    modelSanPham.setRowCount(0); // Xóa bảng để hiện kết quả tìm kiếm
-    
-    try {
-        java.util.List<entity.SanPham> list = spDAO.selectAll();
-        for (entity.SanPham sp : list) {
-            // Kiểm tra xem mã SP hoặc tên SP có chứa từ khóa không
-            if (sp.getMaSanPham().toLowerCase().contains(keyword) || 
-                sp.getTenSanPham().toLowerCase().contains(keyword)) {
-                
-                modelSanPham.addRow(new Object[]{
-                    sp.getMaSanPham(), 
-                    sp.getTenSanPham(), 
-                    sp.getDonGia(), 
-                    "Xem"
-                });
+        modelSanPham.setRowCount(0); // Xóa bảng để hiện kết quả tìm kiếm
+
+        try {
+            java.util.List<entity.SanPham> list = spDAO.selectAll();
+            for (entity.SanPham sp : list) {
+                // Kiểm tra xem mã SP hoặc tên SP có chứa từ khóa không
+                if (sp.getMaSanPham().toLowerCase().contains(keyword)
+                        || sp.getTenSanPham().toLowerCase().contains(keyword)) {
+
+                    modelSanPham.addRow(new Object[]{
+                        sp.getMaSanPham(),
+                        sp.getTenSanPham(),
+                        sp.getDonGia(),
+                        "Xem"
+                    });
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void btnFilter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter4ActionPerformed
         // TODO add your handling code here:
         this.dispose(); // Tắt form TraSP hiện tại
-    
+
         // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
         new MenuKhackCheckOut().setVisible(true);
     }//GEN-LAST:event_btnFilter4ActionPerformed
@@ -223,7 +228,7 @@ public class TraSP extends javax.swing.JFrame {
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
         this.dispose(); // Tắt form TraSP hiện tại
-    
+
         // Mở form Thanh Toán lên
         new ThanhToan().setVisible(true);
     }//GEN-LAST:event_btnThanhToanActionPerformed

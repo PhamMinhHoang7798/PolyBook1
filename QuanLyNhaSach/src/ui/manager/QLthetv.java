@@ -17,6 +17,9 @@ public class QLthetv extends javax.swing.JFrame {
      */
     public QLthetv() {
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        loadTable();
     }
 
     /**
