@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class KhachHang {
 
-    private int maKhachHang;
+    private String maKhachHang; // Đã đổi thành String
     private String tenKhachHang;
     private String soDienThoai;
     private String loaiThe;
@@ -17,7 +17,7 @@ public class KhachHang {
     public KhachHang() {
     }
 
-    public KhachHang(int maKhachHang, String tenKhachHang, String soDienThoai, String loaiThe, int diemTichLuy) {
+    public KhachHang(String maKhachHang, String tenKhachHang, String soDienThoai, String loaiThe, int diemTichLuy) {
         this.maKhachHang = maKhachHang;
         this.tenKhachHang = tenKhachHang;
         this.soDienThoai = soDienThoai;
@@ -25,12 +25,11 @@ public class KhachHang {
         this.diemTichLuy = diemTichLuy;
     }
 
-    // Getter và Setter
-    public int getMaKhachHang() {
+    public String getMaKhachHang() {
         return maKhachHang;
     }
 
-    public void setMaKhachHang(int maKhachHang) {
+    public void setMaKhachHang(String maKhachHang) {
         this.maKhachHang = maKhachHang;
     }
 

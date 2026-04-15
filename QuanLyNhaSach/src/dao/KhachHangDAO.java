@@ -14,9 +14,9 @@ public interface KhachHangDAO {
 
     void update(KhachHang kh);
 
-    void delete(int maKhachHang);
+    void delete(String maKhachHang); // Đổi thành String
 
-    KhachHang selectById(int maKhachHang);
+    KhachHang selectById(String maKhachHang); // Sửa 'int' thành 'String' ở đây
 
     KhachHang selectByPhone(String sdt); // Tìm khách hàng nhanh tại quầy bằng SĐT
 

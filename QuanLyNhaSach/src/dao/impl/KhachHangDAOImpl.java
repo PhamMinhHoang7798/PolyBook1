@@ -2,7 +2,6 @@
 //Mssv : PS47440
 //Date : 
 //Slide:
-
 package dao.impl;
 
 import dao.KhachHangDAO;
@@ -15,26 +14,26 @@ public class KhachHangDAOImpl implements KhachHangDAO {
 
     @Override
     public void insert(KhachHang kh) {
-        String sql = "INSERT INTO KhachHang (TenKhachHang, SoDienThoai, LoaiThe, DiemTichLuy) VALUES (?, ?, ?, ?)";
-        XJdbc.executeUpdate(sql, kh.getTenKhachHang(), kh.getSoDienThoai(), kh.getLoaiThe(), kh.getDiemTichLuy());
+        String sql = "INSERT INTO KhachHang (MaKhachHang, TenKhachHang, SoDienThoai, LoaiThe, DiemTichLuy) VALUES (?, ?, ?, ?, ?)";
+        util.XJdbc.executeUpdate(sql, kh.getMaKhachHang(), kh.getTenKhachHang(), kh.getSoDienThoai(), kh.getLoaiThe(), kh.getDiemTichLuy());
     }
 
     @Override
     public void update(KhachHang kh) {
         String sql = "UPDATE KhachHang SET TenKhachHang=?, SoDienThoai=?, LoaiThe=?, DiemTichLuy=? WHERE MaKhachHang=?";
-        XJdbc.executeUpdate(sql, kh.getTenKhachHang(), kh.getSoDienThoai(), kh.getLoaiThe(), kh.getDiemTichLuy(), kh.getMaKhachHang());
+        util.XJdbc.executeUpdate(sql, kh.getTenKhachHang(), kh.getSoDienThoai(), kh.getLoaiThe(), kh.getDiemTichLuy(), kh.getMaKhachHang());
     }
 
     @Override
-    public void delete(int maKhachHang) {
+    public void delete(String maKhachHang) { // Tham số là String
         String sql = "DELETE FROM KhachHang WHERE MaKhachHang=?";
-        XJdbc.executeUpdate(sql, maKhachHang);
+        util.XJdbc.executeUpdate(sql, maKhachHang);
     }
 
     @Override
-    public KhachHang selectById(int maKhachHang) {
+    public KhachHang selectById(String maKhachHang) { // Đổi 'int' thành 'String'
         String sql = "SELECT * FROM KhachHang WHERE MaKhachHang=?";
-        return XQuery.getSingleBean(KhachHang.class, sql, maKhachHang);
+        return util.XQuery.getSingleBean(KhachHang.class, sql, maKhachHang);
     }
 
     @Override
