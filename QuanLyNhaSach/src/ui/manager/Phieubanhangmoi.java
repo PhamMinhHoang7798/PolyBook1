@@ -4,52 +4,81 @@
  */
 package ui.manager;
 
+import dao.impl.hoadonDAOImpl;
+import entity.hoadon;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import util.XDialog;
+import java.text.SimpleDateFormat;
+
 /**
  *
  * @author nguye
  */
 public class Phieubanhangmoi extends javax.swing.JFrame {
 
+    hoadonDAOImpl dao = new hoadonDAOImpl(); // Khai báo để dùng chung
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Phieubanhangmoi.class.getName());
     // Khai báo Model bảng và biến tổng tiền
-    private javax.swing.table.DefaultTableModel modelChiTiet;
+    private javax.swing.table.DefaultTableModel modelGioHang;
     private double tongTien = 0;
+    private double tienGiamGia = 0;
 
-    /**
-     * Creates new form Phieubanhangmoi
-     */
     public Phieubanhangmoi() {
         initComponents();
-        
-
         init(); // Khởi tạo dữ liệu
     }
 
     private void init() {
-        setLocationRelativeTo(null); // Cho form ra giữa màn hình
+        setLocationRelativeTo(null);
+        modelGioHang = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        modelGioHang.setRowCount(0);
 
-        // Lấy model của bảng Chi tiết phiếu (jTable1)
-        modelChiTiet = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        modelChiTiet.setRowCount(0); // Xóa trắng dữ liệu ảo ban đầu
+        // 1. Mặc định chọn Chuyển khoản
+        jComboBox1.setSelectedItem("chuyển khoản");
 
-        // Tự động điền ngày hôm nay vào ô Ngày bán (jTextField3)
+        // 2. Gọi hàm ẩn các ô tiền mặt ngay khi mở trang
+        toggleTienMatFields(false);
+
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
         jTextField3.setText(sdf.format(new java.util.Date()));
-        jTextField3.setEditable(false); // Khóa ô ngày, không cho người dùng sửa bậy
+    }
 
-        jLabel12.setText("0 VNĐ"); // Đặt mặc định nhãn Tổng tiền
-        jLabel13.setText("0 VNĐ"); // Nhãn Giảm giá
-        jLabel14.setText("0 VNĐ"); // Nhãn Tiền thối
+    // Hàm phụ trợ để ẩn/hiện các dòng tiền mặt cho gọn code
+    private void toggleTienMatFields(boolean visible) {
+        jLabel11.setVisible(visible);      // Nhãn "Tiền khách đưa"
+        txtTienKhachDua.setVisible(visible); // Ô nhập tiền khách đưa
+        jLabel17.setVisible(visible);      // Nhãn "Tiền thối"
+        jLabel15.setVisible(visible);      // Nhãn hiển thị số tiền thối
     }
 
     // Hàm tính toán lại tổng tiền mỗi khi có thay đổi trong bảng
     private void tinhTongTien() {
-        tongTien = 0;
-        for (int i = 0; i < modelChiTiet.getRowCount(); i++) {
-            // Cột index 4 là cột "Thành tiền" theo thiết kế của bạn
-            tongTien += Double.parseDouble(modelChiTiet.getValueAt(i, 4).toString());
+        double tongTienHang = 0;
+        // Tính tổng tiền từ bảng giỏ hàng
+        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+            tongTienHang += Double.parseDouble(modelGioHang.getValueAt(i, 4).toString());
         }
+
+        // Tính tổng tiền thực tế sau khi trừ Voucher
+        tongTien = tongTienHang - tienGiamGia;
+        if (tongTien < 0) {
+            tongTien = 0;
+        }
+
+        // --- ĐIỀU CHỈNH ĐỂ HIỂN THỊ TRỐNG THAY VÌ 0 VNĐ ---
+        if (tienGiamGia > 0) {
+            txtMaVoucher.setText(String.format("%,.0f VNĐ", tienGiamGia));
+        } else {
+            txtMaVoucher.setText(""); // Nếu không có giảm giá thì để trống hoàn toàn
+        }
+        // ------------------------------------------------
+
         jLabel12.setText(String.format("%,.0f VNĐ", tongTien));
+
+        // Cập nhật lại tiền thối (nếu có)
+        txtTienKhachDuaKeyReleased(null);
     }
 
     /**
@@ -88,11 +117,12 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        btnThanhToan1 = new javax.swing.JButton();
+        btnInHoaĐon = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        txtTienKhachDua = new javax.swing.JTextField();
+        txtMaVoucher = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -137,8 +167,18 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
         jLabel5.setText("Ngày bán:");
 
         jTextField1.setToolTipText("");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jTextField2.setToolTipText("");
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
 
         jTextField3.setToolTipText("");
 
@@ -294,6 +334,11 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
 
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiền mặt", "chuyển khoản", " " }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel12.setText(" ");
@@ -301,25 +346,34 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel13.setText(" ");
 
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel14.setText(" ");
-
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel16.setText(" ");
-
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel17.setText("Tiền thối:");
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel18.setText(" ");
 
-        btnThanhToan1.setBackground(new java.awt.Color(96, 147, 104));
-        btnThanhToan1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnThanhToan1.setForeground(new java.awt.Color(255, 255, 255));
-        btnThanhToan1.setText("IN HÓA ĐƠN");
-        btnThanhToan1.addActionListener(new java.awt.event.ActionListener() {
+        btnInHoaĐon.setBackground(new java.awt.Color(96, 147, 104));
+        btnInHoaĐon.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnInHoaĐon.setForeground(new java.awt.Color(255, 255, 255));
+        btnInHoaĐon.setText("IN HÓA ĐƠN");
+        btnInHoaĐon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThanhToan1ActionPerformed(evt);
+                btnInHoaĐonActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel15.setText(" ");
+
+        txtTienKhachDua.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTienKhachDuaKeyReleased(evt);
+            }
+        });
+
+        txtMaVoucher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMaVoucherActionPerformed(evt);
             }
         });
 
@@ -341,54 +395,62 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
                                     .addComponent(jLabel8)
                                     .addComponent(jLabel9)
                                     .addComponent(jLabel10))
-                                .addGap(21, 21, 21)
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18))
                                     .addGroup(jPanel5Layout.createSequentialGroup()
-                                        .addGap(3, 3, 3)
-                                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(24, 24, 24)
+                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtMaVoucher))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel11)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel17))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel17))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTienKhachDua, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(9, 9, 9)))
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(112, 112, 112)
-                        .addComponent(btnThanhToan1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnInHoaĐon, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtMaVoucher))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel16))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel14))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel17)
-                        .addGap(76, 76, 76))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(248, 248, 248)
-                        .addComponent(jLabel18)))
-                .addComponent(btnThanhToan1)
+                        .addGap(4, 4, 4)
+                        .addComponent(txtTienKhachDua, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel17))
+                .addGap(35, 35, 35)
+                .addComponent(jLabel18)
+                .addGap(10, 10, 10)
+                .addComponent(btnInHoaĐon)
                 .addGap(12, 12, 12))
         );
 
@@ -403,8 +465,9 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(333, 333, 333)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -416,7 +479,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 332, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 345, Short.MAX_VALUE))
                 .addGap(0, 5, Short.MAX_VALUE))
         );
 
@@ -462,7 +525,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
                 double thanhTien = soLuong * sp.getDonGia();
 
                 // Đẩy dữ liệu vào jTable1 (đúng thứ tự cột bạn thiết kế)
-                modelChiTiet.addRow(new Object[]{
+                modelGioHang.addRow(new Object[]{
                     sp.getMaSanPham(),
                     sp.getTenSanPham(),
                     soLuong,
@@ -491,7 +554,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
                         javax.swing.JOptionPane.YES_NO_OPTION);
 
                 if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-                    modelChiTiet.removeRow(row);
+                    modelGioHang.removeRow(row);
                     tinhTongTien(); // Xóa xong phải tính lại tiền
                 }
             }
@@ -500,34 +563,66 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
         // TODO add your handling code here:
-        String maHD = String.valueOf(System.currentTimeMillis());
+        // 1. Kiểm tra giỏ hàng
+        if (jTable1.getRowCount() == 0) {
+            util.XDialog.alert(this, "Giỏ hàng đang trống!");
+            return;
+        }
 
-        // INSERT HÓA ĐƠN
-        hoadon hd = new hoadon();
-        hd.setMaHoaDon(maHD);
-        hd.setMaKhachHang("KH001");
-        hd.setNgayLap(new java.util.Date());
-        hd.setPhuongThucThanhToan("Tiền mặt");
-        hd.setTrangThai("Đã thanh toán");
-        hd.setTongTien(tongTien);
-        hd.setTenDangNhap("admin");
+        try {
+            // 2. Tạo Mã hóa đơn duy nhất
+            String maHD = "HD" + System.currentTimeMillis() % 1000000;
 
-        hdDAO.create(hd);
+            // 3. Lưu Hóa Đơn (Bảng Cha)
+            entity.hoadon hd = new entity.hoadon();
+            hd.setMaHoaDon(maHD);
+            // Lấy mã KH từ jLabel6 nếu có, không thì mặc định KH001
+            hd.setMaKhachHang(jLabel6.getText().trim().isEmpty() ? "KH001" : jLabel6.getText().trim());
+            hd.setNgayLap(new java.util.Date());
+            hd.setPhuongThucThanhToan(jComboBox1.getSelectedItem().toString());
+            hd.setTrangThai("Đã thanh toán");
+            hd.setTongTien(tongTien);
+            hd.setTenDangNhap("admin");
 
-        // INSERT CHI TIẾT
-        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+            dao.impl.hoadonDAOImpl hdDAO = new dao.impl.hoadonDAOImpl();
+            // Kiểm tra xem là .insert(hd) hay .create(hd) tùy theo file DAO của ông
+            hdDAO.create(hd);
 
-            String temp = modelGioHang.getValueAt(i, 0).toString();
-            String maSP = temp.split(" - ")[0];
+            // 4. Lưu Chi Tiết Hóa Đơn & CẬP NHẬT KHO (Bảng Con)
+            dao.impl.hoadonchitietDAOImpl hdctDAO = new dao.impl.hoadonchitietDAOImpl();
+            dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
 
-            hoadonchitiet ct = new hoadonchitiet();
-            ct.setMaCT((int) System.currentTimeMillis());
-            ct.setMaHoaDon(maHD);
-            ct.setMaSanPham(maSP);
-            ct.setSoLuong((Integer) modelGioHang.getValueAt(i, 1));
-            ct.setGia((Double) modelGioHang.getValueAt(i, 2));
+            for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+                String maSP = modelGioHang.getValueAt(i, 0).toString();
+                int soLuongBan = Integer.parseInt(modelGioHang.getValueAt(i, 2).toString());
+                double giaBan = Double.parseDouble(modelGioHang.getValueAt(i, 3).toString());
 
-            hdctDAO.create(ct);
+                entity.hoadonchitiet ct = new entity.hoadonchitiet();
+                ct.setMaCT((int) (System.currentTimeMillis() % 100000) + i);
+                ct.setMaHoaDon(maHD);
+                ct.setMaSanPham(maSP);
+                ct.setSoLuong(soLuongBan);
+                ct.setGia(giaBan);
+                hdctDAO.create(ct); // Kiểm tra lại tên hàm insert/create
+
+                // Cập nhật kho
+                entity.SanPham sp = spDAO.selectById(maSP);
+                if (sp != null) {
+                    sp.setSoLuongTon(sp.getSoLuongTon() - soLuongBan);
+                    spDAO.update(sp);
+                }
+            }
+
+            // 5. THÀNH CÔNG: Hiện nút In và báo tin
+            util.XDialog.alert(this, "Thanh toán thành công! Mã HD: " + maHD);
+
+            btnInHoaĐon.setVisible(true); // Hiện nút In ra
+            btnInHoaĐon.setEnabled(true);
+
+            // LƯU Ý: KHÔNG gọi btnHuy ở đây để giữ lại dữ liệu cho nút IN bốc đi
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi thanh toán: " + e.getMessage());
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
@@ -537,9 +632,158 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
         tinhTongTien();
     }//GEN-LAST:event_btnHuyActionPerformed
 
-    private void btnThanhToan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToan1ActionPerformed
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnThanhToan1ActionPerformed
+        String sdt = jTextField2.getText().trim();
+        if (!sdt.isEmpty()) {
+            dao.KhachHangDAO khDAO = new dao.impl.KhachHangDAOImpl();
+            entity.KhachHang kh = khDAO.selectByPhone(sdt); // Hàm này ông đã có trong DAO
+            if (kh != null) {
+                jTextField1.setText(kh.getTenKhachHang());
+                jLabel6.setText(kh.getMaKhachHang()); // Lưu mã KH vào nhãn ẩn để sau này lưu hóa đơn
+                util.XDialog.alert(this, "Đã tìm thấy khách hàng: " + kh.getTenKhachHang());
+            } else {
+                util.XDialog.alert(this, "Số điện thoại này chưa có trong hệ thống!");
+            }
+        }
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void txtMaVoucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaVoucherActionPerformed
+        // TODO add your handling code here:
+        String maVoucher = txtMaVoucher.getText().trim();
+        if (maVoucher.isEmpty()) {
+            tienGiamGia = 0;
+            tinhTongTien();
+            return;
+        }
+
+        try {
+            // Truy vấn trực tiếp từ bảng Voucher trong Database
+            String sql = "SELECT Giagiam FROM Voucher WHERE MaVoucher = ?";
+            // Sử dụng util.XQuery hoặc XJdbc tùy theo thư viện ông có
+            java.sql.ResultSet rs = util.XJdbc.query(sql, maVoucher);
+
+            if (rs.next()) {
+                double giaTriGiam = rs.getDouble("Giagiam");
+                // Theo quy ước của ông: 5.00 trong DB = 5,000 VNĐ
+                tienGiamGia = giaTriGiam * 1000;
+
+                util.XDialog.alert(this, "Áp dụng mã giảm giá thành công: " + String.format("%,.0f VNĐ", tienGiamGia));
+                tinhTongTien(); // Tính lại toàn bộ tiền
+            } else {
+                util.XDialog.alert(this, "Mã giảm giá không tồn tại hoặc đã hết hạn!");
+                tienGiamGia = 0;
+                tinhTongTien();
+            }
+        } catch (Exception e) {
+            util.XDialog.alert(this, " lỗi kiểm tra Voucher: " + e.getMessage());
+        }
+    }//GEN-LAST:event_txtMaVoucherActionPerformed
+
+    private void txtTienKhachDuaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTienKhachDuaKeyReleased
+        // TODO add your handling code here:
+        try {
+            if (txtTienKhachDua.getText().trim().isEmpty()) {
+                jLabel15.setText("0 VNĐ");
+                return;
+            }
+
+            double tienKhachDua = Double.parseDouble(txtTienKhachDua.getText());
+            double tienThoi = tienKhachDua - tongTien; // tongTien đã được tính ở hàm tinhTongTien()
+
+            if (tienThoi < 0) {
+                jLabel15.setText("Khách đưa thiếu!");
+            } else {
+                jLabel15.setText(String.format("%,.0f VNĐ", tienThoi));
+            }
+        } catch (NumberFormatException e) {
+            jLabel15.setText("Số tiền không hợp lệ!");
+        }
+    }//GEN-LAST:event_txtTienKhachDuaKeyReleased
+
+    private void btnInHoaĐonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInHoaĐonActionPerformed
+        // TODO add your handling code here:
+        String tenKH = jTextField1.getText().isEmpty() ? "Khách lẻ" : jTextField1.getText();
+        String sdt = jTextField2.getText();
+        String ngay = jTextField3.getText();
+        String pthanhToan = jComboBox1.getSelectedItem().toString(); // Lấy phương thức thanh toán
+
+        // Bắt đầu dựng nội dung hóa đơn
+        StringBuilder bill = new StringBuilder();
+        bill.append("        NHÀ SÁCH POLY BOOK\n");
+        bill.append("   ĐC: 123 Trịnh Văn Bô, Nam Từ Liêm\n");
+        bill.append("   SĐT: 0987.654.321\n");
+        bill.append("------------------------------------------\n");
+        bill.append(String.format(" KH: %-20s\n", tenKH));
+        bill.append(String.format(" SĐT: %-20s\n", sdt));
+        bill.append(String.format(" Ngày: %-20s\n", ngay));
+        bill.append(String.format(" P.Thức: %-20s\n", pthanhToan)); // In phương thức thanh toán lên hóa đơn
+        bill.append("------------------------------------------\n");
+        bill.append(String.format("%-18s %-3s %-10s %-10s\n", "Tên SP", "SL", "Đơn giá", "Thành tiền"));
+
+        // Lấy dữ liệu từ bảng giỏ hàng
+        for (int i = 0; i < modelGioHang.getRowCount(); i++) {
+            String ten = modelGioHang.getValueAt(i, 1).toString();
+            String sl = modelGioHang.getValueAt(i, 2).toString();
+            String gia = modelGioHang.getValueAt(i, 3).toString();
+            String tt = modelGioHang.getValueAt(i, 4).toString();
+
+            if (ten.length() > 15) {
+                ten = ten.substring(0, 15) + "..";
+            }
+            bill.append(String.format("%-18s %-3s %-10s %-10s\n", ten, sl, gia, tt));
+        }
+
+        bill.append("------------------------------------------\n");
+        bill.append(String.format(" TỔNG CỘNG:            %,.0f VNĐ\n", tongTien)); //
+
+        // --- PHẦN ĐIỀU CHỈNH THEO Ý ÔNG ---
+        if (pthanhToan.equals("Tiền mặt")) {
+            try {
+                // Lấy số tiền từ ô txtTienKhachDua mà ta đã tạo ở bước trước
+                double khachDua = Double.parseDouble(txtTienKhachDua.getText().trim());
+                double thoiLai = khachDua - tongTien;
+
+                bill.append(String.format(" TIỀN KHÁCH ĐƯA:      %,.0f VNĐ\n", khachDua));
+                bill.append(String.format(" TIỀN THỐI LẠI:       %,.0f VNĐ\n", thoiLai));
+            } catch (Exception e) {
+                bill.append(" TIỀN KHÁCH ĐƯA:      (Chưa nhập)\n");
+            }
+        }
+        // Nếu là Chuyển khoản, code sẽ tự động bỏ qua phần trên và đi tiếp xuống dưới
+        // ---------------------------------
+
+        bill.append("------------------------------------------\n");
+        bill.append("      CẢM ƠN QUÝ KHÁCH. HẸN GẶP LẠI!\n");
+
+        // Hiển thị hóa đơn mô phỏng
+        javax.swing.JTextArea txtArea = new javax.swing.JTextArea(bill.toString());
+        txtArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 13));
+        txtArea.setEditable(false);
+
+        javax.swing.JOptionPane.showMessageDialog(this, new javax.swing.JScrollPane(txtArea), "HÓA ĐƠN VẬT LÝ", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        // Reset lại form để làm phiếu mới
+        btnHuyActionPerformed(null);
+        btnInHoaĐon.setVisible(false);
+    }//GEN-LAST:event_btnInHoaĐonActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        String method = jComboBox1.getSelectedItem().toString();
+
+        if (method.equals("Tiền mặt")) {
+            toggleTienMatFields(true);  // Hiện ra nếu là tiền mặt
+        } else {
+            toggleTienMatFields(false); // Ẩn đi nếu là chuyển khoản
+            txtTienKhachDua.setText("");
+            jLabel15.setText("0 VNĐ");
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -568,8 +812,8 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHuy;
+    private javax.swing.JButton btnInHoaĐon;
     private javax.swing.JButton btnThanhToan;
-    private javax.swing.JButton btnThanhToan1;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
@@ -577,8 +821,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
@@ -599,5 +842,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField txtMaVoucher;
+    private javax.swing.JTextField txtTienKhachDua;
     // End of variables declaration//GEN-END:variables
 }
