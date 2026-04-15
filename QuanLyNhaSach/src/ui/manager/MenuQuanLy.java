@@ -246,7 +246,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
     private void btnQuanLyDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyDoanhThuActionPerformed
         // TODO add your handling code here:
         if (util.XAuth.isManager()) {
-            new QLDoanhThu().setVisible(true);
+            showPanel(new QLDoanhThu());
         } else {
             util.XDialog.alert(this, "Chỉ quản lý mới được xem doanh thu!");
         }
@@ -256,7 +256,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         // TODO add your handling code here:
         // Cách 1: Kiểm tra đúng quyền (Khuyên dùng)
         if (util.XAuth.isManager()) {
-            new QlNguoidung().setVisible(true);
+            showPanel(new QlNguoidung());
         } else {
             util.XDialog.alert(this, "Tài khoản của bạn không có quyền Quản lý!");
         }
@@ -268,29 +268,29 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
     private void btnQuanLyPhieuBanHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyPhieuBanHangActionPerformed
         // TODO add your handling code here:
-        new Phieubanhangmoi().setVisible(true);
+        showPanel(new Phieubanhangmoi());
     }//GEN-LAST:event_btnQuanLyPhieuBanHangActionPerformed
 
     private void btnQuanLyTheThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyTheThanhVienActionPerformed
         // TODO add your handling code here:
         // 1. Kiểm tra quyền hạn (Tùy chọn: Thẻ thành viên thường dành cho Quản lý hoặc Nhân viên)
-    // Nếu bạn muốn chỉ Quản lý mới được vào:
-    if (util.XAuth.isManager()) {
-        new ui.manager.QLthetv().setVisible(true);
-    } else {
-        // Nếu là nhân viên vẫn cho vào thì bỏ câu lệnh if/else này
-        util.XDialog.alert(this, "Chức năng này yêu cầu quyền Quản lý!");
-    }
+        // Nếu bạn muốn chỉ Quản lý mới được vào:
+        if (util.XAuth.isManager()) {
+            showPanel(new QLthetv());
+        } else {
+            // Nếu là nhân viên vẫn cho vào thì bỏ câu lệnh if/else này
+            util.XDialog.alert(this, "Chức năng này yêu cầu quyền Quản lý!");
+        }
     }//GEN-LAST:event_btnQuanLyTheThanhVienActionPerformed
 
     private void btnQuanLySPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLySPActionPerformed
         // TODO add your handling code here:
-        new QlSanpham().setVisible(true);
+        showPanel(new QlSanpham());
     }//GEN-LAST:event_btnQuanLySPActionPerformed
 
     private void btnQuanlyLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanlyLoaiSPActionPerformed
         // TODO add your handling code here:
-        new QlLoaiSP().setVisible(true);
+        showPanel(new QlLoaiSP());
     }//GEN-LAST:event_btnQuanlyLoaiSPActionPerformed
 
     /**
@@ -318,6 +318,14 @@ public class MenuQuanLy extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new MenuQuanLy().setVisible(true));
     }
 
+    // Hàm hỗ trợ nhúng Form con vào jPanel2
+    private void showPanel(javax.swing.JFrame form) {
+        jPanel2.removeAll(); // Xóa trắng chức năng cũ đang hiển thị
+        jPanel2.setLayout(new java.awt.BorderLayout()); // Chuyển layout để tự động lấp đầy
+        jPanel2.add(form.getContentPane()); // Lấy "phần ruột" của form con nhét vào jPanel2
+        jPanel2.revalidate(); // Tải lại cấu trúc giao diện
+        jPanel2.repaint();    // Vẽ lại giao diện
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnQuanLyDoanhThu;
