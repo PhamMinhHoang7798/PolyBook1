@@ -4,6 +4,8 @@
  */
 package ui.customer;
 
+import ui.staff.Login;
+
 /**
  *
  * @author nguye
@@ -17,6 +19,8 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
      */
     public MenuKhackCheckOut() {
         initComponents();
+        // Lệnh này ép Cửa sổ Menu tự động nhảy ra chính giữa màn hình
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -145,10 +149,13 @@ public class MenuKhackCheckOut extends javax.swing.JFrame {
     private void btnThoat1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoat1ActionPerformed
         // TODO add your handling code here:
         this.dispose();
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
+        });
     }//GEN-LAST:event_btnThoat1ActionPerformed
 
     private void btnTraCuuSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraCuuSPActionPerformed
-        new ui.staff.Timkiem().setVisible(true);
+        new ui.customer.TraCuuSP().setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_btnTraCuuSPActionPerformed

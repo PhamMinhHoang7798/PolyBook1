@@ -19,6 +19,8 @@ public class MenuQuanLy extends javax.swing.JFrame {
      */
     public MenuQuanLy() {
         initComponents();
+        // Lệnh này ép Cửa sổ Menu tự động nhảy ra chính giữa màn hình
+        this.setLocationRelativeTo(null);
     }
 
     /**

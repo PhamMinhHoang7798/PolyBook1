@@ -22,6 +22,8 @@ public class MenuNhanVien extends javax.swing.JFrame {
      */
     public MenuNhanVien() {
         initComponents();
+        // Lệnh này ép Cửa sổ Menu tự động nhảy ra chính giữa màn hình
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -233,25 +235,26 @@ public class MenuNhanVien extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new MenuNhanVien().setVisible(true));
     }
 // Tuyệt chiêu "Bóc tách ruột" - Chấp mọi loại lỗi Layout của NetBeans
+
     private void showPanel(javax.swing.JFrame form) {
-        jPanel2.removeAll(); 
-        jPanel2.setLayout(new java.awt.BorderLayout()); 
-        
+        jPanel2.removeAll();
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
         try {
             // 1. Bóc trực tiếp cái nền (jPanel1) từ form con ra, vứt bỏ lớp vỏ JFrame đi
             javax.swing.JPanel mainPanel = (javax.swing.JPanel) form.getContentPane().getComponent(0);
-            
+
             // 2. Phủ màu trắng tinh cho nền để khử sạch mọi mảng xám
             mainPanel.setBackground(java.awt.Color.WHITE);
-            
+
             // 3. Nhét thẳng cái ruột đó vào jPanel2 của Menu
             jPanel2.add(mainPanel, java.awt.BorderLayout.CENTER);
-            
+
         } catch (Exception e) {
             // Dự phòng nếu form bị lỗi thiết kế thì dùng cách cũ
             jPanel2.add(form.getContentPane(), java.awt.BorderLayout.CENTER);
         }
-        
+
         jPanel2.revalidate();
         jPanel2.repaint();
     }
