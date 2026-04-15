@@ -41,7 +41,13 @@ public class SanPhamDAOImpl implements SanPhamDAO {
 
     @Override
     public void delete(String id) {
-        XJdbc.executeUpdate(DELETE_SQL, id);
+        // 1. ĐI DỌN DẸP BẢN GHI CON TRƯỚC (Phá vỡ ràng buộc khóa ngoại)
+        // Xóa sạch các chi tiết hóa đơn có chứa mã sản phẩm này
+        String sqlDeleteChiTiet = "DELETE FROM HoaDonChiTiet WHERE MaSanPham = ?";
+        util.XJdbc.executeUpdate(sqlDeleteChiTiet, id);
+
+        // 2. KHI ĐÃ SẠCH SẼ RÀNG BUỘC, TIẾN HÀNH XÓA SẢN PHẨM (BẢN GHI CHA)
+        util.XJdbc.executeUpdate(DELETE_SQL, id);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class QlLoaiSP extends javax.swing.JFrame {
 
     // Nâng cấp loadTable: Có hỗ trợ lọc theo từ khóa
     void loadTable(String keyword) {
-        DefaultTableModel model = (DefaultTableModel) tlbLoaiSanPham.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblLoaiSanPham.getModel();
         model.setRowCount(0);
 
         java.util.List<LoaiSP> list;
@@ -65,7 +65,7 @@ public class QlLoaiSP extends javax.swing.JFrame {
         txtNhapMaLoai = new javax.swing.JTextField();
         btnTim = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tlbLoaiSanPham = new javax.swing.JTable();
+        tblLoaiSanPham = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtMaLoai = new javax.swing.JTextField();
@@ -102,8 +102,8 @@ public class QlLoaiSP extends javax.swing.JFrame {
             }
         });
 
-        tlbLoaiSanPham.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tlbLoaiSanPham.setModel(new javax.swing.table.DefaultTableModel(
+        tblLoaiSanPham.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tblLoaiSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -114,12 +114,12 @@ public class QlLoaiSP extends javax.swing.JFrame {
                 "Mã loại sản phẩm", "Tên loại sản phẩm"
             }
         ));
-        tlbLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tlbLoaiSanPhamMouseClicked(evt);
+                tblLoaiSanPhamMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tlbLoaiSanPham);
+        jScrollPane1.setViewportView(tblLoaiSanPham);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -320,15 +320,15 @@ public class QlLoaiSP extends javax.swing.JFrame {
         clearForm();
     }//GEN-LAST:event_btnNhapMoiActionPerformed
 
-    private void tlbLoaiSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tlbLoaiSanPhamMouseClicked
+    private void tblLoaiSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiSanPhamMouseClicked
         // TODO add your handling code here:
-        tlbLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 edit();
             }
         });
 
-    }//GEN-LAST:event_tlbLoaiSanPhamMouseClicked
+    }//GEN-LAST:event_tblLoaiSanPhamMouseClicked
 
     private void txtNhapMaLoaiKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNhapMaLoaiKeyReleased
         // TODO add your handling code here:
@@ -457,10 +457,10 @@ void find() {
 }
 
 void edit() {
-    int row = tlbLoaiSanPham.getSelectedRow();
+    int row = tblLoaiSanPham.getSelectedRow();
     if (row >= 0) {
-        txtMaLoai.setText(tlbLoaiSanPham.getValueAt(row, 0).toString());
-        txtTenloai.setText(tlbLoaiSanPham.getValueAt(row, 1).toString());
+        txtMaLoai.setText(tblLoaiSanPham.getValueAt(row, 0).toString());
+        txtTenloai.setText(tblLoaiSanPham.getValueAt(row, 1).toString());
         jTabbedPane1.setSelectedIndex(1);
     }
 }
@@ -480,7 +480,7 @@ void edit() {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable tlbLoaiSanPham;
+    private javax.swing.JTable tblLoaiSanPham;
     private javax.swing.JTextField txtMaLoai;
     private javax.swing.JTextField txtNhapMaLoai;
     private javax.swing.JTextField txtTenloai;

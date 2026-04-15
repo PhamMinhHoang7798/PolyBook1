@@ -17,9 +17,8 @@ public class QLthetv extends javax.swing.JFrame {
      */
     public QLthetv() {
         initComponents();
-        
 
-        loadTable();
+        loadTable("");
     }
 
     /**
@@ -35,7 +34,7 @@ public class QLthetv extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         txtTim = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnTim = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblDanhSach = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -60,8 +59,19 @@ public class QLthetv extends javax.swing.JFrame {
 
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setText("Tìm");
+        txtTim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKeyReleased(evt);
+            }
+        });
+
+        btnTim.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnTim.setText("Tìm");
+        btnTim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimActionPerformed(evt);
+            }
+        });
 
         tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,7 +99,7 @@ public class QLthetv extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE)
         );
@@ -99,7 +109,7 @@ public class QLthetv extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                    .addComponent(btnTim, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
                 .addContainerGap())
@@ -319,18 +329,36 @@ public class QLthetv extends javax.swing.JFrame {
         clearForm();
     }//GEN-LAST:event_btnNewActionPerformed
 
+    private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
+        // TODO add your handling code here:
+        loadTable(txtTim.getText().trim());
+    }//GEN-LAST:event_txtTimKeyReleased
+
+    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
+        // TODO add your handling code here:
+        loadTable(txtTim.getText().trim());
+    }//GEN-LAST:event_btnTimActionPerformed
+
     // Gọi DAO để tương tác DB
     dao.impl.KhachHangDAOImpl dao = new dao.impl.KhachHangDAOImpl();
 
     // Biến ngầm để lưu Mã Khách Hàng khi click vào bảng (do trên form không có ô Mã KH)
     int currentMaKH = -1;
 
-    void loadTable() {
+    // 1. Nâng cấp loadTable: Hỗ trợ tìm kiếm Real-time
+    void loadTable(String keyword) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
 
         try {
-            java.util.List<entity.KhachHang> list = dao.selectAll();
+            java.util.List<entity.KhachHang> list;
+            // Nếu không gõ gì thì lấy tất cả, nếu có gõ thì tìm theo từ khóa
+            if (keyword == null || keyword.trim().isEmpty()) {
+                list = dao.selectAll();
+            } else {
+                list = dao.selectByKeyword(keyword);
+            }
+
             for (entity.KhachHang kh : list) {
                 model.addRow(new Object[]{
                     kh.getMaKhachHang(),
@@ -342,6 +370,73 @@ public class QLthetv extends javax.swing.JFrame {
             }
         } catch (Exception e) {
             util.XDialog.alert(this, "Lỗi tải dữ liệu: " + e.getMessage());
+        }
+    }
+
+    void insert() {
+        if (txtTenKH.getText().isEmpty() || txtSoDT.getText().isEmpty()) {
+            util.XDialog.alert(this, "Vui lòng nhập Tên KH và Số điện thoại!");
+            return;
+        }
+        try {
+            dao.insert(getForm());
+            loadTable(""); // Gọi lại bảng
+            clearForm();
+            util.XDialog.alert(this, "Thêm khách hàng thành công!");
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi thêm khách hàng: " + e.getMessage());
+        }
+    }
+
+    void update() {
+        if (currentMaKH == -1) {
+            util.XDialog.alert(this, "Vui lòng chọn khách hàng cần cập nhật từ danh sách!");
+            return;
+        }
+
+        // KIỂM TRA TỒN TẠI (Chặn lỗi ngầm)
+        entity.KhachHang khCheck = dao.selectById(currentMaKH);
+        if (khCheck == null) {
+            util.XDialog.alert(this, "Khách hàng này không còn tồn tại trong hệ thống!");
+            return;
+        }
+
+        try {
+            dao.update(getForm());
+            loadTable(""); // Gọi lại bảng
+            util.XDialog.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
+        }
+    }
+
+    void delete() {
+        if (currentMaKH == -1) {
+            util.XDialog.alert(this, "Vui lòng chọn khách hàng cần xóa từ danh sách!");
+            return;
+        }
+
+        // KIỂM TRA TỒN TẠI
+        entity.KhachHang khCheck = dao.selectById(currentMaKH);
+        if (khCheck == null) {
+            util.XDialog.alert(this, "Không có khách hàng này trong danh sách để xóa!");
+            return;
+        }
+
+        if (util.XDialog.confirm(this, "Bạn có chắc chắn muốn xóa khách hàng này không?")) {
+            try {
+                dao.delete(currentMaKH);
+                loadTable(""); // Gọi lại bảng
+                clearForm();
+                util.XDialog.alert(this, "Xóa thành công!");
+            } catch (Exception e) {
+                // BẮT LỖI KHÓA NGOẠI: Khách hàng đã từng mua hàng
+                if (e.getMessage().contains("REFERENCE constraint") || e.getMessage().contains("FK_")) {
+                    util.XDialog.alert(this, "Không thể xóa! Khách hàng này đã từng mua hàng và có hóa đơn lưu trữ.");
+                } else {
+                    util.XDialog.alert(this, "Lỗi xóa khách hàng: " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -370,52 +465,6 @@ public class QLthetv extends javax.swing.JFrame {
         txtLoaiThe.setText("");
         TxtDiem.setText("");
         currentMaKH = -1; // Reset lại mã ngầm khi tạo mới
-    }
-
-    void insert() {
-        if (txtTenKH.getText().isEmpty() || txtSoDT.getText().isEmpty()) {
-            util.XDialog.alert(this, "Vui lòng nhập Tên KH và Số điện thoại!");
-            return;
-        }
-        try {
-            dao.insert(getForm());
-            loadTable();
-            clearForm();
-            util.XDialog.alert(this, "Thêm khách hàng thành công!");
-        } catch (Exception e) {
-            util.XDialog.alert(this, "Lỗi thêm khách hàng: " + e.getMessage());
-        }
-    }
-
-    void update() {
-        if (currentMaKH == -1) {
-            util.XDialog.alert(this, "Vui lòng chọn khách hàng cần cập nhật từ danh sách!");
-            return;
-        }
-        try {
-            dao.update(getForm());
-            loadTable();
-            util.XDialog.alert(this, "Cập nhật thành công!");
-        } catch (Exception e) {
-            util.XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
-        }
-    }
-
-    void delete() {
-        if (currentMaKH == -1) {
-            util.XDialog.alert(this, "Vui lòng chọn khách hàng cần xóa từ danh sách!");
-            return;
-        }
-        if (util.XDialog.confirm(this, "Bạn có chắc chắn muốn xóa khách hàng này không?")) {
-            try {
-                dao.delete(currentMaKH); // Hàm delete truyền ID (số nguyên) thay vì String
-                loadTable();
-                clearForm();
-                util.XDialog.alert(this, "Xóa thành công!");
-            } catch (Exception e) {
-                util.XDialog.alert(this, "Lỗi xóa khách hàng: " + e.getMessage());
-            }
-        }
     }
 
     void edit() {
@@ -465,7 +514,7 @@ public class QLthetv extends javax.swing.JFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnThem;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnTim;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

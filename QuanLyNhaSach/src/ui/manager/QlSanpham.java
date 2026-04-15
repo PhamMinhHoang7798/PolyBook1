@@ -18,9 +18,8 @@ public class QlSanpham extends javax.swing.JFrame {
     public QlSanpham() {
         initComponents();
         // Thêm dòng này ngay bên dưới để ghi đè lệnh tắt:
-        
-        setLocationRelativeTo(null); 
-        loadTable(); 
+        setLocationRelativeTo(null);
+        loadTable("");
     }
 //   
 
@@ -64,8 +63,24 @@ public class QlSanpham extends javax.swing.JFrame {
 
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        txtTim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimActionPerformed(evt);
+            }
+        });
+        txtTim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKeyReleased(evt);
+            }
+        });
+
         btnTim.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnTim.setText("Tìm");
+        btnTim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimActionPerformed(evt);
+            }
+        });
 
         tbldanhsach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -78,6 +93,11 @@ public class QlSanpham extends javax.swing.JFrame {
                 "Mã sản phẩm", " Loại sản phẩm", "Tên sản phẩm", "Giá", "Số lượng"
             }
         ));
+        tbldanhsach.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbldanhsachMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbldanhsach);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -109,7 +129,6 @@ public class QlSanpham extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Mã sản phẩm");
 
-        txtMaSanPham.setEditable(false);
         txtMaSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaSanPhamActionPerformed(evt);
@@ -342,27 +361,55 @@ public class QlSanpham extends javax.swing.JFrame {
         // TODO add your handling code here:
         clearForm();
     }//GEN-LAST:event_btnNewActionPerformed
-// Gọi DAO để tương tác DB
-    dao.impl.SanPhamDAOImpl dao = new dao.impl.SanPhamDAOImpl();
 
-    void loadTable() {
-        // Đã đổi jTable1 thành tbldanhsach
+    private void tbldanhsachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbldanhsachMouseClicked
+        // TODO add your handling code here:
+        edit();
+    }//GEN-LAST:event_tbldanhsachMouseClicked
+
+    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTimActionPerformed
+
+    private void txtTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimActionPerformed
+
+    private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
+        // TODO add your handling code here:
+        loadTable(txtTim.getText().trim());
+    }//GEN-LAST:event_txtTimKeyReleased
+// 1. Khai báo DAO để dùng chung cho cả class
+    dao.SanPhamDAO dao = new dao.impl.SanPhamDAOImpl();
+
+    // 2. Nâng cấp loadTable: Hỗ trợ tìm kiếm
+    void loadTable(String keyword) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tbldanhsach.getModel();
-        model.setRowCount(0); // Xóa sạch dữ liệu cũ trên bảng
+        model.setRowCount(0); // Xóa trắng dữ liệu cũ
 
         try {
-            java.util.List<entity.SanPham> list = dao.selectAll();
+            java.util.List<entity.SanPham> list;
+
+            // Nếu không gõ gì thì lấy hết, nếu có gõ thì tìm theo từ khóa
+            if (keyword == null || keyword.trim().isEmpty()) {
+                list = dao.selectAll();
+            } else {
+                list = dao.selectByKeyword(keyword);
+            }
+
             for (entity.SanPham sp : list) {
+                // THỨ TỰ PHẢI KHỚP VỚI CỘT TRÊN GIAO DIỆN:
+                // Mã SP (0) -> Mã Loại (1) -> Tên SP (2) -> Giá (3) -> Số Lượng (4)
                 model.addRow(new Object[]{
                     sp.getMaSanPham(),
-                    sp.getMaLoai(), // Loại SP
-                    sp.getTenSanPham(), // Tên SP
-                    sp.getDonGia(), // Giá
-                    sp.getSoLuongTon() // Số lượng
+                    sp.getMaLoai(),
+                    sp.getTenSanPham(),
+                    sp.getDonGia(),
+                    sp.getSoLuongTon()
                 });
             }
         } catch (Exception e) {
-            util.XDialog.alert(this, "Lỗi tải dữ liệu: " + e.getMessage());
+            util.XDialog.alert(this, "Lỗi nạp dữ liệu sản phẩm!");
         }
     }
 
@@ -404,23 +451,33 @@ public class QlSanpham extends javax.swing.JFrame {
 
         try {
             dao.insert(getForm());
-            loadTable(); // Load lại bảng luôn
+            loadTable(""); // Load lại bảng luôn
             clearForm(); // Dọn sạch form
             util.XDialog.alert(this, "Thêm sản phẩm thành công!");
         } catch (Exception e) {
             util.XDialog.alert(this, "Lỗi thêm sản phẩm: Kiểm tra lại Mã Loại SP xem có tồn tại không! (" + e.getMessage() + ")");
         }
     }
+
     // ================= CHỨC NĂNG CẬP NHẬT (SỬA) =================
     void update() {
-        if (txtMaSanPham.getText().isEmpty()) {
-            util.XDialog.alert(this, "Vui lòng chọn sản phẩm cần cập nhật!");
+        String ma = txtMaSanPham.getText().trim();
+        if (ma.isEmpty()) {
+            util.XDialog.alert(this, "Vui lòng nhập mã sản phẩm!");
             return;
         }
+
+        // KIỂM TRA TỒN TẠI: Nếu tìm không thấy thì báo lỗi ngay
+        entity.SanPham spCheck = dao.selectById(ma);
+        if (spCheck == null) {
+            util.XDialog.alert(this, "Chưa có sản phẩm trong danh sách để chỉnh sửa!");
+            return;
+        }
+
         try {
             dao.update(getForm());
-            loadTable(); // Tải lại bảng để xem dữ liệu mới
-            util.XDialog.alert(this, "Cập nhật thành công!");
+            loadTable(""); // Load lại toàn bộ bảng sau khi sửa
+            util.XDialog.alert(this, "Cập nhật sản phẩm thành công!");
         } catch (Exception e) {
             util.XDialog.alert(this, "Lỗi cập nhật: " + e.getMessage());
         }
@@ -428,21 +485,28 @@ public class QlSanpham extends javax.swing.JFrame {
 
     // ================= CHỨC NĂNG XÓA =================
     void delete() {
-        String ma = txtMaSanPham.getText();
+        String ma = txtMaSanPham.getText().trim();
         if (ma.isEmpty()) {
-            util.XDialog.alert(this, "Vui lòng chọn sản phẩm cần xóa!");
+            util.XDialog.alert(this, "Vui lòng nhập mã sản phẩm để xóa!");
             return;
         }
-        
-        // Hỏi lại cho chắc trước khi xóa
-        if (util.XDialog.confirm(this, "Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+
+        // KIỂM TRA TỒN TẠI
+        entity.SanPham spCheck = dao.selectById(ma);
+        if (spCheck == null) {
+            util.XDialog.alert(this, "Không có sản phẩm này trong danh sách để xóa!");
+            return;
+        }
+
+        if (util.XDialog.confirm(this, "Bạn thực sự muốn xóa sản phẩm này?")) {
             try {
-                dao.delete(ma);
-                loadTable(); 
-                clearForm(); 
+                dao.delete(ma); // Nó sẽ gọi hàm delete mới tinh ở Bước 1
+                loadTable("");
+                clearForm();
                 util.XDialog.alert(this, "Xóa thành công!");
             } catch (Exception e) {
-                util.XDialog.alert(this, "Lỗi xóa sản phẩm (Có thể do SP này đang nằm trong hóa đơn): " + e.getMessage());
+                // Báo lỗi bình thường nếu có lỗi mạng hoặc database sập
+                util.XDialog.alert(this, "Lỗi khi xóa: " + e.getMessage());
             }
         }
     }
@@ -451,19 +515,17 @@ public class QlSanpham extends javax.swing.JFrame {
     void edit() {
         int row = tbldanhsach.getSelectedRow();
         if (row >= 0) {
-            // Lấy dữ liệu từ bảng theo từng cột (0, 1, 2, 3, 4) và đẩy lên form
-            txtMaSanPham.setText(tbldanhsach.getValueAt(row, 0).toString());
-            txtLoaiSanPham.setText(tbldanhsach.getValueAt(row, 1).toString());
-            txtTenSanPham.setText(tbldanhsach.getValueAt(row, 2).toString());
-            txtGia.setText(tbldanhsach.getValueAt(row, 3).toString());
-            txtSoLuong.setText(tbldanhsach.getValueAt(row, 4).toString());
-            
+            // Lấy dữ liệu từ bảng bốc lên Form theo đúng thứ tự cột giao diện
+            txtMaSanPham.setText(tbldanhsach.getValueAt(row, 0).toString());  // Cột 0: Mã SP
+            txtLoaiSanPham.setText(tbldanhsach.getValueAt(row, 1).toString());// Cột 1: Mã Loại
+            txtTenSanPham.setText(tbldanhsach.getValueAt(row, 2).toString()); // Cột 2: Tên SP
+            txtGia.setText(tbldanhsach.getValueAt(row, 3).toString());        // Cột 3: Giá
+            txtSoLuong.setText(tbldanhsach.getValueAt(row, 4).toString());    // Cột 4: Số lượng
+
             // Tự động chuyển sang tab Biểu mẫu (Tab số 1)
-            jTabbedPane1.setSelectedIndex(1); 
+            jTabbedPane1.setSelectedIndex(1);
         }
     }
-
-   
 
     /**
      * @param args the command line arguments
