@@ -28,7 +28,7 @@ public class TaoHoaDon extends javax.swing.JFrame {
      */
     public TaoHoaDon() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
         model = (DefaultTableModel) jTable1.getModel();
 

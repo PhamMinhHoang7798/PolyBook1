@@ -17,7 +17,7 @@ public class QLPhieubanhang extends javax.swing.JFrame {
      */
     public QLPhieubanhang() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
     }
 

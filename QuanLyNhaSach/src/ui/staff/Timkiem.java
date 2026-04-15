@@ -27,7 +27,7 @@ public class Timkiem extends javax.swing.JFrame {
      */
     public Timkiem() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
         fillTableHoaDon("");
         fillTableSanPham();

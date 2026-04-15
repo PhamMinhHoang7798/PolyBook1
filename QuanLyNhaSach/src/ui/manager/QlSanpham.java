@@ -18,7 +18,7 @@ public class QlSanpham extends javax.swing.JFrame {
     public QlSanpham() {
         initComponents();
         // Thêm dòng này ngay bên dưới để ghi đè lệnh tắt:
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
         setLocationRelativeTo(null); 
         loadTable(); 
     }

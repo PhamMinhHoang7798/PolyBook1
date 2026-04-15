@@ -23,7 +23,7 @@ public class QlNguoidung extends javax.swing.JFrame {
      */
     public QlNguoidung() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
         loadTable();
         javax.swing.ButtonGroup roleGroup = new javax.swing.ButtonGroup();

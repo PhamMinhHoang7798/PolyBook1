@@ -20,7 +20,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
      */
     public Phieubanhangmoi() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
         init(); // Khởi tạo dữ liệu
     }

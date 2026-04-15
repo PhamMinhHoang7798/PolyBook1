@@ -30,7 +30,7 @@ public class ThanhToan extends javax.swing.JFrame {
      */
     public ThanhToan() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
         init();
     }

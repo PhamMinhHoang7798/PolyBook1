@@ -20,7 +20,7 @@ public class DoiMatKhau extends javax.swing.JFrame {
 
     public DoiMatKhau() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
         setLocationRelativeTo(null);
     }

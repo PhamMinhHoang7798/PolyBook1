@@ -17,7 +17,7 @@ public class QLDoanhThu extends javax.swing.JFrame {
      */
     public QLDoanhThu() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
     }
 

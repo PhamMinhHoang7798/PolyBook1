@@ -20,7 +20,7 @@ public class TraSP extends javax.swing.JFrame {
      */
     public TraSP() {
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
         init();
     }
