@@ -498,8 +498,8 @@ public class ThanhToan extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose(); // Tắt form TraSP hiện tại
 
-        // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
-        new MenuKhackCheckout().setVisible(true);
+        // Mở lại form Menu Khách (Bạn đinew MenuKhackCheckout().setVisible(true);ều chỉnh lại tên Class Menu cho đúng nếu cần)
+        new ui.customer.MenuKhackCheckout().setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked

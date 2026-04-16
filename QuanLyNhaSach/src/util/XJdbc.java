@@ -1,6 +1,8 @@
 package util;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class XJdbc {
 
@@ -47,17 +49,17 @@ public class XJdbc {
 
     // ================= QUERY (SELECT) =================
     public static ResultSet executeQuery(String sql, Object... args) {
-    try {
-        Connection con = getConnection();
-        PreparedStatement ps = con.prepareStatement(sql);
+        try {
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            setParams(ps, args);
 
-        setParams(ps, args);
-        return ps.executeQuery();
+            return ps.executeQuery(); // ⚠️ vẫn phải xử lý đóng bên ngoài
 
-    } catch (SQLException e) {
-        throw new RuntimeException("Lỗi executeQuery: " + sql, e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi executeQuery: " + sql, e);
+        }
     }
-}
 
     // ================= QUERY (shortcut) =================
     public static ResultSet query(String sql, Object... args) {
@@ -89,4 +91,30 @@ public class XJdbc {
             ps.setObject(i + 1, args[i]);
         }
     }
+    
+    public static List<Object[]> getList(String sql, Object... args) {
+    List<Object[]> list = new ArrayList<>();
+    try (
+        Connection con = getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)
+    ) {
+        setParams(ps, args);
+        ResultSet rs = ps.executeQuery();
+
+        int cols = rs.getMetaData().getColumnCount();
+
+        while (rs.next()) {
+            Object[] row = new Object[cols];
+            for (int i = 0; i < cols; i++) {
+                row[i] = rs.getObject(i + 1);
+            }
+            list.add(row);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+    return list;
+}
+
 }
