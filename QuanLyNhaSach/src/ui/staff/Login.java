@@ -19,7 +19,7 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
-        getRootPane().setDefaultButton(btnThoat);
+        getRootPane().setDefaultButton(btnDangNhap1);
     }
 
     // ================= LOGIN =================
@@ -90,6 +90,11 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setText("ĐĂNG NHẬP");
 
         txtUserName.setText("admin");
+        txtUserName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUserNameActionPerformed(evt);
+            }
+        });
 
         btnThoat.setBackground(new java.awt.Color(255, 51, 51));
         btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -202,6 +207,7 @@ public class Login extends javax.swing.JFrame {
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
+        login();
     }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void btnDangNhapKhachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapKhachActionPerformed
@@ -210,9 +216,11 @@ public class Login extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnDangNhapKhachActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
+        // TODO add your handling code here:
+        txtPassword.requestFocus();
+    }//GEN-LAST:event_txtUserNameActionPerformed
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info
