@@ -78,7 +78,7 @@
                           <EmptySpace min="-2" pref="220" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="btnTimKiemVaThanhToan" alignment="0" min="-2" pref="366" max="-2" attributes="0"/>
-                              <Component id="btnTraCuuSP" min="-2" pref="366" max="-2" attributes="0"/>
+                              <Component id="btnTraGiaSP" min="-2" pref="366" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="233" max="32767" attributes="0"/>
                       </Group>
@@ -98,7 +98,7 @@
                   <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                  <Component id="btnTraCuuSP" min="-2" pref="63" max="-2" attributes="0"/>
+                  <Component id="btnTraGiaSP" min="-2" pref="63" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                   <Component id="btnTimKiemVaThanhToan" min="-2" pref="63" max="-2" attributes="0"/>
                   <EmptySpace pref="88" max="32767" attributes="0"/>
@@ -120,7 +120,7 @@
             <Property name="text" type="java.lang.String" value="Qu&#x1ea7;y Self-Checkout"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnTraCuuSP">
+        <Component class="javax.swing.JButton" name="btnTraGiaSP">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="62" green="21" red="17" type="rgb"/>
@@ -131,10 +131,10 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Tra c&#x1ee9;u s&#x1ea3;n ph&#x1ea9;m"/>
+            <Property name="text" type="java.lang.String" value="Tra gi&#xe1; s&#x1ea3;n ph&#x1ea9;m"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTraCuuSPActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTraGiaSPActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnTimKiemVaThanhToan">

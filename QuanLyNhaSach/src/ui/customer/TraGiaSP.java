@@ -8,9 +8,9 @@ package ui.customer;
  *
  * @author nguye
  */
-public class TraCuuSP extends javax.swing.JFrame {
+public class TraGiaSP extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TraCuuSP.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TraGiaSP.class.getName());
     // 1. Khai báo DAO và Model
     private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
     private javax.swing.table.DefaultTableModel modelSanPham;
@@ -18,9 +18,8 @@ public class TraCuuSP extends javax.swing.JFrame {
     /**
      * Creates new form TráP
      */
-    public TraCuuSP() {
+    public TraGiaSP() {
         initComponents();
-        
 
         init();
     }
@@ -29,25 +28,31 @@ public class TraCuuSP extends javax.swing.JFrame {
         setLocationRelativeTo(null); // Cho form ra giữa màn hình
         modelSanPham = (javax.swing.table.DefaultTableModel) TblDanhSach.getModel();
 
-        loadDataToTable(); // Đổ dữ liệu lên bảng khi vừa mở form
+        loadDataToTable(""); // Đổ dữ liệu lên bảng khi vừa mở form
     }
 
     // 2. Hàm đổ dữ liệu sản phẩm lên bảng
-    private void loadDataToTable() {
-        modelSanPham.setRowCount(0); // Xóa trắng dữ liệu cũ
+    private void loadDataToTable(String keyword) {
+        modelSanPham = (javax.swing.table.DefaultTableModel) TblDanhSach.getModel();
+        modelSanPham.setColumnIdentifiers(new Object[]{"Mã Sản Phẩm", "Tên Sản Phẩm", "Đơn Giá"});
+        modelSanPham.setRowCount(0);
         try {
-            java.util.List<entity.SanPham> list = spDAO.selectAll();
+            java.util.List<entity.SanPham> list;
+            if (keyword.isEmpty()) {
+                list = spDAO.selectAll();
+            } else {
+                // Sử dụng hàm tìm kiếm theo từ khóa đã có trong DAO
+                list = spDAO.selectByKeyword(keyword);
+            }
             for (entity.SanPham sp : list) {
                 modelSanPham.addRow(new Object[]{
                     sp.getMaSanPham(),
                     sp.getTenSanPham(),
-                    sp.getDonGia(),
-                    "Xem"
+                    String.format("%,.0f VNĐ", sp.getDonGia())
                 });
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(this, "Lỗi kết nối cơ sở dữ liệu!");
+            util.XDialog.alert(this, "Lỗi kết nối dữ liệu tra cứu!");
         }
     }
 
@@ -67,7 +72,6 @@ public class TraCuuSP extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         TblDanhSach = new javax.swing.JTable();
         btnFilter4 = new javax.swing.JButton();
-        btnThanhToan = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,6 +81,11 @@ public class TraCuuSP extends javax.swing.JFrame {
         txtTim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTimActionPerformed(evt);
+            }
+        });
+        txtTim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKeyReleased(evt);
             }
         });
 
@@ -91,17 +100,17 @@ public class TraCuuSP extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(59, 77, 169));
-        jLabel1.setText("Tra cứu sản phẩm");
+        jLabel1.setText("Tra giá sản phẩm");
 
         TblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Mã sản phẩm", "Tên sản phẩm", "Giá", "Thao tác  "
+                "Mã sản phẩm", "Tên sản phẩm", "Giá"
             }
         ));
         jScrollPane3.setViewportView(TblDanhSach);
@@ -112,16 +121,6 @@ public class TraCuuSP extends javax.swing.JFrame {
         btnFilter4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFilter4ActionPerformed(evt);
-            }
-        });
-
-        btnThanhToan.setBackground(new java.awt.Color(68, 165, 68));
-        btnThanhToan.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnThanhToan.setForeground(new java.awt.Color(255, 255, 255));
-        btnThanhToan.setText("Thanh toán");
-        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThanhToanActionPerformed(evt);
             }
         });
 
@@ -143,12 +142,10 @@ public class TraCuuSP extends javax.swing.JFrame {
                         .addGap(43, 43, 43)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(55, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnFilter4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnThanhToan)
-                .addGap(39, 39, 39))
+                .addGap(295, 295, 295))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,9 +159,7 @@ public class TraCuuSP extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFilter4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnFilter4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
 
@@ -190,48 +185,26 @@ public class TraCuuSP extends javax.swing.JFrame {
 
     private void txtTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimActionPerformed
         // TODO add your handling code here:
+        loadDataToTable(txtTim.getText().trim());
     }//GEN-LAST:event_txtTimActionPerformed
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
-        String keyword = txtTim.getText().trim().toLowerCase();
-        modelSanPham.setRowCount(0); // Xóa bảng để hiện kết quả tìm kiếm
-
-        try {
-            java.util.List<entity.SanPham> list = spDAO.selectAll();
-            for (entity.SanPham sp : list) {
-                // Kiểm tra xem mã SP hoặc tên SP có chứa từ khóa không
-                if (sp.getMaSanPham().toLowerCase().contains(keyword)
-                        || sp.getTenSanPham().toLowerCase().contains(keyword)) {
-
-                    modelSanPham.addRow(new Object[]{
-                        sp.getMaSanPham(),
-                        sp.getTenSanPham(),
-                        sp.getDonGia(),
-                        "Xem"
-                    });
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadDataToTable(txtTim.getText().trim());
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void btnFilter4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilter4ActionPerformed
         // TODO add your handling code here:
-        this.dispose(); // Tắt form TraCuuSP hiện tại
-
-        // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
+        // Tắt form TraGiaSP hiện tại
+        this.dispose();
+        // Mở lại form Menu Khách
         new MenuKhackCheckout().setVisible(true);
     }//GEN-LAST:event_btnFilter4ActionPerformed
 
-    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
+    private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
         // TODO add your handling code here:
-        this.dispose(); // Tắt form TraCuuSP hiện tại
-
-        // Mở form Thanh Toán lên
-        new ThanhToan().setVisible(true);
-    }//GEN-LAST:event_btnThanhToanActionPerformed
+        loadDataToTable(txtTim.getText().trim());
+    }//GEN-LAST:event_txtTimKeyReleased
 
     /**
      * @param args the command line arguments
@@ -255,13 +228,12 @@ public class TraCuuSP extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TraCuuSP().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new TraGiaSP().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TblDanhSach;
     private javax.swing.JButton btnFilter4;
-    private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnTim;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

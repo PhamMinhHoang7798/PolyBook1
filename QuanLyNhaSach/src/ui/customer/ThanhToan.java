@@ -30,7 +30,6 @@ public class ThanhToan extends javax.swing.JFrame {
      */
     public ThanhToan() {
         initComponents();
-        
 
         init();
     }
@@ -42,18 +41,27 @@ public class ThanhToan extends javax.swing.JFrame {
 
         modelGioHang.setRowCount(0); // Xóa trắng giỏ hàng ban đầu
 
-        fillComboBoxLoai(); // Đổ loại sản phẩm vào ComboBox
-        fillTableSanPham(); // Đổ danh sách sản phẩm vào bảng
+        fillTableSanPham("");// Đổ danh sách sản phẩm vào bảng
     }
 
-    private void fillComboBoxLoai() {
-        javax.swing.DefaultComboBoxModel model = (javax.swing.DefaultComboBoxModel) cboTimeRanges2.getModel();
-        model.removeAllElements();
-        model.addElement("Tất cả");
+    private void fillTableSanPham(String keyword) {
+        modelSanPham.setRowCount(0);
         try {
-            java.util.List<entity.LoaiSP> list = loaiDAO.selectAll();
-            for (entity.LoaiSP loai : list) {
-                model.addElement(loai); // Nhờ LoaiSP đã có hàm toString() nên nó sẽ hiện tên loại
+            java.util.List<entity.SanPham> list;
+            if (keyword == null || keyword.isEmpty()) {
+                list = spDAO.selectAll();
+            } else {
+                // Sử dụng hàm tìm kiếm theo keyword đã có trong DAO của ông
+                list = spDAO.selectByKeyword(keyword);
+            }
+
+            for (entity.SanPham sp : list) {
+                modelSanPham.addRow(new Object[]{
+                    sp.getMaSanPham(),
+                    sp.getTenSanPham(),
+                    sp.getDonGia(),
+                    "Chọn"
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,8 +103,6 @@ public class ThanhToan extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel39 = new javax.swing.JLabel();
-        cboTimeRanges2 = new javax.swing.JComboBox<>();
         txtTim = new javax.swing.JTextField();
         btnTim = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -117,21 +123,15 @@ public class ThanhToan extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel39.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel39.setText("Loại:");
-
-        cboTimeRanges2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        cboTimeRanges2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
-        cboTimeRanges2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboTimeRanges2ActionPerformed(evt);
-            }
-        });
-
         txtTim.setColumns(8);
         txtTim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTimActionPerformed(evt);
+            }
+        });
+        txtTim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKeyReleased(evt);
             }
         });
 
@@ -171,11 +171,7 @@ public class ThanhToan extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel39)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cboTimeRanges2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 6, Short.MAX_VALUE)))
@@ -184,17 +180,10 @@ public class ThanhToan extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel39, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cboTimeRanges2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(301, 301, 301))
@@ -359,54 +348,11 @@ public class ThanhToan extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cboTimeRanges2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTimeRanges2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboTimeRanges2ActionPerformed
-
-    private void txtTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTimActionPerformed
-
-    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        // TODO add your handling code here:
-        String keyword = txtTim.getText().trim();
-        // Bạn có thể dùng SpDAO.selectAll() rồi lọc bằng code cho nhanh
-        fillTableSanPham(); // Load lại rồi lọc theo keyword ở đây
-    }//GEN-LAST:event_btnTimActionPerformed
-
     private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
         // TODO add your handling code here:
         modelGioHang.setRowCount(0);
         tinhTongTien();
     }//GEN-LAST:event_btnHuyActionPerformed
-
-    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
-        // TODO add your handling code here:
-        if (evt.getClickCount() == 2) { // Click đúp để chọn
-            int row = tblDanhSach.getSelectedRow();
-            String maSP = tblDanhSach.getValueAt(row, 0).toString();
-            String tenSP = tblDanhSach.getValueAt(row, 1).toString();
-            double gia = (Double) tblDanhSach.getValueAt(row, 2);
-
-            // Kiểm tra xem đã có trong giỏ chưa
-            boolean found = false;
-            for (int i = 0; i < modelGioHang.getRowCount(); i++) {
-                if (modelGioHang.getValueAt(i, 0).toString().startsWith(maSP)) {
-                    int sl = (Integer) modelGioHang.getValueAt(i, 1) + 1;
-                    modelGioHang.setValueAt(sl, i, 1);
-                    modelGioHang.setValueAt(sl * gia, i, 3);
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                // Lưu mã SP vào tên để sau này dễ tách mã ra lưu DB
-                modelGioHang.addRow(new Object[]{maSP + " - " + tenSP, 1, gia, gia, "Xóa"});
-            }
-            tinhTongTien();
-        }
-    }//GEN-LAST:event_tblDanhSachMouseClicked
 
     private void tblGioHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGioHangMouseClicked
         // TODO add your handling code here:
@@ -414,6 +360,39 @@ public class ThanhToan extends javax.swing.JFrame {
 
     private void btnThanhToan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToan1ActionPerformed
         // TODO add your handling code here:
+        if (tblGioHang.getRowCount() == 0) {
+            util.XDialog.alert(this, "Giỏ hàng đang trống!");
+            return;
+        }
+
+        // Mô phỏng hóa đơn vật lý giống Phieubanhangmoi
+        StringBuilder bill = new StringBuilder();
+        bill.append("        HÓA ĐƠN TỰ PHỤC VỤ (SELF-CHECKOUT)\n");
+        bill.append("------------------------------------------\n");
+        bill.append(String.format("%-18s %-3s %-20s\n", "Tên SP", "SL", "Thành tiền"));
+
+        double tong = 0;
+        for (int i = 0; i < tblGioHang.getRowCount(); i++) {
+            String ten = tblGioHang.getValueAt(i, 1).toString();
+            String sl = tblGioHang.getValueAt(i, 2).toString();
+            double tt = Double.parseDouble(tblGioHang.getValueAt(i, 4).toString());
+            tong += tt;
+            if (ten.length() > 15) {
+                ten = ten.substring(0, 15) + "..";
+            }
+            bill.append(String.format("%-18s %-3s %,.0f VNĐ\n", ten, sl, tt));
+        }
+        bill.append("------------------------------------------\n");
+        bill.append(String.format(" TỔNG CỘNG:            %,.0f VNĐ\n", tong));
+        bill.append("      QUÝ KHÁCH VUI LÒNG QUÉT MÃ QR\n");
+
+        javax.swing.JTextArea txtArea = new javax.swing.JTextArea(bill.toString());
+        txtArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 13));
+
+        util.XDialog.alert(this, "Thanh toán thành công! Hệ thống đang in hóa đơn...");
+        javax.swing.JOptionPane.showMessageDialog(this, new javax.swing.JScrollPane(txtArea), "HÓA ĐƠN", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+        btnHuyActionPerformed(null); // Về trang chủ sau khi xong
     }//GEN-LAST:event_btnThanhToan1ActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
@@ -423,6 +402,41 @@ public class ThanhToan extends javax.swing.JFrame {
         // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
         new MenuKhackCheckout().setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
+        // TODO add your handling code here:
+        int row = tblDanhSach.getSelectedRow();
+        if (row >= 0) {
+            String maSP = tblDanhSach.getValueAt(row, 0).toString();
+            String tenSP = tblDanhSach.getValueAt(row, 1).toString();
+            double gia = Double.parseDouble(tblDanhSach.getValueAt(row, 2).toString().replace(",", "").replace(" VNĐ", ""));
+
+            String slStr = javax.swing.JOptionPane.showInputDialog(this, "Nhập số lượng cho: " + tenSP, "1");
+            if (slStr != null) {
+                try {
+                    int sl = Integer.parseInt(slStr);
+                    double thanhTien = sl * gia;
+                    modelGioHang.addRow(new Object[]{maSP, tenSP, sl, gia, thanhTien});
+                    tinhTongTien(); // Hàm tự viết để cộng dồn tiền
+                } catch (Exception e) {
+                    util.XDialog.alert(this, "Số lượng không hợp lệ!");
+                }
+            }
+        }
+    }//GEN-LAST:event_tblDanhSachMouseClicked
+
+    private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
+        fillTableSanPham(txtTim.getText().trim());
+    }//GEN-LAST:event_btnTimActionPerformed
+
+    private void txtTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimActionPerformed
+
+    private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
+        // TODO add your handling code here:
+        fillTableSanPham(txtTim.getText().trim());
+    }//GEN-LAST:event_txtTimKeyReleased
 
     /**
      * @param args the command line arguments
@@ -454,11 +468,9 @@ public class ThanhToan extends javax.swing.JFrame {
     private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnThanhToan1;
     private javax.swing.JButton btnTim;
-    private javax.swing.JComboBox<String> cboTimeRanges2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
