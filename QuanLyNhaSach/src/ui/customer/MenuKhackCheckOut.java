@@ -125,12 +125,10 @@ public class MenuKhackCheckout extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
-        
         this.dispose();
     }//GEN-LAST:event_btnThoatActionPerformed
 
     private void btnThoat1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoat1ActionPerformed
-        
         this.dispose();
         java.awt.EventQueue.invokeLater(() -> {
             new Login().setVisible(true);

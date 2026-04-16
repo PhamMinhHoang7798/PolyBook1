@@ -6,11 +6,8 @@ public class QLDoanhThu extends javax.swing.JFrame {
 
     public QLDoanhThu() {
         initComponents();
-        
-
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -293,7 +290,6 @@ public class QLDoanhThu extends javax.swing.JFrame {
         
     }//GEN-LAST:event_txtBeginActionPerformed
 
-    
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -310,7 +306,6 @@ public class QLDoanhThu extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new QLDoanhThu().setVisible(true));
     }
