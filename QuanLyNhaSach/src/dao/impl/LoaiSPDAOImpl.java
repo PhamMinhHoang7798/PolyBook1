@@ -3,14 +3,12 @@ package dao.impl;
 import entity.LoaiSP;
 import dao.LoaiSPDAO;
 import util.XJdbc;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoaiSPDAOImpl implements LoaiSPDAO {
-
     // Cần thay đổi tên bảng [LoaiSP] và các cột cho khớp SQL của bạn
     String INSERT_SQL = "INSERT INTO LoaiSanPham (MaLoai, TenLoai) VALUES (?, ?)";
     String UPDATE_SQL = "UPDATE LoaiSanPham SET TenLoai = ? WHERE MaLoai = ?";
@@ -20,14 +18,12 @@ public class LoaiSPDAOImpl implements LoaiSPDAO {
 
     @Override
     public void insert(LoaiSP entity) {
-        // Cần truyền cả MaLoai và TenLoai vì ông nhập tay
         String sql = "INSERT INTO LoaiSanPham (MaLoai, TenLoai) VALUES (?, ?)";
         XJdbc.executeUpdate(sql, entity.getMaLoai(), entity.getTenLoai());
     }
 
     @Override
     public void update(LoaiSP entity) {
-        // Bỏ dấu phẩy thừa trước chữ WHERE
         String sql = "UPDATE LoaiSanPham SET TenLoai = ? WHERE MaLoai = ?";
         XJdbc.executeUpdate(sql, entity.getTenLoai(), entity.getMaLoai());
     }

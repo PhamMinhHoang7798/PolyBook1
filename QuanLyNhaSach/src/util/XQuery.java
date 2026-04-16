@@ -16,7 +16,6 @@ public class XQuery {
     // ================= LẤY DANH SÁCH =================
     public static <B> List<B> getBeanList(Class<B> beanClass, String sql, Object... values) {
         List<B> list = new ArrayList<>();
-
         try {
             ResultSet rs = XJdbc.executeQuery(sql, values);
 
@@ -24,12 +23,10 @@ public class XQuery {
                 B bean = readBean(rs, beanClass);
                 list.add(bean);
             }
-
             rs.getStatement().getConnection().close();
         } catch (Exception e) {
             throw new RuntimeException("Lỗi truy vấn dữ liệu", e);
         }
-
         return list;
     }
 
@@ -37,18 +34,14 @@ public class XQuery {
     private static <B> B readBean(ResultSet rs, Class<B> beanClass) throws Exception {
         B bean = beanClass.getDeclaredConstructor().newInstance();
         Method[] methods = beanClass.getDeclaredMethods();
-
         for (Method method : methods) {
             String methodName = method.getName();
-
             // chỉ lấy setter
             if (methodName.startsWith("set") && method.getParameterCount() == 1) {
                 String columnName = methodName.substring(3);
                 Class<?> paramType = method.getParameterTypes()[0];
-
                 try {
                     Object value;
-
                     // xử lý boolean riêng
                     if (paramType == boolean.class || paramType == Boolean.class) {
                         value = rs.getBoolean(columnName);
@@ -61,16 +54,12 @@ public class XQuery {
                     } else {
                         value = rs.getObject(columnName);
                     }
-
                     method.invoke(bean, value);
-
                 } catch (Exception e) {
                     System.out.println("Không tìm thấy cột: " + columnName);
                 }
             }
         }
-
         return bean;
     }
-    
 }

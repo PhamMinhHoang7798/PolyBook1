@@ -15,7 +15,6 @@ public class hoadon {
 
     public hoadon() {}
 
-    // GET SET
     public String getMaHoaDon() { return maHoaDon; }
     public void setMaHoaDon(String maHoaDon) { this.maHoaDon = maHoaDon; }
 

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao.impl;
 
 import java.util.List;
@@ -11,7 +7,6 @@ import util.XJdbc;
 import util.XQuery;
 
 public class UserDAOImpl implements UserDAO {
-
     private final String createSql = """
             INSERT INTO NguoiDung
             (TenDangNhap, MatKhau, HoTen, HinhAnh, VaiTro, TrangThai)
@@ -73,7 +68,6 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> selectByKeyword(String keyword) {
         String sql = "SELECT * FROM NguoiDung WHERE TenDangNhap LIKE ? OR HoTen LIKE ?";
-        // Phải dùng XQuery.getBeanList mới đúng bộ thư viện ông đang xài
         return util.XQuery.getBeanList(User.class, sql, "%" + keyword + "%", "%" + keyword + "%");
     }
 
@@ -96,5 +90,4 @@ public class UserDAOImpl implements UserDAO {
     public List<User> selectAll() {
         return findAll();
     }
-
 }

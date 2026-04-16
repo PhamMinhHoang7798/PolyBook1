@@ -3,13 +3,11 @@ package dao.impl;
 import dao.hoadonchitietDAO;
 import entity.hoadonchitiet;
 import util.XJdbc;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class hoadonchitietDAOImpl implements hoadonchitietDAO {
-
     String INSERT = "INSERT INTO HoaDonChiTiet VALUES (?,?,?,?,?)";
     String UPDATE = "UPDATE HoaDonChiTiet SET MaHoaDon=?, MaSanPham=?, SoLuong=?, Gia=? WHERE MaCT=?";
     String DELETE = "DELETE FROM HoaDonChiTiet WHERE MaCT=?";

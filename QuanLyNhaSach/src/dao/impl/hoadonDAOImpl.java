@@ -3,13 +3,11 @@ package dao.impl;
 import dao.hoadonDAO;
 import entity.hoadon;
 import util.XJdbc;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class hoadonDAOImpl implements hoadonDAO {
-
     String INSERT = "INSERT INTO HoaDon VALUES (?,?,?,?,?,?,?,?,?)";
     String UPDATE = "UPDATE HoaDon SET MaKhachHang=?, NgayLap=?, PhuongThucThanhToan=?, TrangThai=?, KhuyenMai=?, TongTien=?, MaVoucher=?, TenDangNhap=? WHERE MaHoaDon=?";
     String DELETE = "DELETE FROM HoaDon WHERE MaHoaDon=?";

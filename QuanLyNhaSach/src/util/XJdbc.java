@@ -50,10 +50,8 @@ public class XJdbc {
     try {
         Connection con = getConnection();
         PreparedStatement ps = con.prepareStatement(sql);
-
         setParams(ps, args);
         return ps.executeQuery();
-
     } catch (SQLException e) {
         throw new RuntimeException("Lỗi executeQuery: " + sql, e);
     }
@@ -71,13 +69,11 @@ public class XJdbc {
             PreparedStatement ps = con.prepareStatement(sql)
         ) {
             setParams(ps, args);
-
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getObject(1);
             }
             return null;
-
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi getValue: " + sql, e);
         }

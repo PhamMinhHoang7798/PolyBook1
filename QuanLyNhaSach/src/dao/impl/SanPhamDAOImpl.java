@@ -3,13 +3,11 @@ package dao.impl;
 import dao.SanPhamDAO;
 import entity.SanPham;
 import util.XJdbc;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SanPhamDAOImpl implements SanPhamDAO {
-
     String INSERT_SQL = "INSERT INTO SanPham (MaSanPham, TenSanPham, DonGia, SoLuongTon, MaLoai) VALUES (?, ?, ?, ?, ?)";
     String UPDATE_SQL = "UPDATE SanPham SET TenSanPham=?, DonGia=?, SoLuongTon=?, MaLoai=? WHERE MaSanPham=?";
     String DELETE_SQL = "DELETE FROM SanPham WHERE MaSanPham=?";
@@ -45,7 +43,6 @@ public class SanPhamDAOImpl implements SanPhamDAO {
         // Xóa sạch các chi tiết hóa đơn có chứa mã sản phẩm này
         String sqlDeleteChiTiet = "DELETE FROM HoaDonChiTiet WHERE MaSanPham = ?";
         util.XJdbc.executeUpdate(sqlDeleteChiTiet, id);
-
         // 2. KHI ĐÃ SẠCH SẼ RÀNG BUỘC, TIẾN HÀNH XÓA SẢN PHẨM (BẢN GHI CHA)
         util.XJdbc.executeUpdate(DELETE_SQL, id);
     }
@@ -72,10 +69,8 @@ public class SanPhamDAOImpl implements SanPhamDAO {
 
     private List<SanPham> selectBySql(String sql, Object... args) {
         List<SanPham> list = new ArrayList<>();
-
         try {
             ResultSet rs = XJdbc.query(sql, args);
-
             while (rs.next()) {
                 SanPham sp = new SanPham();
                 sp.setMaSanPham(rs.getString("MaSanPham"));
@@ -83,16 +78,12 @@ public class SanPhamDAOImpl implements SanPhamDAO {
                 sp.setDonGia(rs.getDouble("DonGia"));
                 sp.setSoLuongTon(rs.getInt("SoLuongTon"));
                 sp.setMaLoai(rs.getString("MaLoai"));
-
                 list.add(sp);
             }
-
             rs.getStatement().getConnection().close();
-
         } catch (Exception e) {
             throw new RuntimeException("Lỗi SanPham DAO", e);
         }
-
         return list;
     }
 }

@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entity;
+
 public class LoaiSP {
     private String maLoai;
     private String tenLoai;
@@ -33,6 +30,6 @@ public class LoaiSP {
 
     @Override
     public String toString() {
-        return this.tenLoai; // Hữu ích khi hiển thị lên ComboBox
+        return this.tenLoai; 
     }
 }

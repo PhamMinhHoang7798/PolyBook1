@@ -10,7 +10,6 @@ public interface BillDAO {
     List<Bill> search(String keyword);
 
     List<Bill> thongKeDoanhThu();
-    
-    List<Bill> filter(String from, String to);
 
+    List<Bill> filter(String from, String to);
 }

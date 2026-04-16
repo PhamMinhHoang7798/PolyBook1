@@ -1,14 +1,9 @@
-//Name : Phạm Minh Hoàng 
-//Mssv : PS47440
-//Date : 
-//Slide:
 package entity;
 
 import java.util.Scanner;
 
 public class KhachHang {
-
-    private String maKhachHang; // Đã đổi thành String
+    private String maKhachHang;
     private String tenKhachHang;
     private String soDienThoai;
     private String loaiThe;

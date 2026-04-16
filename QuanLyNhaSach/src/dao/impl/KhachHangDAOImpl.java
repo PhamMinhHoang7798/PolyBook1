@@ -1,7 +1,3 @@
-//Name : Phạm Minh Hoàng 
-//Mssv : PS47440
-//Date : 
-//Slide:
 package dao.impl;
 
 import dao.KhachHangDAO;
