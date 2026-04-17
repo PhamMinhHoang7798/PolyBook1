@@ -305,7 +305,7 @@ public class QlSanpham extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtMaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaSanPhamActionPerformed
-        
+
     }//GEN-LAST:event_txtMaSanPhamActionPerformed
 
     private void txtLoaiSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoaiSanPhamActionPerformed

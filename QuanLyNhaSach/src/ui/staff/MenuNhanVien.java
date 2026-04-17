@@ -1,8 +1,6 @@
 package ui.staff;
 
 import ui.staff.Timkiem;
-import ui.staff.TaoHoaDon;
-import ui.staff.LichSu;
 import ui.staff.DoiMatKhau;
 import ui.manager.Phieubanhangmoi;
 
@@ -25,7 +23,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
         btnTimKiem = new javax.swing.JButton();
         btnTaoHoaDonMoi = new javax.swing.JButton();
         btnLogOut = new javax.swing.JButton();
-        btnLichSu = new javax.swing.JButton();
         btnDoiMatKhau = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
@@ -77,19 +74,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
             }
         });
 
-        btnLichSu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnLichSu.setForeground(new java.awt.Color(255, 255, 255));
-        btnLichSu.setText("Lịch sử");
-        btnLichSu.setBorderPainted(false);
-        btnLichSu.setContentAreaFilled(false);
-        btnLichSu.setFocusPainted(false);
-        btnLichSu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnLichSu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLichSuActionPerformed(evt);
-            }
-        });
-
         btnDoiMatKhau.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnDoiMatKhau.setForeground(new java.awt.Color(255, 255, 255));
         btnDoiMatKhau.setText("Đổi mật khẩu");
@@ -121,9 +105,7 @@ public class MenuNhanVien extends javax.swing.JFrame {
                                     .addComponent(jLabel1))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(26, 26, 26)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(btnLichSu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnDoiMatKhau, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
+                                    .addComponent(btnDoiMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(26, 26, 26)
                                     .addComponent(btnTaoHoaDonMoi))))
@@ -139,8 +121,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
                 .addComponent(btnTimKiem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnTaoHoaDonMoi)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLichSu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDoiMatKhau)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -193,11 +173,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogOutActionPerformed
 
-    private void btnLichSuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLichSuActionPerformed
-
-        showPanel(new LichSu());
-    }//GEN-LAST:event_btnLichSuActionPerformed
-
     private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMatKhauActionPerformed
 
         showPanel(new DoiMatKhau());
@@ -237,7 +212,6 @@ public class MenuNhanVien extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDoiMatKhau;
-    private javax.swing.JButton btnLichSu;
     private javax.swing.JButton btnLogOut;
     private javax.swing.JButton btnTaoHoaDonMoi;
     private javax.swing.JButton btnTimKiem;
