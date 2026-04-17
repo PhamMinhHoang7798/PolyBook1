@@ -1,13 +1,10 @@
 package ui.staff;
 
 import dao.impl.SanPhamDAOImpl;
-import dao.impl.TheThanhVienDAOImpl;
 import entity.SanPham;
-import entity.TheThanhVien;
 import util.XJdbc;
 import java.util.List;
 import java.sql.ResultSet;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class Timkiem extends javax.swing.JFrame {
@@ -18,9 +15,8 @@ public class Timkiem extends javax.swing.JFrame {
 
     public Timkiem() {
         initComponents();
-        setLocationRelativeTo(null); // Cho cửa sổ ra giữa màn hình
-
-        // 1. Logic tìm kiếm Hóa đơn
+        setLocationRelativeTo(null); 
+        
         javax.swing.Timer timerHD = new javax.swing.Timer(300, e -> {
             fillTableHoaDon(txtMaHoaDon.getText().trim());
         });
@@ -31,7 +27,6 @@ public class Timkiem extends javax.swing.JFrame {
             }
         });
 
-        // 2. Logic tìm kiếm Sản phẩm
         javax.swing.Timer timerSP = new javax.swing.Timer(300, e -> {
             fillTableSanPham(txtMaSanPham.getText().trim());
         });
@@ -42,7 +37,6 @@ public class Timkiem extends javax.swing.JFrame {
             }
         });
 
-        // 3. Logic tìm kiếm Thành viên
         javax.swing.Timer timerTV = new javax.swing.Timer(300, e -> {
             fillTableThanhVien(txtTim.getText().trim());
         });
@@ -53,12 +47,10 @@ public class Timkiem extends javax.swing.JFrame {
             }
         });
 
-        // Khởi tạo dữ liệu ban đầu
         fillTableHoaDon("");
         fillTableSanPham("");
         fillTableThanhVien("");
 
-        // Chặn sửa trực tiếp trên bảng
         tblTimKiemHoaDon.setDefaultEditor(Object.class, null);
         tblTimKiemSanPham.setDefaultEditor(Object.class, null);
         tblDanhSach.setDefaultEditor(Object.class, null);
@@ -101,15 +93,14 @@ public class Timkiem extends javax.swing.JFrame {
         model.setRowCount(0);
 
         try {
-            // SỬA TẠI ĐÂY: Dùng KhachHangDAO thay vì TheThanhVienDAO
             List<entity.KhachHang> list = khDAO.selectByKeyword(keyword);
 
             for (entity.KhachHang kh : list) {
                 model.addRow(new Object[]{
                     kh.getSoDienThoai(),
                     kh.getTenKhachHang(),
-                    kh.getLoaiThe(), // Hạng thẻ đã được cập nhật lúc bán hàng
-                    kh.getDiemTichLuy() // Điểm mới nhất từ bảng KhachHang
+                    kh.getLoaiThe(), 
+                    kh.getDiemTichLuy() 
                 });
             }
         } catch (Exception e) {

@@ -2,7 +2,6 @@ package dao;
 
 import entity.KhachHang;
 import java.util.List;
-import dao.impl.KhachHangDAOImpl;
 
 public interface KhachHangDAO {
 
@@ -10,11 +9,11 @@ public interface KhachHangDAO {
 
     void update(KhachHang kh);
 
-    void delete(String maKhachHang); // Đổi thành String
+    void delete(String maKhachHang);
 
-    KhachHang selectById(String maKhachHang); // Sửa 'int' thành 'String' ở đây
+    KhachHang selectById(String maKhachHang);
 
-    KhachHang selectByPhone(String sdt); // Tìm khách hàng nhanh tại quầy bằng SĐT
+    KhachHang selectByPhone(String sdt);
 
     List<KhachHang> selectAll();
 

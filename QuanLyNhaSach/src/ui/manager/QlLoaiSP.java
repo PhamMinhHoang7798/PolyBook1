@@ -15,12 +15,11 @@ public class QlLoaiSP extends javax.swing.JFrame {
         loadTable("");
     }
 
-    //loadTable: hỗ trợ lọc theo từ khóa
+
     void loadTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblLoaiSanPham.getModel();
         model.setRowCount(0);
         java.util.List<LoaiSP> list;
-        // Nếu không gõ gì thì lấy tất cả, nếu có gõ thì tìm theo từ khóa
         if (keyword == null || keyword.trim().isEmpty()) {
             list = dao.selectAll();
         } else {
@@ -149,7 +148,9 @@ public class QlLoaiSP extends javax.swing.JFrame {
             }
         });
 
+        btnCapNhat.setBackground(new java.awt.Color(255, 255, 204));
         btnCapNhat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCapNhat.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Edit.png")); // NOI18N
         btnCapNhat.setText("Cập nhập");
         btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,7 +158,9 @@ public class QlLoaiSP extends javax.swing.JFrame {
             }
         });
 
+        btnTaoMoi.setBackground(new java.awt.Color(204, 255, 204));
         btnTaoMoi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnTaoMoi.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Add.png")); // NOI18N
         btnTaoMoi.setText("Tạo mới");
         btnTaoMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -165,7 +168,9 @@ public class QlLoaiSP extends javax.swing.JFrame {
             }
         });
 
+        btnXoa.setBackground(new java.awt.Color(255, 204, 204));
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnXoa.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Delete.png")); // NOI18N
         btnXoa.setText("Xóa");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,7 +178,9 @@ public class QlLoaiSP extends javax.swing.JFrame {
             }
         });
 
+        btnNhapMoi.setBackground(new java.awt.Color(204, 255, 255));
         btnNhapMoi.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnNhapMoi.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Accept.png")); // NOI18N
         btnNhapMoi.setText("Nhập mới");
         btnNhapMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,24 +193,23 @@ public class QlLoaiSP extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(30, Short.MAX_VALUE)
+                .addContainerGap(55, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTenloai, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtMaLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(48, 48, 48))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnTaoMoi)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCapNhat)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnNhapMoi)
-                        .addGap(23, 23, 23))))
+                    .addComponent(txtTenloai, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtMaLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(48, 48, 48))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnTaoMoi)
+                .addGap(18, 18, 18)
+                .addComponent(btnCapNhat)
+                .addGap(18, 18, 18)
+                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnNhapMoi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,13 +222,13 @@ public class QlLoaiSP extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(txtTenloai, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTaoMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCapNhat, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnNhapMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                .addGap(18, 18, 18))
         );
 
         jTabbedPane1.addTab("Biểu mẫu", jPanel3);
@@ -277,7 +283,7 @@ public class QlLoaiSP extends javax.swing.JFrame {
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         
         String keyword = txtNhapMaLoai.getText().trim();
-        loadTable(keyword); // Gọi hàm load lại bảng với từ khóa vừa nhập
+        loadTable(keyword); 
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void btnTaoMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoMoiActionPerformed
@@ -329,19 +335,17 @@ public class QlLoaiSP extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new QlLoaiSP().setVisible(true));
     }
 
     LoaiSP getForm() {
         LoaiSP l = new LoaiSP();
-        l.setMaLoai(txtMaLoai.getText()); // Giữ nguyên kiểu chuỗi để nhận "a1"
-        l.setTenLoai(txtTenloai.getText()); // Đã sửa lại đúng tên biến của ông
+        l.setMaLoai(txtMaLoai.getText()); 
+        l.setTenLoai(txtTenloai.getText()); 
         return l;
     }
 
     void insert() {
-        // Bây giờ bắt buộc phải nhập cả 2 ô
         if (txtMaLoai.getText().isEmpty() || txtTenloai.getText().isEmpty()) {
             XDialog.alert(this, "Không được để trống Mã loại và Tên loại!");
             return;
@@ -362,11 +366,10 @@ public class QlLoaiSP extends javax.swing.JFrame {
             XDialog.alert(this, "Vui lòng nhập mã loại cần cập nhật!");
             return;
         }
-        // KIỂM TRA TỒN TẠI TRƯỚC KHI CẬP NHẬT
         LoaiSP checkTonTai = dao.findById(ma);
         if (checkTonTai == null) {
             XDialog.alert(this, "Chưa có sản phẩm trong danh sách để chỉnh sửa!");
-            return; // Dừng lại, không chạy code update phía dưới nữa
+            return; 
         }
         try {
             dao.update(getForm());
@@ -388,17 +391,16 @@ public class QlLoaiSP extends javax.swing.JFrame {
             XDialog.alert(this, "Chưa nhập mã để xóa!");
             return;
         }
-        // KIỂM TRA TỒN TẠI TRƯỚC KHI XÓA
         LoaiSP checkTonTai = dao.findById(ma);
         if (checkTonTai == null) {
             XDialog.alert(this, "Không có sản phẩm này trong danh sách để xóa!");
-            return; // Dừng lại, không chạy code delete phía dưới nữa
+            return;
         }
         if (XDialog.confirm(this, "Bạn chắc chắn muốn xóa?")) {
             try {
                 dao.delete(ma);
                 loadTable("");
-                clearForm(); // Nên xóa trắng các ô nhập liệu sau khi đã xóa thành công
+                clearForm(); 
                 XDialog.alert(this, "Xóa thành công!");
             } catch (Exception e) {
                 XDialog.alert(this, "Lỗi khi xóa: " + e.getMessage());

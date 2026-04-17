@@ -10,26 +10,48 @@ public class KhachHangDAOImpl implements KhachHangDAO {
 
     @Override
     public void insert(KhachHang kh) {
-        String sql = "INSERT INTO KhachHang (MaKhachHang, TenKhachHang, SoDienThoai, LoaiThe, DiemTichLuy) VALUES (?, ?, ?, ?, ?)";
-        util.XJdbc.executeUpdate(sql, kh.getMaKhachHang(), kh.getTenKhachHang(), kh.getSoDienThoai(), kh.getLoaiThe(), kh.getDiemTichLuy());
+        String sql = """
+            INSERT INTO KhachHang 
+            (MaKhachHang, TenKhachHang, SoDienThoai, LoaiThe, DiemTichLuy) 
+            VALUES (?, ?, ?, ?, ?)
+        """;
+
+        XJdbc.executeUpdate(sql,
+                kh.getMaKhachHang(),
+                kh.getTenKhachHang(),
+                kh.getSoDienThoai(),
+                kh.getLoaiThe(),
+                kh.getDiemTichLuy()
+        );
     }
 
     @Override
     public void update(KhachHang kh) {
-        String sql = "UPDATE KhachHang SET TenKhachHang=?, SoDienThoai=?, LoaiThe=?, DiemTichLuy=? WHERE MaKhachHang=?";
-        util.XJdbc.executeUpdate(sql, kh.getTenKhachHang(), kh.getSoDienThoai(), kh.getLoaiThe(), kh.getDiemTichLuy(), kh.getMaKhachHang());
+        String sql = """
+            UPDATE KhachHang 
+            SET TenKhachHang=?, SoDienThoai=?, LoaiThe=?, DiemTichLuy=? 
+            WHERE MaKhachHang=?
+        """;
+
+        XJdbc.executeUpdate(sql,
+                kh.getTenKhachHang(),
+                kh.getSoDienThoai(),
+                kh.getLoaiThe(),
+                kh.getDiemTichLuy(),
+                kh.getMaKhachHang()
+        );
     }
 
     @Override
-    public void delete(String maKhachHang) { // Tham số là String
+    public void delete(String maKhachHang) {
         String sql = "DELETE FROM KhachHang WHERE MaKhachHang=?";
-        util.XJdbc.executeUpdate(sql, maKhachHang);
+        XJdbc.executeUpdate(sql, maKhachHang);
     }
 
     @Override
-    public KhachHang selectById(String maKhachHang) { // Đổi 'int' thành 'String'
+    public KhachHang selectById(String maKhachHang) {
         String sql = "SELECT * FROM KhachHang WHERE MaKhachHang=?";
-        return util.XQuery.getSingleBean(KhachHang.class, sql, maKhachHang);
+        return XQuery.getSingleBean(KhachHang.class, sql, maKhachHang);
     }
 
     @Override
@@ -44,9 +66,24 @@ public class KhachHangDAOImpl implements KhachHangDAO {
         return XQuery.getBeanList(KhachHang.class, sql);
     }
 
+    // 🔥 FIX QUAN TRỌNG: tìm kiếm KHÔNG DẤU + realtime
     @Override
     public List<KhachHang> selectByKeyword(String keyword) {
-        String sql = "SELECT * FROM KhachHang WHERE TenKhachHang LIKE ? OR SoDienThoai LIKE ?";
-        return XQuery.getBeanList(KhachHang.class, sql, "%" + keyword + "%", "%" + keyword + "%");
+
+        String sql = """
+            SELECT * FROM KhachHang
+            WHERE 
+                TenKhachHang COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
+                OR SoDienThoai LIKE ?
+        """;
+
+        String key = "%" + keyword + "%";
+
+        return XQuery.getBeanList(
+                KhachHang.class,
+                sql,
+                key,
+                key
+        );
     }
 }
