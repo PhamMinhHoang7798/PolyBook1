@@ -465,7 +465,7 @@ public class ThanhToan extends javax.swing.JFrame {
         this.dispose(); // Tắt form TraSP hiện tại
 
         // Mở lại form Menu Khách (Bạn điều chỉnh lại tên Class Menu cho đúng nếu cần)
-        new MenuKhackCheckout().setVisible(true);
+        new MenuKhackCheckOut().setVisible(true);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked

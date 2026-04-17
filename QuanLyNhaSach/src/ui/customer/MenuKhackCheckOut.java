@@ -2,11 +2,11 @@ package ui.customer;
 
 import ui.staff.Login;
 
-public class MenuKhackCheckout extends javax.swing.JFrame {
+public class MenuKhackCheckOut extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuKhackCheckout.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuKhackCheckOut.class.getName());
 
-    public MenuKhackCheckout() {
+    public MenuKhackCheckOut() {
         initComponents();
         // Lệnh này ép Cửa sổ Menu tự động nhảy ra chính giữa màn hình
         this.setLocationRelativeTo(null);
@@ -158,7 +158,7 @@ public class MenuKhackCheckout extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MenuKhackCheckout().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new MenuKhackCheckOut().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

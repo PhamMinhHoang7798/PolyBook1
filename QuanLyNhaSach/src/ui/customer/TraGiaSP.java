@@ -180,7 +180,7 @@ public class TraGiaSP extends javax.swing.JFrame {
         // Tắt form TraGiaSP hiện tại
         this.dispose();
         // Mở lại form Menu Khách
-        new MenuKhackCheckout().setVisible(true);
+        new MenuKhackCheckOut().setVisible(true);
     }//GEN-LAST:event_btnFilter4ActionPerformed
 
     private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
