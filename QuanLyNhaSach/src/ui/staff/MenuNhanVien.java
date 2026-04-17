@@ -4,6 +4,7 @@ import ui.staff.Timkiem;
 import ui.staff.TaoHoaDon;
 import ui.staff.LichSu;
 import ui.staff.DoiMatKhau;
+import ui.manager.Phieubanhangmoi;
 
 public class MenuNhanVien extends javax.swing.JFrame {
 
@@ -169,17 +170,17 @@ public class MenuNhanVien extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        
+
         showPanel(new Timkiem());
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnTaoHoaDonMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHoaDonMoiActionPerformed
-        
-        showPanel(new TaoHoaDon());
+
+        showPanel(new Phieubanhangmoi());
     }//GEN-LAST:event_btnTaoHoaDonMoiActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-        
+
         if (util.XDialog.confirm(this, "Bạn có muốn đăng xuất không?")) {
             // 1. Xóa thông tin đăng nhập cũ
             util.XAuth.logout();
@@ -193,12 +194,12 @@ public class MenuNhanVien extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnLichSuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLichSuActionPerformed
-        
+
         showPanel(new LichSu());
     }//GEN-LAST:event_btnLichSuActionPerformed
 
     private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMatKhauActionPerformed
-        
+
         showPanel(new DoiMatKhau());
     }//GEN-LAST:event_btnDoiMatKhauActionPerformed
 
