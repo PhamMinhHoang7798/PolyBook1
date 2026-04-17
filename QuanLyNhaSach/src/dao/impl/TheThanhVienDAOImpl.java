@@ -3,21 +3,26 @@ package dao.impl;
 import dao.TheThanhVienDAO;
 import entity.TheThanhVien;
 import util.XJdbc;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TheThanhVienDAOImpl implements TheThanhVienDAO {
+
     String SELECT_ALL_SQL = """
         SELECT MaThe, MaKhachHang, SDT, TenKhachHang, DiemTichLuy
         FROM TheThanhVien
     """;
+
     String SELECT_BY_KEYWORD_SQL = """
-        SELECT MaThe, MaKhachHang, SDT, TenKhachHang, DiemTichLuy
-        FROM TheThanhVien
-        WHERE SDT LIKE ? OR TenKhachHang LIKE ?
-    """;
-    
+    SELECT MaThe, MaKhachHang, SDT, TenKhachHang, DiemTichLuy
+    FROM TheThanhVien
+    WHERE SDT COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
+       OR TenKhachHang COLLATE SQL_Latin1_General_CP1_CI_AI LIKE ?
+""";
+
+
     @Override
     public List<TheThanhVien> selectAll() {
         return selectBySql(SELECT_ALL_SQL);
@@ -31,21 +36,28 @@ public class TheThanhVienDAOImpl implements TheThanhVienDAO {
 
     private List<TheThanhVien> selectBySql(String sql, Object... args) {
         List<TheThanhVien> list = new ArrayList<>();
+
         try {
             ResultSet rs = XJdbc.query(sql, args);
+
             while (rs.next()) {
                 TheThanhVien tv = new TheThanhVien();
+
                 tv.setMaThe(rs.getString("MaThe"));
                 tv.setMaKhachHang(rs.getString("MaKhachHang"));
                 tv.setSdt(rs.getString("SDT"));
                 tv.setTenKhachHang(rs.getString("TenKhachHang"));
                 tv.setDiemTichLuy(rs.getInt("DiemTichLuy"));
+
                 list.add(tv);
             }
+
             rs.getStatement().getConnection().close();
+
         } catch (Exception e) {
             throw new RuntimeException("Lỗi DAO TheThanhVien", e);
         }
+
         return list;
     }
 }
