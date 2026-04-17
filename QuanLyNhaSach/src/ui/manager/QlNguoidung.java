@@ -17,7 +17,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         javax.swing.ButtonGroup roleGroup = new javax.swing.ButtonGroup();
         roleGroup.add(rbtQuanLy);
         roleGroup.add(rbtNhanVien);
-        roleGroup.add(rbtKhachHang);
 
         javax.swing.ButtonGroup statusGroup = new javax.swing.ButtonGroup();
         statusGroup.add(rbtHoatDong);
@@ -27,22 +26,24 @@ public class QlNguoidung extends javax.swing.JFrame {
     private UserDAOImpl dao = new UserDAOImpl();
     private String hinhAnh = null;
 
-    private User getForm() {
-        User u = new User();
-        u.setTenDangNhap(txtTenDangNhap.getText());
-        u.setMatKhau(txtMatkhau.getText());
-        u.setHoTen(txtHoten.getText());
-        // Vai trò (int)
+    private entity.User getForm() {
+        entity.User u = new entity.User();
+        u.setTenDangNhap(txtTenDangNhap.getText().trim());
+        u.setMatKhau(new String(txtMatkhau.getText())); // Hoặc txtMatkhau.getText() tùy loại field
+        u.setHoTen(txtHoten.getText().trim());
+        u.setHinhAnh(hinhAnh); // Biến hinhAnh lưu tên file ảnh
+
+        // Xử lý Vai trò: Chỉ còn Quản lý (2) và Nhân viên (1)
         if (rbtQuanLy.isSelected()) {
             u.setVaiTro(2);
-        } else if (rbtNhanVien.isSelected()) {
-            u.setVaiTro(1);
         } else {
-            u.setVaiTro(0);
+            // Mặc định là nhân viên nếu rbtNhanVien được chọn hoặc chưa chọn gì
+            u.setVaiTro(1);
         }
-        u.setHinhAnh(hinhAnh);
-        // Trạng thái
+
+        // Xử lý Trạng thái: Hoạt động (true) / Tạm dừng (false)
         u.setTrangThai(rbtHoatDong.isSelected());
+
         return u;
     }
 
@@ -62,8 +63,7 @@ public class QlNguoidung extends javax.swing.JFrame {
                 u.getMatKhau() == null ? "" : u.getMatKhau(),
                 u.getHoTen() == null ? "" : u.getHoTen(),
                 u.getHinhAnh() == null ? "" : u.getHinhAnh(),
-                u.getVaiTro() == 2 ? "Quản lý"
-                : u.getVaiTro() == 1 ? "Nhân viên" : "Khách hàng",
+                u.getVaiTro() == 2 ? "Quản lý" : "Nhân viên",
                 u.isTrangThai() ? "Hoạt động" : "Tạm dừng"
             });
         }
@@ -105,38 +105,40 @@ public class QlNguoidung extends javax.swing.JFrame {
     }
 
     private void delete() {
+        String maNV = txtTenDangNhap.getText();
         try {
-            String id = txtTenDangNhap.getText();
-            if (id.isEmpty()) {
-                XDialog.alert(this, "Chọn người dùng cần xóa!");
-                return;
-            }
-            int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
-                    "Bạn chắc chắn muốn xóa?",
-                    "Xác nhận",
-                    javax.swing.JOptionPane.YES_NO_OPTION);
-            if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-                dao.delete(id);
-                XDialog.alert(this, "Xóa thành công!");
-                loadTable("");
-                clearForm();
-            }
+            dao.delete(maNV);
+            this.clearForm();
+            this.loadTable("");
+            util.XDialog.alert(this, "Xóa thành công!");
         } catch (Exception e) {
-            XDialog.alert(this, "Xóa thất bại!");
+            // Nếu lỗi do khóa ngoại, máy sẽ nhảy vào đây
+            util.XDialog.alert(this, "Không thể xóa nhân viên này vì đã có dữ liệu hóa đơn liên quan!\n"
+                    + "Gợi ý: Hãy chuyển trạng thái sang 'Tạm dừng'.");
         }
     }
 
     private void clearForm() {
+        // 1. Xóa các ô văn bản
         txtTenDangNhap.setText("");
         txtMatkhau.setText("");
         txtXacNhanMatKhau.setText("");
         txtHoten.setText("");
-        rbtQuanLy.setSelected(false);
-        rbtNhanVien.setSelected(false);
-        rbtKhachHang.setSelected(false);
+
+        // 2. Reset vai trò (Mặc định chọn Nhân viên)
+        rbtNhanVien.setSelected(true);
+        // rbtQuanLy.setSelected(false); // roleGroup sẽ tự xử lý nếu đã thêm vào ButtonGroup
+
+        // 3. Reset trạng thái (Mặc định Hoạt động)
         rbtHoatDong.setSelected(true);
+
+        // 4. Xóa hình ảnh hiển thị
         lblHinh.setIcon(null);
+        lblHinh.setText("Chọn ảnh"); // Nếu ông có để text hướng dẫn
         hinhAnh = null;
+
+        // 5. Đưa con trỏ về ô đầu tiên
+        txtTenDangNhap.requestFocus();
     }
 
     private String getValueSafe(int row, int col) {
@@ -170,7 +172,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         rbtQuanLy = new javax.swing.JRadioButton();
         rbtNhanVien = new javax.swing.JRadioButton();
-        rbtKhachHang = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
         rbtHoatDong = new javax.swing.JRadioButton();
         rbtTamDung = new javax.swing.JRadioButton();
@@ -302,9 +303,6 @@ public class QlNguoidung extends javax.swing.JFrame {
         rbtNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         rbtNhanVien.setText("Nhân viên");
 
-        rbtKhachHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        rbtKhachHang.setText("Khách hàng");
-
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Trạng thái:");
 
@@ -325,9 +323,7 @@ public class QlNguoidung extends javax.swing.JFrame {
                 .addComponent(rbtQuanLy)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbtNhanVien)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbtKhachHang)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbtHoatDong)
@@ -347,8 +343,7 @@ public class QlNguoidung extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
                         .addComponent(rbtQuanLy)
-                        .addComponent(rbtNhanVien)
-                        .addComponent(rbtKhachHang)))
+                        .addComponent(rbtNhanVien)))
                 .addGap(27, 27, 27))
         );
 
@@ -497,43 +492,43 @@ public class QlNguoidung extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtTenDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenDangNhapActionPerformed
-        
+
     }//GEN-LAST:event_txtTenDangNhapActionPerformed
 
     private void txtMatkhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatkhauActionPerformed
-        
+
     }//GEN-LAST:event_txtMatkhauActionPerformed
 
     private void txtXacNhanMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtXacNhanMatKhauActionPerformed
-        
+
     }//GEN-LAST:event_txtXacNhanMatKhauActionPerformed
 
     private void txtHotenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHotenActionPerformed
-        
+
     }//GEN-LAST:event_txtHotenActionPerformed
 
     private void btnTaoMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoMoiActionPerformed
-        
+
         insert();
     }//GEN-LAST:event_btnTaoMoiActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
-        
+
         update();
     }//GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        
+
         delete();
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnNhapMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhapMoiActionPerformed
-        
+
         clearForm();
     }//GEN-LAST:event_btnNhapMoiActionPerformed
 
     private void tblQLNguoiDungMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQLNguoiDungMouseClicked
-        
+
         if (evt.getClickCount() == 2) {
             int row = tblQLNguoiDung.getSelectedRow();
             if (row < 0) {
@@ -568,14 +563,11 @@ public class QlNguoidung extends javax.swing.JFrame {
             String vaiTro = getValueSafe(row, 4);
             rbtQuanLy.setSelected(false);
             rbtNhanVien.setSelected(false);
-            rbtKhachHang.setSelected(false);
 
             if (vaiTro.equals("Quản lý")) {
                 rbtQuanLy.setSelected(true);
             } else if (vaiTro.equals("Nhân viên")) {
                 rbtNhanVien.setSelected(true);
-            } else {
-                rbtKhachHang.setSelected(true);
             }
             // ===== TRẠNG THÁI =====
             String trangThai = getValueSafe(row, 5);
@@ -592,7 +584,7 @@ public class QlNguoidung extends javax.swing.JFrame {
     }//GEN-LAST:event_tblQLNguoiDungMouseClicked
 
     private void lblHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHinhMouseClicked
-        
+
         javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
         if (fileChooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
             java.io.File file = fileChooser.getSelectedFile();
@@ -627,12 +619,12 @@ public class QlNguoidung extends javax.swing.JFrame {
     }//GEN-LAST:event_lblHinhMouseClicked
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        
+
         loadTable(txtTim.getText().trim());
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
-        
+
         loadTable(txtTim.getText().trim());
     }//GEN-LAST:event_txtTimKeyReleased
 
@@ -672,7 +664,6 @@ public class QlNguoidung extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblHinh;
     private javax.swing.JRadioButton rbtHoatDong;
-    private javax.swing.JRadioButton rbtKhachHang;
     private javax.swing.JRadioButton rbtNhanVien;
     private javax.swing.JRadioButton rbtQuanLy;
     private javax.swing.JRadioButton rbtTamDung;

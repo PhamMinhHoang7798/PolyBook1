@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package ui.staff;
 
 import dao.impl.SanPhamDAOImpl;
@@ -14,243 +10,113 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author nguye
- */
 public class Timkiem extends javax.swing.JFrame {
 
+    dao.impl.KhachHangDAOImpl khDAO = new dao.impl.KhachHangDAOImpl();
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Timkiem.class.getName());
 
-    /**
-     * Creates new form TImkiem
-     */
     public Timkiem() {
         initComponents();
-        javax.swing.Timer timer = new javax.swing.Timer(300, e -> {
-        String keyword = txtMaHoaDon.getText().trim();
+        setLocationRelativeTo(null); // Cho cửa sổ ra giữa màn hình
 
-        if (keyword.equals("Nhập mã HĐ / tên KH / sản phẩm...")) {
-            keyword = "";
-        }
-
-        fillTableHoaDon(keyword);
-    });
-    timer.setRepeats(false);
-
-    txtMaHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyReleased(java.awt.event.KeyEvent evt) {
-            timer.restart();
-        }
-    });
-        javax.swing.Timer timerSP = new javax.swing.Timer(300, e -> {
-    String keyword = txtMaSanPham.getText().trim();
-
-    if (keyword.equals("Nhập mã hoặc tên sản phẩm...")) {
-        keyword = "";
-    }
-
-    try {
-        SanPhamDAOImpl dao = new SanPhamDAOImpl();
-        List<SanPham> list = dao.selectByKeyword(keyword);
-
-        DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
-        model.setRowCount(0);
-
-        for (SanPham sp : list) {
-            model.addRow(new Object[]{
-                sp.getMaSanPham(),
-                sp.getTenSanPham(),
-                sp.getSoLuongTon(),
-                sp.getDonGia()
-            });
-        }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-});
-    timerSP.setRepeats(false);
-
-    txtMaSanPham.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyReleased(java.awt.event.KeyEvent evt) {
-            timerSP.restart();
-        }
-    });
-
-        fillTableHoaDon("");
-        fillTableSanPham();
-        tblTimTheThanhVien.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{
-                    "SĐT", "Tên khách hàng", "Loại thẻ", "Điểm"
-                }
-        ) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
+        // 1. Logic tìm kiếm Hóa đơn
+        javax.swing.Timer timerHD = new javax.swing.Timer(300, e -> {
+            fillTableHoaDon(txtMaHoaDon.getText().trim());
+        });
+        timerHD.setRepeats(false);
+        txtMaHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                timerHD.restart();
             }
         });
+
+        // 2. Logic tìm kiếm Sản phẩm
+        javax.swing.Timer timerSP = new javax.swing.Timer(300, e -> {
+            fillTableSanPham(txtMaSanPham.getText().trim());
+        });
+        timerSP.setRepeats(false);
+        txtMaSanPham.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                timerSP.restart();
+            }
+        });
+
+        // 3. Logic tìm kiếm Thành viên
         javax.swing.Timer timerTV = new javax.swing.Timer(300, e -> {
-        String keyword = txtSDTThanhVien.getText().trim();
+            fillTableThanhVien(txtTim.getText().trim());
+        });
+        timerTV.setRepeats(false);
+        txtTim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                timerTV.restart();
+            }
+        });
 
-        if (keyword.equals("Nhập số điện thoại...")) {
-            keyword = "";
-        }
-
-        fillTableThanhVien(keyword);
-    });
-    timerTV.setRepeats(false);
-
-    txtSDTThanhVien.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyReleased(java.awt.event.KeyEvent evt) {
-            timerTV.restart();
-        }
-    });
-
+        // Khởi tạo dữ liệu ban đầu
+        fillTableHoaDon("");
+        fillTableSanPham("");
         fillTableThanhVien("");
-        setPlaceholder(txtMaHoaDon, "Nhập mã HĐ / tên KH / sản phẩm...");
-        setPlaceholder(txtMaSanPham, "Nhập mã hoặc tên sản phẩm...");
-        setPlaceholder(txtSDTThanhVien, "Nhập số điện thoại...");
+
+        // Chặn sửa trực tiếp trên bảng
         tblTimKiemHoaDon.setDefaultEditor(Object.class, null);
         tblTimKiemSanPham.setDefaultEditor(Object.class, null);
-        tblTimTheThanhVien.setDefaultEditor(Object.class, null);
-
+        tblDanhSach.setDefaultEditor(Object.class, null);
     }
 
     void fillTableHoaDon(String keyword) {
-    DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
-    model.setRowCount(0);
-
-    String sql = """
-    SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia
-    FROM HoaDon hd
-    JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon
-    JOIN SanPham sp ON ct.MaSanPham = sp.MaSanPham
-    JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKhachHang
-    WHERE dbo.fn_RemoveVietnameseAccent(hd.MaHoaDon) LIKE dbo.fn_RemoveVietnameseAccent(?)
-    OR dbo.fn_RemoveVietnameseAccent(kh.TenKhachHang) LIKE dbo.fn_RemoveVietnameseAccent(?)
-    OR dbo.fn_RemoveVietnameseAccent(sp.TenSanPham) LIKE dbo.fn_RemoveVietnameseAccent(?)
-    """;
-
-
-    try {
-        ResultSet rs = XJdbc.query(sql,
-                "%" + keyword + "%",
-                "%" + keyword + "%",
-                "%" + keyword + "%"
-        );
-
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rs.getString("MaHoaDon"),
-                rs.getString("TenKhachHang"),
-                rs.getString("TenSanPham"),
-                rs.getInt("SoLuong"),
-                rs.getDouble("Gia")
-            });
-        }
-
-        rs.getStatement().getConnection().close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-    void setPlaceholder(javax.swing.JTextField txt, String text) {
-        txt.setText(text);
-        txt.setForeground(java.awt.Color.GRAY);
-
-        txt.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (txt.getText().equals(text)) {
-                    txt.setText("");
-                    txt.setForeground(java.awt.Color.BLACK);
-                }
-            }
-
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (txt.getText().isEmpty()) {
-                    txt.setText(text);
-                    txt.setForeground(java.awt.Color.GRAY);
-                }
-            }
-        });
-    }
-
-    boolean isValidDate(String date) {
+        DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
+        model.setRowCount(0);
+        String sql = "SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia "
+                + "FROM HoaDon hd JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon "
+                + "JOIN SanPham sp ON ct.MaSanPham = sp.MaSanPham "
+                + "JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKhachHang "
+                + "WHERE hd.MaHoaDon LIKE ? OR kh.TenKhachHang LIKE ?";
         try {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            sdf.setLenient(false);
-            sdf.parse(date);
-            return true;
+            ResultSet rs = XJdbc.query(sql, "%" + keyword + "%", "%" + keyword + "%");
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5)});
+            }
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
         }
     }
 
-    void fillTableSanPham() {
+    void fillTableSanPham(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
         model.setRowCount(0);
-
-        String sql = "SELECT MaSanPham, TenSanPham, SoLuongTon, DonGia FROM SanPham";
-
         try {
-            ResultSet rs = XJdbc.query(sql);
-
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getString("MaSanPham"),
-                    rs.getString("TenSanPham"),
-                    rs.getInt("SoLuongTon"),
-                    rs.getDouble("DonGia")
-                });
+            SanPhamDAOImpl dao = new SanPhamDAOImpl();
+            List<SanPham> list = dao.selectByKeyword(keyword);
+            for (SanPham sp : list) {
+                model.addRow(new Object[]{sp.getMaSanPham(), sp.getTenSanPham(), sp.getSoLuongTon(), sp.getDonGia()});
             }
-
-            rs.getStatement().getConnection().close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     void fillTableThanhVien(String keyword) {
-        DefaultTableModel model = (DefaultTableModel) tblTimTheThanhVien.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
         model.setRowCount(0);
 
         try {
-            TheThanhVienDAOImpl dao = new TheThanhVienDAOImpl();
-            List<TheThanhVien> list = dao.selectByKeyword(keyword);
+            // SỬA TẠI ĐÂY: Dùng KhachHangDAO thay vì TheThanhVienDAO
+            List<entity.KhachHang> list = khDAO.selectByKeyword(keyword);
 
-            boolean hasData = false;
-
-            for (TheThanhVien tv : list) {
-                hasData = true;
-
-                int diem = tv.getDiemTichLuy();
-
-                String loaiThe;
-                if (diem >= 200) {
-                    loaiThe = " Vàng";
-                } else if (diem >= 150) {
-                    loaiThe = " Bạc";
-                } else if (diem >= 100) {
-                    loaiThe = " Đồng";
-                } else {
-                    loaiThe = "Thường";
-                }
-
+            for (entity.KhachHang kh : list) {
                 model.addRow(new Object[]{
-                    tv.getSdt(),
-                    tv.getTenKhachHang(),
-                    loaiThe,
-                    diem
+                    kh.getSoDienThoai(),
+                    kh.getTenKhachHang(),
+                    kh.getLoaiThe(), // Hạng thẻ đã được cập nhật lúc bán hàng
+                    kh.getDiemTichLuy() // Điểm mới nhất từ bảng KhachHang
                 });
             }
-
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi truy vấn!");
             e.printStackTrace();
+            util.XDialog.alert(this, "Lỗi truy vấn dữ liệu khách hàng!");
         }
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -271,12 +137,11 @@ public class Timkiem extends javax.swing.JFrame {
         txtMaSanPham = new javax.swing.JTextField();
         jLabel36 = new javax.swing.JLabel();
         btnTimSP = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tblTimTheThanhVien = new javax.swing.JTable();
-        jLabel37 = new javax.swing.JLabel();
-        txtSDTThanhVien = new javax.swing.JTextField();
-        btnTimSDTthanhVien = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        txtTim = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDanhSach = new javax.swing.JTable();
+        btnTimKhack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -336,7 +201,7 @@ public class Timkiem extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 739, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 751, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(104, 104, 104)
                         .addComponent(jLabel35)
@@ -405,7 +270,7 @@ public class Timkiem extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(7, 7, 7)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
@@ -431,7 +296,13 @@ public class Timkiem extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Tìm kiếm sản phẩm", jPanel3);
 
-        tblTimTheThanhVien.setModel(new javax.swing.table.DefaultTableModel(
+        txtTim.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKeyReleased(evt);
+            }
+        });
+
+        tblDanhSach.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -439,83 +310,60 @@ public class Timkiem extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Số điện thoại thành viên:", "Tên Khách hàng", "Loại thẻ", "Điểm hiện có"
+                "Số điện thoại", "Tên Khách hàng", "Loại thẻ", "Điểm hiện có"
             }
         ));
-        tblTimTheThanhVien.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblDanhSach.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblTimTheThanhVienMouseClicked(evt);
+                tblDanhSachMouseClicked(evt);
             }
         });
-        jScrollPane4.setViewportView(tblTimTheThanhVien);
+        jScrollPane1.setViewportView(tblDanhSach);
 
-        jLabel37.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel37.setText("Số điện thoại thành viên:");
-
-        txtSDTThanhVien.setColumns(8);
-        txtSDTThanhVien.addActionListener(new java.awt.event.ActionListener() {
+        btnTimKhack.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTimKhack.setForeground(new java.awt.Color(12, 66, 139));
+        btnTimKhack.setText("Tìm");
+        btnTimKhack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSDTThanhVienActionPerformed(evt);
+                btnTimKhackActionPerformed(evt);
             }
         });
 
-        btnTimSDTthanhVien.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnTimSDTthanhVien.setForeground(new java.awt.Color(12, 66, 139));
-        btnTimSDTthanhVien.setText("Tìm");
-        btnTimSDTthanhVien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTimSDTthanhVienActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(7, 7, 7)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jLabel37)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSDTThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTimSDTthanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnTimKhack, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 763, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel37)
-                        .addComponent(btnTimSDTthanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(txtSDTThanhVien)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKhack, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Tìm kiếm thẻ thành viên", jPanel4);
+        jTabbedPane1.addTab("Tìm kiếm thành viên ", jPanel5);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 751, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -523,8 +371,8 @@ public class Timkiem extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("Tìm kiếm hóa đơn");
@@ -546,86 +394,40 @@ public class Timkiem extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtMaHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaHoaDonActionPerformed
-        
+
     }//GEN-LAST:event_txtMaHoaDonActionPerformed
 
     private void btnTimHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimHoaDonActionPerformed
-        
-            String keyword = txtMaHoaDon.getText().trim();
-
-            if (keyword.startsWith("Nhập")) {
-                keyword = "";
-            }
-
-            fillTableHoaDon(keyword);
-
+        fillTableHoaDon(txtMaHoaDon.getText().trim());
     }//GEN-LAST:event_btnTimHoaDonActionPerformed
 
     private void txtMaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaSanPhamActionPerformed
-        
+
     }//GEN-LAST:event_txtMaSanPhamActionPerformed
 
     private void btnTimSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimSPActionPerformed
-        
-        try {
-            SanPhamDAOImpl dao = new SanPhamDAOImpl();
-
-            String keyword = txtMaSanPham.getText();
-
-            if (keyword.equals("Nhập mã hoặc tên sản phẩm...")) {
-                keyword = "";
-            }
-
-            List<SanPham> list = dao.selectByKeyword(keyword);
-
-            DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
-            model.setRowCount(0);
-
-            for (SanPham sp : list) {
-                model.addRow(new Object[]{
-                    sp.getMaSanPham(),
-                    sp.getTenSanPham(),
-                    sp.getSoLuongTon(),
-                    sp.getDonGia()
-                });
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi truy vấn sản phẩm!");
-            e.printStackTrace();
-        }
-            
+        fillTableSanPham(txtMaSanPham.getText().trim());
     }//GEN-LAST:event_btnTimSPActionPerformed
 
-    private void txtSDTThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTThanhVienActionPerformed
-        
-    }//GEN-LAST:event_txtSDTThanhVienActionPerformed
-
-    private void btnTimSDTthanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimSDTthanhVienActionPerformed
-        
-                String sdt = txtSDTThanhVien.getText();
-
-        if (sdt.equals("Nhập số điện thoại...") || sdt.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại!");
-            txtSDTThanhVien.requestFocus();
-            return;
-        }
-
-        fillTableThanhVien(sdt);
- 
-    }//GEN-LAST:event_btnTimSDTthanhVienActionPerformed
-
-    private void tblTimTheThanhVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTimTheThanhVienMouseClicked
-        
-    }//GEN-LAST:event_tblTimTheThanhVienMouseClicked
-
     private void tblTimKiemSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTimKiemSanPhamMouseClicked
-        
+
     }//GEN-LAST:event_tblTimKiemSanPhamMouseClicked
 
     private void tblTimKiemHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTimKiemHoaDonMouseClicked
-        
+
     }//GEN-LAST:event_tblTimKiemHoaDonMouseClicked
+
+    private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
+        fillTableThanhVien(txtTim.getText().trim());
+    }//GEN-LAST:event_txtTimKeyReleased
+
+    private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
+
+    }//GEN-LAST:event_tblDanhSachMouseClicked
+
+    private void btnTimKhackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKhackActionPerformed
+        fillTableThanhVien(txtTim.getText().trim());
+    }//GEN-LAST:event_btnTimKhackActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -644,25 +446,36 @@ public class Timkiem extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTimHoaDon;
-    private javax.swing.JButton btnTimSDTthanhVien;
+    private javax.swing.JButton btnTimKhack;
     private javax.swing.JButton btnTimSP;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable tblDanhSach;
     private javax.swing.JTable tblTimKiemHoaDon;
     private javax.swing.JTable tblTimKiemSanPham;
-    private javax.swing.JTable tblTimTheThanhVien;
     private javax.swing.JTextField txtMaHoaDon;
     private javax.swing.JTextField txtMaSanPham;
-    private javax.swing.JTextField txtSDTThanhVien;
+    private javax.swing.JTextField txtTim;
     // End of variables declaration//GEN-END:variables
+// Hàm xác định hạng thẻ dựa trên điểm (Ông dán đoạn này vào cuối class nhé)
+    private String xacDinhLoaiThe(int diem) {
+        if (diem >= 200) {
+            return "Vàng";
+        } else if (diem >= 150) {
+            return "Bạc";
+        } else if (diem >= 100) {
+            return "Đồng";
+        } else {
+            return "Thường";
+        }
+    }
 }
