@@ -6,6 +6,8 @@ public class Welcome extends javax.swing.JFrame {
 
     public Welcome() {
         initComponents();
+        //dòng này để đưa cửa sổ ra giữa màn hình
+        this.setLocationRelativeTo(null);
         startLoading();
     }
 
