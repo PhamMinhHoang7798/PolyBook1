@@ -1,4 +1,5 @@
 package dao;
+// Lớp DAO (Data Access Object) chịu trách nhiệm kết nối và thực hiện các thao tác CRUD với cơ sở dữ liệu.
 
 import entity.SanPham;
 import java.util.List;

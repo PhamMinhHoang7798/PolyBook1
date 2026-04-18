@@ -1,5 +1,5 @@
 package util;
-
+// Lớp XImage cung cấp các phương thức hỗ trợ xử lý hình ảnh như lưu file ảnh, đọc ảnh từ thư mục và lấy icon ứng dụng.
 import java.awt.Image;
 import java.io.File;
 import java.net.URL;

@@ -1,5 +1,5 @@
 package dao;
-
+// Lớp DAO (Data Access Object) chịu trách nhiệm kết nối và thực hiện các thao tác CRUD với cơ sở dữ liệu.
 import entity.KhachHang;
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface KhachHangDAO {
 
     List<KhachHang> selectAll();
 
-    List<KhachHang> selectByKeyword(String keyword);
+    List<KhachHang> selectByKeyword(String keyword);// Tìm kiếm khách hàng theo từ khóa (tên, SĐT,...)
 }

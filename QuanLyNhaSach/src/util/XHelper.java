@@ -1,5 +1,5 @@
 package util;
-
+// Lớp tiện ích cung cấp các hàm hỗ trợ xử lý dữ liệu, ví dụ định dạng số tiền hiển thị.
 import java.text.DecimalFormat;
 
 public class XHelper {

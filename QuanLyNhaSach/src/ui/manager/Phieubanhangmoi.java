@@ -1,11 +1,6 @@
 package ui.manager;
 
 import dao.impl.hoadonDAOImpl;
-import entity.hoadon;
-import java.util.List;
-import javax.swing.table.DefaultTableModel;
-import util.XDialog;
-import java.text.SimpleDateFormat;
 
 public class Phieubanhangmoi extends javax.swing.JFrame {
 

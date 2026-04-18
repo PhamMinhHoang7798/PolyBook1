@@ -22,17 +22,17 @@ import ui.staff.Timkiem;
 
 public class MenuNhanVien extends javax.swing.JFrame {
 
-    private final int AVATAR_SIZE = 110;
+    private final int AVATAR_SIZE = 110; // kích thước avatar
 
     public MenuNhanVien() {
         try {
             initComponents();
-            setupAvatar();
-            this.setLocationRelativeTo(null);
+            setupAvatar();// load avatar ban đầu
+            this.setLocationRelativeTo(null);// căn giữa màn hình
             
             // Đảm bảo các Panel có kích thước ban đầu
-            jPanel1.setPreferredSize(new java.awt.Dimension(250, 700));
-            jPanel2.setLayout(new BorderLayout());
+            jPanel1.setPreferredSize(new java.awt.Dimension(250, 700)); // panel menu bên trái
+            jPanel2.setLayout(new BorderLayout());// panel nội dung
         } catch (Exception e) {
             System.err.println("Lỗi khi khởi tạo giao diện: " + e.getMessage());
             e.printStackTrace();
@@ -42,37 +42,37 @@ public class MenuNhanVien extends javax.swing.JFrame {
     public void refreshProfile() {
     // Truy vấn lại Database để lấy thông tin mới nhất của User hiện tại
     UserDAOImpl dao = new UserDAOImpl();
-    util.XAuth.user = dao.selectById(util.XAuth.user.getTenDangNhap());
-    setupAvatar(); // Vẽ lại ảnh tròn
+    util.XAuth.user = dao.selectById(util.XAuth.user.getTenDangNhap());// load lại user từ DB
+    setupAvatar(); // cập nhật avatar mới
     jLabel1.setText(util.XAuth.user.getHoTen()); // Cập nhật tên hiển thị
 }
 
-    private void setupAvatar() {
-    lblAvatar.setText("");
-    lblAvatar.setHorizontalAlignment(SwingConstants.CENTER);
-    lblAvatar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    private void setupAvatar() {//load ảnh đại diện khi mở app
+    lblAvatar.setText("");// xóa text
+    lblAvatar.setHorizontalAlignment(SwingConstants.CENTER);// căn giữa
+    lblAvatar.setCursor(new Cursor(Cursor.HAND_CURSOR));// đổi con trỏ chuột
 
     // 1. Lấy thông tin người dùng đang đăng nhập từ hệ thống
     entity.User user = util.XAuth.user; 
 
-    if (user != null && user.getHinhAnh() != null && !user.getHinhAnh().isEmpty()) {
+    if (user != null && user.getHinhAnh() != null && !user.getHinhAnh().isEmpty()) {//kiểm tra dữ liệu null
         try {
             // 2. Tìm file ảnh dựa trên tên file lưu trong Database
             // Giả sử bạn lưu ảnh trong thư mục "logos" ngang hàng với src
-            File file = new File("logos", user.getHinhAnh());
+            File file = new File("logos", user.getHinhAnh());// tìm file ảnh
             if (file.exists()) {
-                lblAvatar.setIcon(makeCircularIcon(file.toURI().toURL(), AVATAR_SIZE));
+                lblAvatar.setIcon(makeCircularIcon(file.toURI().toURL(), AVATAR_SIZE));// hiển thị avatar
             } else {
-                loadDefaultAvatar();
+                loadDefaultAvatar();// fallback ảnh mặc định
             }
         } catch (Exception e) {
-            loadDefaultAvatar();
+            loadDefaultAvatar();  // lỗi thì load ảnh mặc định
         }
     } else {
-        loadDefaultAvatar();
+        loadDefaultAvatar();// chưa có ảnh
     }
 
-    // Sự kiện click nếu bạn vẫn muốn cho phép đổi nhanh (hoặc bỏ qua nếu chỉ muốn đổi ở QLNguoiDung)
+    // Sự kiện click cho phép đổi nhanh
     lblAvatar.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -85,67 +85,67 @@ public class MenuNhanVien extends javax.swing.JFrame {
 // Hàm phụ để load ảnh mặc định khi không có dữ liệu DB
 private void loadDefaultAvatar() {
     try {
-        URL url = getClass().getResource("/icon/nhanvien.jpg");
+        URL url = getClass().getResource("/icon/nhanvien.jpg");// load ảnh mặc định
         if (url != null) {
-            lblAvatar.setIcon(makeCircularIcon(url, AVATAR_SIZE));
+            lblAvatar.setIcon(makeCircularIcon(url, AVATAR_SIZE));// hiển thị ảnh tròn
         } else {
-            lblAvatar.setText("No Image");
+            lblAvatar.setText("No Image");// nếu không có ảnh
             lblAvatar.setForeground(Color.WHITE);
         }
     } catch (Exception e) {
         System.err.println("Lỗi load ảnh mặc định");
     }
 }
-
+    //cho user chọn ảnh mới
     private void chooseNewAvatar() {
-        JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(new FileNameExtensionFilter("Hình ảnh", "jpg", "png", "jpeg"));
+        JFileChooser fc = new JFileChooser(); // mở file chooser
+        fc.setFileFilter(new FileNameExtensionFilter("Hình ảnh", "jpg", "png", "jpeg"));// lọc file ảnh
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
-                File file = fc.getSelectedFile();
-                lblAvatar.setIcon(makeCircularIcon(file.toURI().toURL(), AVATAR_SIZE));
+                File file = fc.getSelectedFile();// lấy file
+                lblAvatar.setIcon(makeCircularIcon(file.toURI().toURL(), AVATAR_SIZE));// hiển thị ngay
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
     }
-
+    //biến ảnh vuông → ảnh tròn
     private ImageIcon makeCircularIcon(URL imagePath, int size) {
         try {
-            BufferedImage master = ImageIO.read(imagePath);
+            BufferedImage master = ImageIO.read(imagePath);// đọc ảnh
             if (master == null) return null;
-            int diameter = Math.min(master.getWidth(), master.getHeight());
+            int diameter = Math.min(master.getWidth(), master.getHeight());// lấy hình vuông
             int x = (master.getWidth() - diameter) / 2;
             int y = (master.getHeight() - diameter) / 2;
-            BufferedImage cropped = master.getSubimage(x, y, diameter, diameter);
+            BufferedImage cropped = master.getSubimage(x, y, diameter, diameter);// cắt ảnh
 
             BufferedImage output = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = output.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setClip(new java.awt.geom.Ellipse2D.Double(0, 0, size, size));
-            g2.drawImage(cropped, 0, 0, size, size, null);
+            g2.setClip(new java.awt.geom.Ellipse2D.Double(0, 0, size, size)); // tạo mask tròn
+            g2.drawImage(cropped, 0, 0, size, size, null);// vẽ ảnh
             g2.setClip(null);
-            g2.setColor(Color.WHITE);
+            g2.setColor(Color.WHITE);// viền trắng
             g2.setStroke(new java.awt.BasicStroke(2f));
             g2.drawOval(1, 1, size - 2, size - 2);
             g2.dispose();
             return new ImageIcon(output);
         } catch (Exception e) {
-            return null;
+            return null;// lỗi thì trả null
         }
     }
-
+    //bấm menu → thay nội dung bên phải
     private void showPanel(javax.swing.JFrame form) {
-        jPanel2.removeAll();
+        jPanel2.removeAll();// xóa nội dung cũ
         jPanel2.setLayout(new BorderLayout());
         try {
             // Chống lỗi nếu form con trống
-            javax.swing.JPanel mainPanel = (javax.swing.JPanel) form.getContentPane().getComponent(0);
-            jPanel2.add(mainPanel, BorderLayout.CENTER);
+            javax.swing.JPanel mainPanel = (javax.swing.JPanel) form.getContentPane().getComponent(0);// lấy panel chính
+            jPanel2.add(mainPanel, BorderLayout.CENTER);// add vào layout
         } catch (Exception e) {
             jPanel2.add(form.getContentPane(), BorderLayout.CENTER);
         }
-        jPanel2.revalidate();
+        jPanel2.revalidate();// refresh UI
         jPanel2.repaint();
     }
     @SuppressWarnings("unchecked")
@@ -294,7 +294,7 @@ private void loadDefaultAvatar() {
 
     private void btnDoiMatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiMatKhauActionPerformed
 
-        showPanel(new DoiMatKhau());
+        showPanel(new DoiMatKhau());// mở form đổi mật khẩu
     }//GEN-LAST:event_btnDoiMatKhauActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
@@ -313,23 +313,23 @@ private void loadDefaultAvatar() {
 
     private void btnTaoHoaDonMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHoaDonMoiActionPerformed
 
-        showPanel(new Phieubanhangmoi());
+        showPanel(new Phieubanhangmoi()); // mở form bán hàng
     }//GEN-LAST:event_btnTaoHoaDonMoiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
 
-        showPanel(new Timkiem());
+        showPanel(new Timkiem()); // mở form tìm kiếm
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void lblAvatarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAvatarMouseClicked
         // 1. Khởi tạo bộ chọn file
-    JFileChooser fileChooser = new JFileChooser();
+    JFileChooser fileChooser = new JFileChooser();// chọn ảnh
     fileChooser.setDialogTitle("Chọn ảnh đại diện mới");
     fileChooser.setFileFilter(new FileNameExtensionFilter("Hình ảnh", "jpg", "png", "jpeg"));
 
     if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
         try {
-            File file = fileChooser.getSelectedFile();
+            File file = fileChooser.getSelectedFile(); // file được chọn
             
             // 2. Lưu file vật lý vào thư mục 'logos' của dự án
             // Hàm này sẽ copy file vào folder để app có thể đọc được sau này

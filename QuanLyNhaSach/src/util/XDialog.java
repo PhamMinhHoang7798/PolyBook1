@@ -2,7 +2,7 @@ package util;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
-
+// Lớp XDialog cung cấp các phương thức hỗ trợ hiển thị hộp thoại (alert, confirm, prompt) giúp tương tác với người dùng.
 public class XDialog {
     public static void alert(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message);

@@ -1,4 +1,5 @@
 package util;
+//Hỗ trợ truy vấn DB và tự động map ResultSet thành object Java
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;

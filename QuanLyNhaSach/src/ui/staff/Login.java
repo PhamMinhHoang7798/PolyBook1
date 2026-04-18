@@ -10,34 +10,33 @@ import util.XDialog;
 
 public class Login extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger
-            = java.util.logging.Logger.getLogger(Login.class.getName());
+            = java.util.logging.Logger.getLogger(Login.class.getName());// logger ghi lỗi
     
     public Login() {
         initComponents();
-        getRootPane().setDefaultButton(btnDangNhap1);
+        getRootPane().setDefaultButton(btnDangNhap1);// nhấn Enter = đăng nhập
     }
-    // ================= LOGIN =================
     public void open() {
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);// hiển thị form ra giữa màn hình
     }
 
     public void login() {
-        String username = txtUserName.getText().trim();
-        String password = new String(txtPassword.getPassword());
+        String username = txtUserName.getText().trim();// lấy username
+        String password = new String(txtPassword.getPassword());// lấy password
 
-        UserDAO dao = new UserDAOImpl();
-        User user = dao.selectById(username);
+        UserDAO dao = new UserDAOImpl();// tạo DAO để truy vấn DB
+        User user = dao.selectById(username);// tìm user theo username
         if (user == null) {
-            XDialog.alert(this, "Sai tên đăng nhập!");
+            XDialog.alert(this, "Sai tên đăng nhập!");// không tồn tại user
         } else if (!password.equals(user.getMatKhau().trim())) {
             XDialog.alert(this, "Sai mật khẩu!");
         } else if (!user.isTrangThai()) {
             XDialog.alert(this, "Tài khoản đã bị khóa!");
         } else {
-            XAuth.user = user;
-            this.dispose();
-            // PHÂN QUYỀN
-            switch (user.getVaiTro()) {
+            XAuth.user = user;// lưu user đăng nhập vào hệ thống
+            this.dispose();// đóng form login
+            
+            switch (user.getVaiTro()) {// phân quyền theo vai trò
                 case 1 -> // admin => vai trò 1
                     new MenuQuanLy().setVisible(true);
                 case 2 -> // nv => NV vai trò 2
@@ -45,7 +44,7 @@ public class Login extends javax.swing.JFrame {
                 case 0 -> // user2 => Khách vai trò 0
                     new MenuKhackCheckOut().setVisible(true);
                 default ->
-                    XDialog.alert(this, "Không xác định vai trò!");
+                    XDialog.alert(this, "Không xác định vai trò!");// lỗi role
             }
         }
     }
@@ -183,28 +182,28 @@ public class Login extends javax.swing.JFrame {
 
     private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
         
-        this.dispose();
+        this.dispose();// đóng app
     }//GEN-LAST:event_btnThoatActionPerformed
 
     private void btnDangNhap1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhap1ActionPerformed
         
-        this.login();
+        this.login();// click login
     }//GEN-LAST:event_btnDangNhap1ActionPerformed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         
-        login();
+        login();// nhấn Enter khi đang ở password
     }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void btnDangNhapKhachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapKhachActionPerformed
         
-        new ui.customer.MenuKhackCheckOut().setVisible(true);
-        this.dispose();
+        new ui.customer.MenuKhackCheckOut().setVisible(true);// vào giao diện khách
+        this.dispose();// đóng login
     }//GEN-LAST:event_btnDangNhapKhachActionPerformed
 
     private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
         
-        txtPassword.requestFocus();
+        txtPassword.requestFocus();// Enter ở username → chuyển xuống password
     }//GEN-LAST:event_txtUserNameActionPerformed
 
     public static void main(String args[]) {

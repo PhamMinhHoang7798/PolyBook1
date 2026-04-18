@@ -1,30 +1,23 @@
 package ui.staff;
 
 import dao.impl.UserDAOImpl;
-import util.XAuth;
-import util.XDialog;
 
 public class DoiMatKhau extends javax.swing.JFrame {
 
-    UserDAOImpl dao = new UserDAOImpl();
+    UserDAOImpl dao = new UserDAOImpl();//để cập nhật user xuống database
     private static final java.util.logging.Logger logger
             = java.util.logging.Logger.getLogger(DoiMatKhau.class.getName());
 
     public DoiMatKhau() {
         initComponents();
-        setLocationRelativeTo(null);
-
-        // --- PHẦN SỬA MỚI ---
-        // 1. Hiện sẵn tên đăng nhập của người đang dùng máy
-        if (util.XAuth.user != null) {
+        setLocationRelativeTo(null);// hiển thị form ra giữa màn hình
+        if (util.XAuth.user != null) {// kiểm tra đã đăng nhập chưa
             txtTenDangNhap.setText(util.XAuth.user.getTenDangNhap());
-            txtTenDangNhap.setEditable(false); // Khóa lại không cho sửa tên người khác
+            txtTenDangNhap.setEditable(false); // Khóa lại không cho sửa username
         }
-
-        // 2. Hiện thẳng mật khẩu (không hiện dấu ****)
-        txtPassword.setEchoChar((char) 0);
-        txtNewpass.setEchoChar((char) 0);
-        txtConfirm.setEchoChar((char) 0);
+        txtPassword.setEchoChar((char) 0); // hiển thị mật khẩu hiện tại (không ẩn *)
+        txtNewpass.setEchoChar((char) 0);// hiển thị mật khẩu mới
+        txtConfirm.setEchoChar((char) 0);// hiển thị xác nhận mật khẩu
         // --------------------
     }
 
@@ -173,15 +166,15 @@ public class DoiMatKhau extends javax.swing.JFrame {
         this.close();
     }//GEN-LAST:event_btnCloseActionPerformed
     private void doiMatKhau() {
-        if (util.XAuth.user == null) {
+        if (util.XAuth.user == null) {// nếu chưa đăng nhập
             util.XDialog.alert(this, "Vui lòng đăng nhập!");
             return;
         }
 
-        String manv = txtTenDangNhap.getText().trim();
-        String matKhau = new String(txtPassword.getPassword());
-        String matKhauMoi = new String(txtNewpass.getPassword()).trim();
-        String xacNhanMatKhau = new String(txtConfirm.getPassword()).trim();
+        String manv = txtTenDangNhap.getText().trim();// lấy username
+        String matKhau = new String(txtPassword.getPassword());// lấy mật khẩu hiện tại
+        String matKhauMoi = new String(txtNewpass.getPassword()).trim();// lấy mật khẩu mới
+        String xacNhanMatKhau = new String(txtConfirm.getPassword()).trim();// lấy mật khẩu xác nhận
 
         if (manv.isEmpty() || matKhau.isEmpty() || matKhauMoi.isEmpty() || xacNhanMatKhau.isEmpty()) {
             util.XDialog.alert(this, "Vui lòng nhập đầy đủ thông tin!");
@@ -193,12 +186,10 @@ public class DoiMatKhau extends javax.swing.JFrame {
             return;
         }
 
-        // Đã gỡ bỏ check 6 ký tự ở đây
         if (!matKhauMoi.equals(xacNhanMatKhau)) {
             util.XDialog.alert(this, "Xác nhận mật khẩu không khớp!");
             return;
         }
-
         try {
             util.XAuth.user.setMatKhau(matKhauMoi);
             dao.update(util.XAuth.user);
@@ -222,10 +213,10 @@ public class DoiMatKhau extends javax.swing.JFrame {
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            logger.log(java.util.logging.Level.SEVERE, null, ex);// ghi log nếu lỗi
         }
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DoiMatKhau().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new DoiMatKhau().setVisible(true));// chạy form
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

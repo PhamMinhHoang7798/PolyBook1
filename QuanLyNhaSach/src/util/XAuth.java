@@ -1,4 +1,4 @@
-
+// Lớp quản lý thông tin người dùng đang đăng nhập và kiểm tra quyền truy cập trong hệ thống.
 package util;
 import entity.User;
 

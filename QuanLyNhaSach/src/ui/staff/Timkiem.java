@@ -2,7 +2,6 @@ package ui.staff;
 
 import dao.impl.SanPhamDAOImpl;
 import entity.SanPham;
-import util.XJdbc;
 import java.util.List;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
@@ -15,20 +14,20 @@ public class Timkiem extends javax.swing.JFrame {
 
     public Timkiem() {
         initComponents();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);// căn giữa màn hình
 
         javax.swing.Timer timerHD = new javax.swing.Timer(300, e -> {
-            fillTableHoaDon(txtMaHoaDon.getText().trim());
+            fillTableHoaDon(txtMaHoaDon.getText().trim());// gọi tìm kiếm hóa đơn sau 300ms
         });
-        timerHD.setRepeats(false);
+        timerHD.setRepeats(false);// chỉ chạy 1 lần
         txtMaHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                timerHD.restart();
+                timerHD.restart();// mỗi lần gõ → reset timer (tránh gọi liên tục)
             }
         });
 
         javax.swing.Timer timerSP = new javax.swing.Timer(300, e -> {
-            fillTableSanPham(txtMaSanPham.getText().trim());
+            fillTableSanPham(txtMaSanPham.getText().trim());// tìm khách hàng
         });
         timerSP.setRepeats(false);
         txtMaSanPham.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -46,19 +45,19 @@ public class Timkiem extends javax.swing.JFrame {
                 timerTV.restart();
             }
         });
-
+        // load dữ liệu ban đầu
         fillTableHoaDon("");
         fillTableSanPham("");
         fillTableThanhVien("");
-
+        // khóa không cho sửa bảng
         tblTimKiemHoaDon.setDefaultEditor(Object.class, null);
         tblTimKiemSanPham.setDefaultEditor(Object.class, null);
         tblDanhSach.setDefaultEditor(Object.class, null);
     }
 
-    void fillTableHoaDon(String keyword) {
+    void fillTableHoaDon(String keyword) { //đổ dữ liệu hóa đơn lên bảng
         DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0); // xóa dữ liệu cũ
         String sql = "SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia "
                 + "FROM HoaDon hd JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon "
                 + "JOIN SanPham sp ON ct.MaSanPham = sp.MaSanPham "
@@ -76,16 +75,16 @@ public class Timkiem extends javax.swing.JFrame {
                 });
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();// log lỗi
         }
     }
 
-    void fillTableSanPham(String keyword) {
+    void fillTableSanPham(String keyword) {//đổ danh sách sản phẩm lên bảng
         DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0);// clear bảng
         try {
-            SanPhamDAOImpl dao = new SanPhamDAOImpl();
-            List<SanPham> list = dao.selectByKeyword(keyword);
+            SanPhamDAOImpl dao = new SanPhamDAOImpl(); // DAO sản phẩm
+            List<SanPham> list = dao.selectByKeyword(keyword);// gọi DB
             for (entity.SanPham sp : list) {
                 model.addRow(new Object[]{
                     sp.getMaSanPham(),
@@ -100,12 +99,12 @@ public class Timkiem extends javax.swing.JFrame {
         }
     }
 
-    void fillTableThanhVien(String keyword) {
+    void fillTableThanhVien(String keyword) {//đổ danh sách khách hàng
         DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0);// clear bảng
 
         try {
-            List<entity.KhachHang> list = khDAO.selectByKeyword(keyword);
+            List<entity.KhachHang> list = khDAO.selectByKeyword(keyword); // gọi DAO khách hàng
 
             for (entity.KhachHang kh : list) {
                 model.addRow(new Object[]{
@@ -434,7 +433,19 @@ public class Timkiem extends javax.swing.JFrame {
     private void btnTimKhackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKhackActionPerformed
         fillTableThanhVien(txtTim.getText().trim());
     }//GEN-LAST:event_btnTimKhackActionPerformed
-
+    // Hàm xác định hạng thẻ dựa trên điểm 
+        private String xacDinhLoaiThe(int diem) {
+            if (diem >= 200) {
+                return "Vàng";
+            } else if (diem >= 150) {
+                return "Bạc";
+            } else if (diem >= 100) {
+                return "Đồng";
+            } else {
+                return "Thường";
+            }
+        }
+        
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -472,16 +483,5 @@ public class Timkiem extends javax.swing.JFrame {
     private javax.swing.JTextField txtMaSanPham;
     private javax.swing.JTextField txtTim;
     // End of variables declaration//GEN-END:variables
-// Hàm xác định hạng thẻ dựa trên điểm (Ông dán đoạn này vào cuối class nhé)
-    private String xacDinhLoaiThe(int diem) {
-        if (diem >= 200) {
-            return "Vàng";
-        } else if (diem >= 150) {
-            return "Bạc";
-        } else if (diem >= 100) {
-            return "Đồng";
-        } else {
-            return "Thường";
-        }
-    }
+
 }

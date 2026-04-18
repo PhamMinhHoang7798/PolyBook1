@@ -1,4 +1,5 @@
 package util;
+// Lớp XJdbc cung cấp các phương thức hỗ trợ kết nối database và thực thi câu lệnh SQL như query, update và lấy dữ liệu.
 
 import java.sql.*;
 
