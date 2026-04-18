@@ -281,7 +281,7 @@ private void loadDefaultAdminIcon() {
         });
 
         btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnLogOut.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogOut.setForeground(new java.awt.Color(255, 51, 51));
         btnLogOut.setText("Đăng xuất");
         btnLogOut.setBorderPainted(false);
         btnLogOut.setContentAreaFilled(false);

@@ -106,15 +106,13 @@ public class QLthetv extends javax.swing.JFrame {
                     .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTim, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("Danh sách ", jPanel2);
 
         btnUpdate.setBackground(new java.awt.Color(255, 255, 204));
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Edit.png")); // NOI18N
         btnUpdate.setText("Cập nhập");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,7 +122,6 @@ public class QLthetv extends javax.swing.JFrame {
 
         btnThem.setBackground(new java.awt.Color(204, 255, 204));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnThem.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Add.png")); // NOI18N
         btnThem.setText("Tạo mới");
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,7 +131,6 @@ public class QLthetv extends javax.swing.JFrame {
 
         btnDel.setBackground(new java.awt.Color(255, 204, 204));
         btnDel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnDel.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Delete.png")); // NOI18N
         btnDel.setText("Xóa");
         btnDel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,7 +140,6 @@ public class QLthetv extends javax.swing.JFrame {
 
         btnNew.setBackground(new java.awt.Color(204, 255, 255));
         btnNew.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Accept.png")); // NOI18N
         btnNew.setText("Nhập mới");
         btnNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

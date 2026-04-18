@@ -172,7 +172,6 @@ private void loadDefaultAvatar() {
 
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
-        btnTimKiem.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\search.png")); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setBorderPainted(false);
         btnTimKiem.setContentAreaFilled(false);
@@ -186,7 +185,6 @@ private void loadDefaultAvatar() {
 
         btnTaoHoaDonMoi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTaoHoaDonMoi.setForeground(new java.awt.Color(255, 255, 255));
-        btnTaoHoaDonMoi.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\add2.png")); // NOI18N
         btnTaoHoaDonMoi.setText("Tạo hóa đơn mới");
         btnTaoHoaDonMoi.setBorderPainted(false);
         btnTaoHoaDonMoi.setContentAreaFilled(false);
@@ -199,8 +197,7 @@ private void loadDefaultAvatar() {
         });
 
         btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnLogOut.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogOut.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\out.png")); // NOI18N
+        btnLogOut.setForeground(new java.awt.Color(255, 0, 51));
         btnLogOut.setText("Đăng xuất");
         btnLogOut.setBorderPainted(false);
         btnLogOut.setContentAreaFilled(false);
@@ -214,7 +211,6 @@ private void loadDefaultAvatar() {
 
         btnDoiMatKhau.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnDoiMatKhau.setForeground(new java.awt.Color(255, 255, 255));
-        btnDoiMatKhau.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\reset-password (1).png")); // NOI18N
         btnDoiMatKhau.setText("Đổi mật khẩu");
         btnDoiMatKhau.setBorderPainted(false);
         btnDoiMatKhau.setContentAreaFilled(false);
@@ -244,17 +240,15 @@ private void loadDefaultAvatar() {
                     .addComponent(jLabel1))
                 .addGap(66, 66, 66))
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDoiMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTaoHoaDonMoi)
+                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnDoiMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnTaoHoaDonMoi)
-                            .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(17, Short.MAX_VALUE))
+                        .addGap(14, 14, 14)
+                        .addComponent(btnLogOut)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,7 +265,7 @@ private void loadDefaultAvatar() {
                 .addComponent(btnDoiMatKhau)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnLogOut)
-                .addGap(69, 69, 69))
+                .addGap(79, 79, 79))
         );
 
         jPanel2.setPreferredSize(new java.awt.Dimension(716, 630));
