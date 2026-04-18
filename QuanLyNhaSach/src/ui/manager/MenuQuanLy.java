@@ -173,43 +173,41 @@ public class MenuQuanLy extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        btnQuanlyLoaiSP = new javax.swing.JButton();
-        btnQuanLySP = new javax.swing.JButton();
-        btnQuanLyTheThanhVien = new javax.swing.JButton();
-        btnQuanLyPhieuBanHang = new javax.swing.JButton();
-        btnQuanLyNguoiDung = new javax.swing.JButton();
-        btnQuanLyDoanhThu = new javax.swing.JButton();
         jPanel1.setPreferredSize(new java.awt.Dimension(250, 700)); // Ép Menu giữ nguyên kích thước
         btnLogOut = new javax.swing.JButton();
         btnLogOut.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        btnQuanLySP = new javax.swing.JButton();
+        btnQuanLyTheThanhVien = new javax.swing.JButton();
+        btnQuanLyPhieuBanHang = new javax.swing.JButton();
         lblAvatar = new javax.swing.JLabel();
+        btnQuanlyLoaiSP = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnQuanLyDoanhThu = new javax.swing.JButton();
         btnTimKiem = new javax.swing.JButton();
+        btnQuanLyNguoiDung = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(25, 53, 94));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Admin");
-
-        btnQuanlyLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnQuanlyLoaiSP.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanlyLoaiSP.setText("Quản lý loại sản phẩm");
-        btnQuanlyLoaiSP.setBorderPainted(false);
-        btnQuanlyLoaiSP.setContentAreaFilled(false);
-        btnQuanlyLoaiSP.setFocusPainted(false);
-        btnQuanlyLoaiSP.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnQuanlyLoaiSP.addActionListener(new java.awt.event.ActionListener() {
+        btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnLogOut.setForeground(new java.awt.Color(255, 51, 51));
+        btnLogOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/out.png"))); // NOI18N
+        btnLogOut.setText("Đăng xuất");
+        btnLogOut.setBorderPainted(false);
+        btnLogOut.setContentAreaFilled(false);
+        btnLogOut.setFocusPainted(false);
+        btnLogOut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLogOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuanlyLoaiSPActionPerformed(evt);
+                btnLogOutActionPerformed(evt);
             }
         });
 
         btnQuanLySP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLySP.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLySP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Label.png"))); // NOI18N
         btnQuanLySP.setText("Quản lý sản phẩm");
         btnQuanLySP.setBorderPainted(false);
         btnQuanLySP.setContentAreaFilled(false);
@@ -223,6 +221,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         btnQuanLyTheThanhVien.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLyTheThanhVien.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLyTheThanhVien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/identity-card.png"))); // NOI18N
         btnQuanLyTheThanhVien.setText("Quản lý thẻ thành viên");
         btnQuanLyTheThanhVien.setBorderPainted(false);
         btnQuanLyTheThanhVien.setContentAreaFilled(false);
@@ -236,6 +235,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         btnQuanLyPhieuBanHang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLyPhieuBanHang.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLyPhieuBanHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/5c53652f-2ec3-4efb-98b2-a214cd2b6688.png"))); // NOI18N
         btnQuanLyPhieuBanHang.setText("Quản lý phiếu bán hàng");
         btnQuanLyPhieuBanHang.setBorderPainted(false);
         btnQuanLyPhieuBanHang.setContentAreaFilled(false);
@@ -247,21 +247,29 @@ public class MenuQuanLy extends javax.swing.JFrame {
             }
         });
 
-        btnQuanLyNguoiDung.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnQuanLyNguoiDung.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanLyNguoiDung.setText("Quản lý người dùng");
-        btnQuanLyNguoiDung.setBorderPainted(false);
-        btnQuanLyNguoiDung.setContentAreaFilled(false);
-        btnQuanLyNguoiDung.setFocusPainted(false);
-        btnQuanLyNguoiDung.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnQuanLyNguoiDung.addActionListener(new java.awt.event.ActionListener() {
+        lblAvatar.setPreferredSize(new java.awt.Dimension(50, 50));
+
+        btnQuanlyLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnQuanlyLoaiSP.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanlyLoaiSP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Card file.png"))); // NOI18N
+        btnQuanlyLoaiSP.setText("Quản lý loại sản phẩm");
+        btnQuanlyLoaiSP.setBorderPainted(false);
+        btnQuanlyLoaiSP.setContentAreaFilled(false);
+        btnQuanlyLoaiSP.setFocusPainted(false);
+        btnQuanlyLoaiSP.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnQuanlyLoaiSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuanLyNguoiDungActionPerformed(evt);
+                btnQuanlyLoaiSPActionPerformed(evt);
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Admin");
+
         btnQuanLyDoanhThu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLyDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLyDoanhThu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Statistics.png"))); // NOI18N
         btnQuanLyDoanhThu.setText("Quản lý doanh thu");
         btnQuanLyDoanhThu.setBorderPainted(false);
         btnQuanLyDoanhThu.setContentAreaFilled(false);
@@ -273,23 +281,9 @@ public class MenuQuanLy extends javax.swing.JFrame {
             }
         });
 
-        btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnLogOut.setForeground(new java.awt.Color(255, 51, 51));
-        btnLogOut.setText("Đăng xuất");
-        btnLogOut.setBorderPainted(false);
-        btnLogOut.setContentAreaFilled(false);
-        btnLogOut.setFocusPainted(false);
-        btnLogOut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnLogOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogOutActionPerformed(evt);
-            }
-        });
-
-        lblAvatar.setPreferredSize(new java.awt.Dimension(50, 50));
-
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setBorderPainted(false);
         btnTimKiem.setContentAreaFilled(false);
@@ -298,6 +292,20 @@ public class MenuQuanLy extends javax.swing.JFrame {
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTimKiemActionPerformed(evt);
+            }
+        });
+
+        btnQuanLyNguoiDung.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnQuanLyNguoiDung.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuanLyNguoiDung.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Unknown person.png"))); // NOI18N
+        btnQuanLyNguoiDung.setText("Quản lý người dùng");
+        btnQuanLyNguoiDung.setBorderPainted(false);
+        btnQuanLyNguoiDung.setContentAreaFilled(false);
+        btnQuanLyNguoiDung.setFocusPainted(false);
+        btnQuanLyNguoiDung.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnQuanLyNguoiDung.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuanLyNguoiDungActionPerformed(evt);
             }
         });
 
@@ -319,22 +327,17 @@ public class MenuQuanLy extends javax.swing.JFrame {
                             .addComponent(btnQuanLyTheThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(73, 73, 73)
-                                .addComponent(jLabel1)))
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addComponent(lblAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnTimKiem))
                         .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(lblAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnTimKiem)))
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(27, 27, 27)
                 .addComponent(lblAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -352,20 +355,20 @@ public class MenuQuanLy extends javax.swing.JFrame {
                 .addComponent(btnQuanLyDoanhThu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTimKiem)
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnLogOut)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addGap(44, 44, 44))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 774, Short.MAX_VALUE)
+            .addGap(0, 1013, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 572, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

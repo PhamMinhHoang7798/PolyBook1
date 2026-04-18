@@ -61,7 +61,7 @@
                           <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
                           <Component id="txtTim" min="-2" pref="412" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="btnTim" min="-2" pref="92" max="-2" attributes="0"/>
+                          <Component id="btnTim" min="-2" pref="108" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
@@ -72,8 +72,8 @@
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  <Component id="btnFilter4" min="-2" pref="115" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="295" max="-2" attributes="0"/>
+                  <Component id="btnFilter4" min="-2" pref="151" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="285" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -108,11 +108,17 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnTim">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="90" green="46" red="2d" type="rgb"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="14" style="1"/>
+              <Font name="Segoe UI" size="16" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="8b" green="42" red="c" type="rgb"/>
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/icon/search.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="T&#xec;m"/>
           </Properties>
