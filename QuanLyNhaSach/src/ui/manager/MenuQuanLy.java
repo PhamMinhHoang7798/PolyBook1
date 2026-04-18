@@ -33,94 +33,86 @@ public class MenuQuanLy extends javax.swing.JFrame {
         jPanel1.setMinimumSize(new java.awt.Dimension(250, 700));
     }
 
-    /**
-     * Thiết lập hiển thị và sự kiện cho Avatar
-     */
     private void setupAvatar() {
-    lblAvatar.setText("");
-    lblAvatar.setHorizontalAlignment(SwingConstants.CENTER);
-    lblAvatar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lblAvatar.setText("");
+        lblAvatar.setHorizontalAlignment(SwingConstants.CENTER);
+        lblAvatar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-    // 1. Lấy thông tin người dùng đang đăng nhập
-    entity.User user = util.XAuth.user; 
+        // 1. Lấy thông tin người dùng đang đăng nhập
+        entity.User user = util.XAuth.user;
 
-    if (user != null && user.getHinhAnh() != null && !user.getHinhAnh().isEmpty()) {
-        try {
-            // 2. Tìm file ảnh trong thư mục logos của dự án
-            File file = new File("logos", user.getHinhAnh());
-            if (file.exists()) {
-                lblAvatar.setIcon(makeCircularIcon(file.toURI().toURL(), AVATAR_SIZE));
-            } else {
-                loadDefaultAdminIcon(); // Nếu file bị xóa mất thì load mặc định
+        if (user != null && user.getHinhAnh() != null && !user.getHinhAnh().isEmpty()) {
+            try {
+                // 2. Tìm file ảnh trong thư mục logos của dự án
+                File file = new File("logos", user.getHinhAnh());
+                if (file.exists()) {
+                    lblAvatar.setIcon(makeCircularIcon(file.toURI().toURL(), AVATAR_SIZE));
+                } else {
+                    loadDefaultAdminIcon(); // Nếu file bị xóa mất thì load mặc định
+                }
+            } catch (Exception e) {
+                loadDefaultAdminIcon();
             }
-        } catch (Exception e) {
+        } else {
             loadDefaultAdminIcon();
         }
-    } else {
-        loadDefaultAdminIcon();
-    }
 
-    // 3. Đảm bảo sự kiện click chỉ được đăng ký một lần
-    for (java.awt.event.MouseListener ml : lblAvatar.getMouseListeners()) {
-        lblAvatar.removeMouseListener(ml);
-    }
-    lblAvatar.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            chooseNewAvatar();
+        // 3. Đảm bảo sự kiện click chỉ được đăng ký một lần
+        for (java.awt.event.MouseListener ml : lblAvatar.getMouseListeners()) {
+            lblAvatar.removeMouseListener(ml);
         }
-    });
-}
+        lblAvatar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                chooseNewAvatar();
+            }
+        });
+    }
 
 // Hàm phụ để load ảnh mặc định
-private void loadDefaultAdminIcon() {
-    try {
-        URL url = getClass().getResource("/icon/admin.jpg"); // Hoặc nhanvien.jpg
-        if (url != null) {
-            lblAvatar.setIcon(makeCircularIcon(url, AVATAR_SIZE));
-        }
-    } catch (Exception e) {}
-}
-
-    /**
-     * Mở trình chọn file và cập nhật Avatar
-     */
-    private void chooseNewAvatar() {
-    JFileChooser fc = new JFileChooser();
-    fc.setDialogTitle("Chọn ảnh đại diện cho Quản lý");
-    fc.setFileFilter(new FileNameExtensionFilter("Hình ảnh", "jpg", "png", "jpeg"));
-
-    if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+    private void loadDefaultAdminIcon() {
         try {
-            File file = fc.getSelectedFile();
-            
-            // 1. Lưu file vật lý vào thư mục logos (sử dụng tiện ích XImage)
-            util.XImage.save(file); 
-            
-            // 2. Lấy đối tượng người dùng hiện tại (Admin)
-            entity.User currentUser = util.XAuth.user;
-            if (currentUser != null) {
-                // 3. Cập nhật tên file ảnh vào đối tượng và Database
-                currentUser.setHinhAnh(file.getName());
-                
-                dao.impl.UserDAOImpl dao = new dao.impl.UserDAOImpl();
-                dao.update(currentUser); // Lưu vào SQL Server
-                
-                // 4. Vẽ lại ảnh tròn ngay lập tức trên Menu
-                setupAvatar(); 
-                
-                util.XDialog.alert(this, "Đã cập nhật ảnh đại diện Admin!");
+            URL url = getClass().getResource("/icon/admin.jpg"); // Hoặc nhanvien.jpg
+            if (url != null) {
+                lblAvatar.setIcon(makeCircularIcon(url, AVATAR_SIZE));
             }
-        } catch (Exception ex) {
-            util.XDialog.alert(this, "Lỗi khi cập nhật ảnh!");
-            ex.printStackTrace();
+        } catch (Exception e) {
         }
     }
-}
 
-    /**
-     * Hàm xử lý cắt ảnh thành hình tròn chuyên nghiệp
-     */
+    private void chooseNewAvatar() {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Chọn ảnh đại diện cho Quản lý");
+        fc.setFileFilter(new FileNameExtensionFilter("Hình ảnh", "jpg", "png", "jpeg"));
+
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                File file = fc.getSelectedFile();
+
+                // 1. Lưu file vật lý vào thư mục logos (sử dụng tiện ích XImage)
+                util.XImage.save(file);
+
+                // 2. Lấy đối tượng người dùng hiện tại (Admin)
+                entity.User currentUser = util.XAuth.user;
+                if (currentUser != null) {
+                    // 3. Cập nhật tên file ảnh vào đối tượng và Database
+                    currentUser.setHinhAnh(file.getName());
+
+                    dao.impl.UserDAOImpl dao = new dao.impl.UserDAOImpl();
+                    dao.update(currentUser); // Lưu vào SQL Server
+
+                    // 4. Vẽ lại ảnh tròn ngay lập tức trên Menu
+                    setupAvatar();
+
+                    util.XDialog.alert(this, "Đã cập nhật ảnh đại diện Admin!");
+                }
+            } catch (Exception ex) {
+                util.XDialog.alert(this, "Lỗi khi cập nhật ảnh!");
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private ImageIcon makeCircularIcon(URL imagePath, int size) {
         try {
             BufferedImage master = ImageIO.read(imagePath);
@@ -157,24 +149,24 @@ private void loadDefaultAdminIcon() {
     }
 
     private void showPanel(javax.swing.JFrame form) {
-    jPanel2.removeAll();
-    jPanel2.setLayout(new BorderLayout());
-    try {
-        javax.swing.JPanel mainPanel = (javax.swing.JPanel) form.getContentPane().getComponent(0);
-        mainPanel.setBackground(Color.WHITE);
-        jPanel2.add(mainPanel, BorderLayout.CENTER);
-    } catch (Exception e) {
-        jPanel2.add(form.getContentPane(), BorderLayout.CENTER);
+        jPanel2.removeAll();
+        jPanel2.setLayout(new BorderLayout());
+        try {
+            javax.swing.JPanel mainPanel = (javax.swing.JPanel) form.getContentPane().getComponent(0);
+            mainPanel.setBackground(Color.WHITE);
+            jPanel2.add(mainPanel, BorderLayout.CENTER);
+        } catch (Exception e) {
+            jPanel2.add(form.getContentPane(), BorderLayout.CENTER);
+        }
+
+        // Quan trọng: Cập nhật lại giao diện mà không làm thay đổi kích thước tổng thể
+        jPanel2.revalidate();
+        jPanel2.repaint();
+
+        // Ép JFrame giữ nguyên kích thước bạn đã thiết kế ban đầu
+        // Đảm bảo nút đăng xuất không bị đẩy xuống dưới đáy khuất tầm mắt
+        this.validate();
     }
-    
-    // Quan trọng: Cập nhật lại giao diện mà không làm thay đổi kích thước tổng thể
-    jPanel2.revalidate();
-    jPanel2.repaint();
-    
-    // Ép JFrame giữ nguyên kích thước bạn đã thiết kế ban đầu
-    // Đảm bảo nút đăng xuất không bị đẩy xuống dưới đáy khuất tầm mắt
-    this.validate(); 
-}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -374,7 +366,7 @@ private void loadDefaultAdminIcon() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-        
+
         if (util.XDialog.confirm(this, "Bạn có muốn đăng xuất không?")) {
             // 1. Xóa thông tin đăng nhập cũ
             util.XAuth.logout();
@@ -390,7 +382,7 @@ private void loadDefaultAdminIcon() {
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnQuanLyDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyDoanhThuActionPerformed
-        
+
         if (util.XAuth.isManager()) {
             showPanel(new QLDoanhThu());
         } else {
@@ -399,7 +391,7 @@ private void loadDefaultAdminIcon() {
     }//GEN-LAST:event_btnQuanLyDoanhThuActionPerformed
 
     private void btnQuanLyNguoiDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyNguoiDungActionPerformed
-        
+
         if (util.XAuth.isManager()) {
             showPanel(new QlNguoidung());
         } else {
@@ -408,12 +400,12 @@ private void loadDefaultAdminIcon() {
     }//GEN-LAST:event_btnQuanLyNguoiDungActionPerformed
 
     private void btnQuanLyPhieuBanHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyPhieuBanHangActionPerformed
-        
+
         showPanel(new Phieubanhangmoi());
     }//GEN-LAST:event_btnQuanLyPhieuBanHangActionPerformed
 
     private void btnQuanLyTheThanhVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyTheThanhVienActionPerformed
-        
+
         // 1. Kiểm tra quyền hạn (Tùy chọn: Thẻ thành viên thường dành cho Quản lý hoặc Nhân viên)
         // Nếu bạn muốn chỉ Quản lý mới được vào:
         if (util.XAuth.isManager()) {
@@ -425,27 +417,27 @@ private void loadDefaultAdminIcon() {
     }//GEN-LAST:event_btnQuanLyTheThanhVienActionPerformed
 
     private void btnQuanLySPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLySPActionPerformed
-        
+
         showPanel(new QlSanpham());
     }//GEN-LAST:event_btnQuanLySPActionPerformed
 
     private void btnQuanlyLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanlyLoaiSPActionPerformed
-        
+
         showPanel(new QlLoaiSP());
     }//GEN-LAST:event_btnQuanlyLoaiSPActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-
         showPanel(new Timkiem());
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
-   private void setupMenuButton(javax.swing.JButton btn, String text, String iconPath) {
+    private void setupMenuButton(javax.swing.JButton btn, String text, String iconPath) {
         btn.setText(text);
         btn.setFont(new java.awt.Font("Segoe UI", 1, 14));
         btn.setForeground(Color.WHITE);
         try {
             btn.setIcon(new ImageIcon(getClass().getResource(iconPath)));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         btn.setBorderPainted(false);
         btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
@@ -462,8 +454,11 @@ private void loadDefaultAdminIcon() {
                 new Login().setVisible(true);
             }
         } else if (source == btnQuanLyDoanhThu) {
-            if (util.XAuth.isManager()) showPanel(new QLDoanhThu());
-            else util.XDialog.alert(this, "Yêu cầu quyền Quản lý!");
+            if (util.XAuth.isManager()) {
+                showPanel(new QLDoanhThu());
+            } else {
+                util.XDialog.alert(this, "Yêu cầu quyền Quản lý!");
+            }
         } else if (source == btnQuanlyLoaiSP) {
             showPanel(new QlLoaiSP());
         } else if (source == btnQuanLySP) {
