@@ -26,12 +26,17 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         modelGioHang = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
         modelGioHang.setRowCount(0);
+
         // 1. Mặc định chọn Chuyển khoản
         jComboBox1.setSelectedItem("chuyển khoản");
+
         // 2. Gọi hàm ẩn các ô tiền mặt ngay khi mở trang
         toggleTienMatFields(false);
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
         jTextField3.setText(sdf.format(new java.util.Date()));
+
+        //Mặc định ẩn nút in hóa đơn
+        btnInHoaĐon.setVisible(false);
     }
 
     // Hàm phụ trợ để ẩn/hiện các dòng tiền mặt cho gọn code
@@ -739,7 +744,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
                 return;
             }
             double tienKhachDua = Double.parseDouble(txtTienKhachDua.getText());
-            double tienThoi = tienKhachDua - tongTien; // tongTien đã được tính ở hàm tinhTongTien()
+            double tienThoi = tienKhachDua - tongTien;
             if (tienThoi < 0) {
                 jLabel15.setText("Khách đưa thiếu!");
             } else {
@@ -787,20 +792,22 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
         bill.append(String.format(" Ngày: %-20s\n", ngay));
         bill.append(String.format(" Phương thức: %-15s\n", pthanhToan));
         bill.append("------------------------------------------\n");
-        bill.append(String.format("%-18s %-3s %-10s %-10s\n", "Tên SP", "SL", "Giá", "T.Tiền"));
+        bill.append(String.format(" %-18s     %-3s  %-10s\n", "Tên SP", "SL", "Giá"));
 
         // Duyệt giỏ hàng để in sản phẩm
         for (int i = 0; i < modelGioHang.getRowCount(); i++) {
             String ten = modelGioHang.getValueAt(i, 1).toString();
             String sl = modelGioHang.getValueAt(i, 2).toString();
-            String gia = modelGioHang.getValueAt(i, 3).toString();
-            String tt = modelGioHang.getValueAt(i, 4).toString();
+            double dGia = Double.parseDouble(modelGioHang.getValueAt(i, 3).toString());
+            double dTT = Double.parseDouble(modelGioHang.getValueAt(i, 4).toString());
+            String gia = String.format("%,.0f", dGia);
+            String tt = String.format("%,.0f", dTT);
 
             // Rút gọn tên nếu quá dài
-            if (ten.length() > 15) {
-                ten = ten.substring(0, 15) + "..";
-            }
-            bill.append(String.format("%-18s %-3s %-10s %-10s\n", ten, sl, gia, tt));
+//            if (ten.length() > 15) {
+//                ten = ten.substring(0, 15) + "..";
+//            }
+            bill.append(String.format(" %-18s   %-3s  %-10s\n", ten, sl, gia));
         }
 
         bill.append("------------------------------------------\n");
@@ -810,7 +817,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
             bill.append(String.format(" GIẢM GIÁ:             -%,.0f VNĐ\n", tienGiamGia));
         }
 
-        bill.append(String.format(" TỔNG CỘNG:            %,.0f VNĐ\n", tongTien));
+        bill.append(String.format(" TỔNG CỘNG:             %,.0f VNĐ\n", tongTien));
 
         // In tiền khách đưa/thối nếu trả tiền mặt
         if (pthanhToan.equalsIgnoreCase("Tiền mặt")) {
@@ -850,7 +857,6 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        // TODO add your handling code here:
         timKhachHang();
     }//GEN-LAST:event_btnTimActionPerformed
 
