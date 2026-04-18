@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class doanhthuDAOImpl implements doanhthuDAO {
+
     // ===== SQL =====
     private static final String SQL_THEO_VOUCHER = """
         SELECT 
@@ -29,6 +30,7 @@ public class doanhthuDAOImpl implements doanhthuDAO {
         WHERE NgayLap BETWEEN ? AND ?
         GROUP BY TenDangNhap
     """;
+
     // ===== THỐNG KÊ THEO VOUCHER =====
     @Override
     public List<doanhthu.TheoVoucher> thongKeTheoVoucher(Date tuNgay, Date denNgay) {
@@ -82,5 +84,46 @@ public class doanhthuDAOImpl implements doanhthuDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // ===== THỐNG KÊ DOANH THU THEO NGÀY =====
+    @Override
+    public List<Object[]> thongKeDoanhThuTheoNgay(Date tuNgay, Date denNgay) {
+        List<Object[]> list = new ArrayList<>();
+        // Query group theo ngày, lấy ra số đơn hàng, tổng SP, tổng doanh thu
+        String sql = """
+            SELECT 
+                CAST(hd.NgayLap AS DATE) AS Ngay,
+                COUNT(hd.MaHoaDon) AS SoDonHang,
+                ISNULL(SUM(ct.TongSanPham), 0) AS TongSanPham,
+                SUM(hd.TongTien) AS TongDoanhThu
+            FROM HoaDon hd
+            LEFT JOIN (
+                SELECT MaHoaDon, SUM(SoLuong) AS TongSanPham 
+                FROM HoaDonChiTiet 
+                GROUP BY MaHoaDon
+            ) ct ON hd.MaHoaDon = ct.MaHoaDon
+            WHERE CAST(hd.NgayLap AS DATE) BETWEEN ? AND ?
+            GROUP BY CAST(hd.NgayLap AS DATE)
+            ORDER BY Ngay DESC
+        """;
+        ResultSet rs = null;
+        try {
+            rs = XJdbc.executeQuery(sql, tuNgay, denNgay);
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getDate("Ngay"),
+                    rs.getInt("SoDonHang"),
+                    rs.getInt("TongSanPham"),
+                    rs.getDouble("TongDoanhThu")
+                };
+                list.add(row);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi thống kê doanh thu theo ngày", e);
+        } finally {
+            dongKetNoi(rs);
+        }
+        return list;
     }
 }

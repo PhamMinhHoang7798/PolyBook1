@@ -1,11 +1,78 @@
 package ui.manager;
 
+import dao.doanhthuDAO;
+import dao.impl.doanhthuDAOImpl;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class QLDoanhThu extends javax.swing.JFrame {
 
+    // Bổ sung dòng khai báo logger này
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QLDoanhThu.class.getName());
+
+    private doanhthuDAO dao = new doanhthuDAOImpl();
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public QLDoanhThu() {
         initComponents();
+        init();
+    }
+
+    private void init() {
+        setLocationRelativeTo(null);
+        jLabel10.setText("Tổng sản phẩm"); // Sửa tên label hiển thị
+
+        // 2. Thiết lập ngày mặc định và load sẵn bảng khi mở form
+        Calendar cal = Calendar.getInstance();
+        txtEnd.setText(sdf.format(cal.getTime())); // Ngày hiện tại
+
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        txtBegin.setText(sdf.format(cal.getTime())); // Ngày đầu tháng
+
+        fillTable(); // Tự động gọi hàm lọc dữ liệu ngay khi khởi tạo
+    }
+
+    private void fillTable() {
+        try {
+            // Lấy ngày từ TextField theo định dạng mới dd/MM/yyyy
+            Date tuNgay = sdf.parse(txtBegin.getText());
+            Date denNgay = sdf.parse(txtEnd.getText());
+
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+
+            // Gọi phương thức từ DAOImpl để lấy dữ liệu thống kê
+            List<Object[]> list = dao.thongKeDoanhThuTheoNgay(tuNgay, denNgay);
+
+            double tongDoanhThu = 0;
+            int tongDonHang = 0;
+            int tongSanPham = 0;
+
+            for (Object[] row : list) {
+                model.addRow(new Object[]{
+                    sdf.format((Date) row[0]), // Hiển thị ngày dạng dd/MM/yyyy trên bảng
+                    row[1],
+                    row[2],
+                    String.format("%,.0f VNĐ", (Double) row[3])
+                });
+
+                tongDonHang += (int) row[1];
+                tongSanPham += (int) row[2];
+                tongDoanhThu += (double) row[3];
+            }
+
+            // Cập nhật các Label thống kê
+            jLabel12.setText(String.format("%,.0f VNĐ", tongDoanhThu));
+            jLabel13.setText(String.valueOf(tongDonHang));
+            jLabel14.setText(String.valueOf(tongSanPham));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày đúng định dạng dd/MM/yyyy!", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -277,15 +344,15 @@ public class QLDoanhThu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
-        
+        fillTable();
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void txtEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEndActionPerformed
-        
+        fillTable();
     }//GEN-LAST:event_txtEndActionPerformed
 
     private void txtBeginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBeginActionPerformed
-        
+
     }//GEN-LAST:event_txtBeginActionPerformed
 
     public static void main(String args[]) {

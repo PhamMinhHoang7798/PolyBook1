@@ -9,4 +9,6 @@ public interface doanhthuDAO {
     List<doanhthu.TheoVoucher> thongKeTheoVoucher(Date tuNgay, Date denNgay);
 
     List<doanhthu.TheoNguoiDung> thongKeTheoNguoiDung(Date tuNgay, Date denNgay);
+
+    List<Object[]> thongKeDoanhThuTheoNgay(Date tuNgay, Date denNgay);
 }
