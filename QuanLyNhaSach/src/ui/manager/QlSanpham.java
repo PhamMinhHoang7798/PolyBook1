@@ -288,7 +288,7 @@ public class QlSanpham extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addComponent(jLabel1)
                 .addGap(26, 26, 26)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -317,60 +317,61 @@ public class QlSanpham extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMaSanPhamActionPerformed
 
     private void txtLoaiSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoaiSanPhamActionPerformed
-        
+
     }//GEN-LAST:event_txtLoaiSanPhamActionPerformed
 
     private void txtSoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoLuongActionPerformed
-        
+
     }//GEN-LAST:event_txtSoLuongActionPerformed
 
     private void txtTenSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenSanPhamActionPerformed
-        
+
     }//GEN-LAST:event_txtTenSanPhamActionPerformed
 
     private void txtGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiaActionPerformed
-        
+
     }//GEN-LAST:event_txtGiaActionPerformed
 
     private void btnTaoMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoMoiActionPerformed
-        
+
         insert();
     }//GEN-LAST:event_btnTaoMoiActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        
+
         update();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        
+
         delete();
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        
+
         clearForm();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void tbldanhsachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbldanhsachMouseClicked
-        
+
         edit();
     }//GEN-LAST:event_tbldanhsachMouseClicked
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        
+
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void txtTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimActionPerformed
-        
+
     }//GEN-LAST:event_txtTimActionPerformed
 
     private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
-        
+
         loadTable(txtTim.getText().trim());
     }//GEN-LAST:event_txtTimKeyReleased
     // 1. Khai báo DAO để dùng chung cho cả class
     dao.SanPhamDAO dao = new dao.impl.SanPhamDAOImpl();
+
     // 2. Nâng cấp loadTable: Hỗ trợ tìm kiếm
     void loadTable(String keyword) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tbldanhsach.getModel();
@@ -383,15 +384,13 @@ public class QlSanpham extends javax.swing.JFrame {
                 list = dao.selectAll();
             } else {
                 list = dao.selectByKeyword(keyword);
-            } 
+            }
             for (entity.SanPham sp : list) {
-                // THỨ TỰ PHẢI KHỚP VỚI CỘT TRÊN GIAO DIỆN:
-                // Mã SP (0) -> Mã Loại (1) -> Tên SP (2) -> Giá (3) -> Số Lượng (4)
                 model.addRow(new Object[]{
                     sp.getMaSanPham(),
                     sp.getMaLoai(),
                     sp.getTenSanPham(),
-                    sp.getDonGia(),
+                    util.XHelper.formatMoney(sp.getDonGia()), // Sử dụng Helper
                     sp.getSoLuongTon()
                 });
             }

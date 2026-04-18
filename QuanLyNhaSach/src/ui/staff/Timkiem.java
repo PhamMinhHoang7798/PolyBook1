@@ -10,13 +10,13 @@ import javax.swing.table.DefaultTableModel;
 public class Timkiem extends javax.swing.JFrame {
 
     dao.impl.KhachHangDAOImpl khDAO = new dao.impl.KhachHangDAOImpl();
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Timkiem.class.getName());
 
     public Timkiem() {
         initComponents();
-        setLocationRelativeTo(null); 
-        
+        setLocationRelativeTo(null);
+
         javax.swing.Timer timerHD = new javax.swing.Timer(300, e -> {
             fillTableHoaDon(txtMaHoaDon.getText().trim());
         });
@@ -65,9 +65,15 @@ public class Timkiem extends javax.swing.JFrame {
                 + "JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKhachHang "
                 + "WHERE hd.MaHoaDon LIKE ? OR kh.TenKhachHang LIKE ?";
         try {
-            ResultSet rs = XJdbc.query(sql, "%" + keyword + "%", "%" + keyword + "%");
+            ResultSet rs = util.XJdbc.query(sql, "%" + keyword + "%", "%" + keyword + "%");
             while (rs.next()) {
-                model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5)});
+                model.addRow(new Object[]{
+                    rs.getString(1), // MaHoaDon
+                    rs.getString(2), // TenKhachHang
+                    rs.getString(3), // TenSanPham
+                    rs.getInt(4), // SoLuong
+                    util.XHelper.formatMoney(rs.getDouble(5)) // Gọi Helper để format Giá
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,8 +86,14 @@ public class Timkiem extends javax.swing.JFrame {
         try {
             SanPhamDAOImpl dao = new SanPhamDAOImpl();
             List<SanPham> list = dao.selectByKeyword(keyword);
-            for (SanPham sp : list) {
-                model.addRow(new Object[]{sp.getMaSanPham(), sp.getTenSanPham(), sp.getSoLuongTon(), sp.getDonGia()});
+            for (entity.SanPham sp : list) {
+                model.addRow(new Object[]{
+                    sp.getMaSanPham(),
+                    sp.getMaLoai(),
+                    sp.getTenSanPham(),
+                    util.XHelper.formatMoney(sp.getDonGia()),
+                    sp.getSoLuongTon()
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,8 +111,8 @@ public class Timkiem extends javax.swing.JFrame {
                 model.addRow(new Object[]{
                     kh.getSoDienThoai(),
                     kh.getTenKhachHang(),
-                    kh.getLoaiThe(), 
-                    kh.getDiemTichLuy() 
+                    kh.getLoaiThe(),
+                    kh.getDiemTichLuy()
                 });
             }
         } catch (Exception e) {

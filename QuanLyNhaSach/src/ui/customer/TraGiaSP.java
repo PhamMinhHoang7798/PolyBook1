@@ -35,7 +35,7 @@ public class TraGiaSP extends javax.swing.JFrame {
                 modelSanPham.addRow(new Object[]{
                     sp.getMaSanPham(),
                     sp.getTenSanPham(),
-                    String.format("%,.0f VNĐ", sp.getDonGia())
+                    util.XHelper.formatMoney(sp.getDonGia()),
                 });
             }
         } catch (Exception e) {
