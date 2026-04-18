@@ -184,6 +184,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         btnLogOut = new javax.swing.JButton();
         btnLogOut.setMargin(new java.awt.Insets(10, 10, 10, 10));
         lblAvatar = new javax.swing.JLabel();
+        btnTimKiem = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -287,6 +288,19 @@ public class MenuQuanLy extends javax.swing.JFrame {
 
         lblAvatar.setPreferredSize(new java.awt.Dimension(50, 50));
 
+        btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiem.setText("Tìm kiếm");
+        btnTimKiem.setBorderPainted(false);
+        btnTimKiem.setContentAreaFilled(false);
+        btnTimKiem.setFocusPainted(false);
+        btnTimKiem.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -308,8 +322,13 @@ public class MenuQuanLy extends javax.swing.JFrame {
                                 .addComponent(jLabel1)))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(lblAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(lblAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnTimKiem)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -331,7 +350,9 @@ public class MenuQuanLy extends javax.swing.JFrame {
                 .addComponent(btnQuanLyNguoiDung)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuanLyDoanhThu)
-                .addGap(63, 63, 63)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnTimKiem)
+                .addGap(24, 24, 24)
                 .addComponent(btnLogOut)
                 .addContainerGap(68, Short.MAX_VALUE))
         );
@@ -493,6 +514,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
     private javax.swing.JButton btnQuanLySP;
     private javax.swing.JButton btnQuanLyTheThanhVien;
     private javax.swing.JButton btnQuanlyLoaiSP;
+    private javax.swing.JButton btnTimKiem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
