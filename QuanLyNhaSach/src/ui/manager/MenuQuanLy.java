@@ -204,7 +204,6 @@ private void loadDefaultAdminIcon() {
 
         btnQuanlyLoaiSP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanlyLoaiSP.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanlyLoaiSP.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Card file.png")); // NOI18N
         btnQuanlyLoaiSP.setText("Quản lý loại sản phẩm");
         btnQuanlyLoaiSP.setBorderPainted(false);
         btnQuanlyLoaiSP.setContentAreaFilled(false);
@@ -218,7 +217,6 @@ private void loadDefaultAdminIcon() {
 
         btnQuanLySP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLySP.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanLySP.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Label.png")); // NOI18N
         btnQuanLySP.setText("Quản lý sản phẩm");
         btnQuanLySP.setBorderPainted(false);
         btnQuanLySP.setContentAreaFilled(false);
@@ -232,7 +230,6 @@ private void loadDefaultAdminIcon() {
 
         btnQuanLyTheThanhVien.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLyTheThanhVien.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanLyTheThanhVien.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\identity-card.png")); // NOI18N
         btnQuanLyTheThanhVien.setText("Quản lý thẻ thành viên");
         btnQuanLyTheThanhVien.setBorderPainted(false);
         btnQuanLyTheThanhVien.setContentAreaFilled(false);
@@ -246,7 +243,6 @@ private void loadDefaultAdminIcon() {
 
         btnQuanLyPhieuBanHang.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLyPhieuBanHang.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanLyPhieuBanHang.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\5c53652f-2ec3-4efb-98b2-a214cd2b6688.png")); // NOI18N
         btnQuanLyPhieuBanHang.setText("Quản lý phiếu bán hàng");
         btnQuanLyPhieuBanHang.setBorderPainted(false);
         btnQuanLyPhieuBanHang.setContentAreaFilled(false);
@@ -260,7 +256,6 @@ private void loadDefaultAdminIcon() {
 
         btnQuanLyNguoiDung.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLyNguoiDung.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanLyNguoiDung.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Unknown person.png")); // NOI18N
         btnQuanLyNguoiDung.setText("Quản lý người dùng");
         btnQuanLyNguoiDung.setBorderPainted(false);
         btnQuanLyNguoiDung.setContentAreaFilled(false);
@@ -274,7 +269,6 @@ private void loadDefaultAdminIcon() {
 
         btnQuanLyDoanhThu.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnQuanLyDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
-        btnQuanLyDoanhThu.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\Statistics.png")); // NOI18N
         btnQuanLyDoanhThu.setText("Quản lý doanh thu");
         btnQuanLyDoanhThu.setBorderPainted(false);
         btnQuanLyDoanhThu.setContentAreaFilled(false);
@@ -288,7 +282,6 @@ private void loadDefaultAdminIcon() {
 
         btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnLogOut.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogOut.setIcon(new javax.swing.ImageIcon("C:\\Users\\nguye\\OneDrive\\Desktop\\GitDestop\\PolyBook1\\QuanLyNhaSach\\src\\icon\\out.png")); // NOI18N
         btnLogOut.setText("Đăng xuất");
         btnLogOut.setBorderPainted(false);
         btnLogOut.setContentAreaFilled(false);
@@ -346,9 +339,9 @@ private void loadDefaultAdminIcon() {
                 .addComponent(btnQuanLyNguoiDung)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnQuanLyDoanhThu)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addGap(63, 63, 63)
                 .addComponent(btnLogOut)
-                .addGap(31, 31, 31))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -373,10 +366,8 @@ private void loadDefaultAdminIcon() {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
