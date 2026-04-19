@@ -425,7 +425,7 @@ public class ThanhToan extends javax.swing.JFrame {
         bill.append("        HÓA ĐƠN TỰ PHỤC VỤ (SELF-CHECKOUT)\n");
         bill.append("        NHÀ SÁCH POLY BOOK - KIOSK #01\n");
         bill.append("------------------------------------------\n");
-        bill.append(String.format("%-18s %-3s %-20s\n", "Tên SP", "SL", "Thành tiền"));
+        bill.append(String.format("%-18s      %-3s     %-20s\n", "Tên SP", "SL", "Thành tiền"));
 
         double tong = 0;
         for (int i = 0; i < tblGioHang.getRowCount(); i++) {
@@ -436,10 +436,10 @@ public class ThanhToan extends javax.swing.JFrame {
             double tt = Double.parseDouble(ttStr);
             tong += tt;
 
-            if (ten.length() > 15) {
-                ten = ten.substring(0, 15) + "..";
-            }
-            bill.append(String.format("%-18s %-3s %,.0f VNĐ\n", ten, sl, tt));
+//            if (ten.length() > 15) {
+//                ten = ten.substring(0, 15) + "..";
+//            }
+            bill.append(String.format("%-18s     %-3s    %,.0f VNĐ\n", ten, sl, tt));
         }
 
         bill.append("------------------------------------------\n");
