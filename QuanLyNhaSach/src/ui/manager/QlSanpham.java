@@ -3,6 +3,7 @@ package ui.manager;
 public class QlSanpham extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QlSanpham.class.getName());
+    dao.SanPhamDAO dao = new dao.impl.SanPhamDAOImpl();// Đối tượng thao tác với DB
 
     public QlSanpham() {
         initComponents();
@@ -373,10 +374,8 @@ public class QlSanpham extends javax.swing.JFrame {
 
         loadTable(txtTim.getText().trim());
     }//GEN-LAST:event_txtTimKeyReleased
-    // 1. Khai báo DAO để dùng chung cho cả class
-    dao.SanPhamDAO dao = new dao.impl.SanPhamDAOImpl();
 
-    // 2. Nâng cấp loadTable: Hỗ trợ tìm kiếm
+    // Nâng cấp loadTable: Hỗ trợ tìm kiếm
     void loadTable(String keyword) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tbldanhsach.getModel();
         model.setRowCount(0); // Xóa trắng dữ liệu cũ

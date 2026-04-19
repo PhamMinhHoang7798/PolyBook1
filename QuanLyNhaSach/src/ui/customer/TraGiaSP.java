@@ -4,7 +4,7 @@ public class TraGiaSP extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TraGiaSP.class.getName());
     // 1. Khai báo DAO và Model
-    private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
+    private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();// Đối tượng thao tác với DB
     private javax.swing.table.DefaultTableModel modelSanPham;
 
     public TraGiaSP() {

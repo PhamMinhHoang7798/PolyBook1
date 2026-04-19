@@ -7,15 +7,18 @@ import util.XDialog;
 
 public class QlLoaiSP extends javax.swing.JFrame {
 
+    // --- KHAI BÁO CÁC BIẾN VÀ ĐỐI TƯỢNG DAO ---
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QlLoaiSP.class.getName());
+    LoaiSPDAOImpl dao = new LoaiSPDAOImpl();// Đối tượng thao tác với DB
 
+    // --- HÀM KHỞI TẠO VÀ CẤU HÌNH BAN ĐẦU ---
     public QlLoaiSP() {
         initComponents();
         setLocationRelativeTo(null);
         loadTable("");
     }
 
-
+    // --- XỬ LÝ ĐỔ DỮ LIỆU LÊN BẢNG (DATA LOADING) ---
     void loadTable(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblLoaiSanPham.getModel();
         model.setRowCount(0);
@@ -276,41 +279,41 @@ public class QlLoaiSP extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtMaLoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaLoaiActionPerformed
-        
+
     }//GEN-LAST:event_txtMaLoaiActionPerformed
 
     private void txtTenloaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenloaiActionPerformed
-        
+
     }//GEN-LAST:event_txtTenloaiActionPerformed
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        
+
         String keyword = txtNhapMaLoai.getText().trim();
-        loadTable(keyword); 
+        loadTable(keyword);
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void btnTaoMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoMoiActionPerformed
-        
+
         insert();
     }//GEN-LAST:event_btnTaoMoiActionPerformed
 
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
-        
+
         update();
     }//GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        
+
         delete();
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnNhapMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhapMoiActionPerformed
-        
+
         clearForm();
     }//GEN-LAST:event_btnNhapMoiActionPerformed
 
     private void tblLoaiSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiSanPhamMouseClicked
-        
+
         tblLoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 edit();
@@ -320,12 +323,10 @@ public class QlLoaiSP extends javax.swing.JFrame {
     }//GEN-LAST:event_tblLoaiSanPhamMouseClicked
 
     private void txtNhapMaLoaiKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNhapMaLoaiKeyReleased
-        
+
         String keyword = txtNhapMaLoai.getText().trim();
         loadTable(keyword);
     }//GEN-LAST:event_txtNhapMaLoaiKeyReleased
-
-    LoaiSPDAOImpl dao = new LoaiSPDAOImpl();
 
     public static void main(String args[]) {
         try {
@@ -343,8 +344,8 @@ public class QlLoaiSP extends javax.swing.JFrame {
 
     LoaiSP getForm() {
         LoaiSP l = new LoaiSP();
-        l.setMaLoai(txtMaLoai.getText()); 
-        l.setTenLoai(txtTenloai.getText()); 
+        l.setMaLoai(txtMaLoai.getText());
+        l.setTenLoai(txtTenloai.getText());
         return l;
     }
 
@@ -372,7 +373,7 @@ public class QlLoaiSP extends javax.swing.JFrame {
         LoaiSP checkTonTai = dao.findById(ma);
         if (checkTonTai == null) {
             XDialog.alert(this, "Chưa có sản phẩm trong danh sách để chỉnh sửa!");
-            return; 
+            return;
         }
         try {
             dao.update(getForm());
@@ -403,7 +404,7 @@ public class QlLoaiSP extends javax.swing.JFrame {
             try {
                 dao.delete(ma);
                 loadTable("");
-                clearForm(); 
+                clearForm();
                 XDialog.alert(this, "Xóa thành công!");
             } catch (Exception e) {
                 XDialog.alert(this, "Lỗi khi xóa: " + e.getMessage());

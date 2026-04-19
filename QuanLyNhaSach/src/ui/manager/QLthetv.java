@@ -1,25 +1,29 @@
 package ui.manager;
 
+// --- KHAI BÁO LỚP VÀ CÁC ĐỐI TƯỢNG HỖ TRỢ ---
 public class QLthetv extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(QLthetv.class.getName());
+    dao.impl.KhachHangDAOImpl dao = new dao.impl.KhachHangDAOImpl(); // Đối tượng thao tác với DB
 
+    // --- HÀM KHỞI TẠO VÀ CẤU HÌNH BAN ĐẦU ---
     public QLthetv() {
-    initComponents();
-    txtLoaiThe.setEditable(false);
-    txtLoaiThe.setFocusable(false);
-    txtLoaiThe.setBackground(new java.awt.Color(240, 240, 240));
+        initComponents();
+        // Thiết lập ô Loại thẻ chỉ để hiển thị, không cho nhập tay
+        txtLoaiThe.setEditable(false);
+        txtLoaiThe.setFocusable(false);
+        txtLoaiThe.setBackground(new java.awt.Color(240, 240, 240));
 
-    clearTable();   
-    loadTable("");
+        clearTable();
+        loadTable(""); // Hiển thị toàn bộ danh sách khi mở form
 
-    TxtDiem.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyReleased(java.awt.event.KeyEvent evt) {
-            updateLoaiThe();
-        }
-    });
-}
-
+        // Lắng nghe sự kiện gõ phím ở ô Điểm để tự động cập nhật Loại thẻ
+        TxtDiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                updateLoaiThe(); // Tự động tính toán hạng thẻ khi điểm thay đổi
+            }
+        });
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -91,7 +95,7 @@ public class QLthetv extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(63, Short.MAX_VALUE)
+                .addContainerGap(75, Short.MAX_VALUE)
                 .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 506, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -106,7 +110,7 @@ public class QLthetv extends javax.swing.JFrame {
                     .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTim, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -221,7 +225,7 @@ public class QLthetv extends javax.swing.JFrame {
                                         .addComponent(jLabel7)
                                         .addGap(156, 156, 156))
                                     .addComponent(txtLoaiThe))))))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,7 +252,7 @@ public class QLthetv extends javax.swing.JFrame {
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Biểu mẫu", jPanel3);
@@ -264,19 +268,16 @@ public class QLthetv extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel1)
-                .addGap(26, 26, 26)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -297,249 +298,251 @@ public class QLthetv extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtSoDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoDTActionPerformed
-        
+
     }//GEN-LAST:event_txtSoDTActionPerformed
 
     private void txtTenKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenKHActionPerformed
-        
+
     }//GEN-LAST:event_txtTenKHActionPerformed
 
     private void txtLoaiTheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoaiTheActionPerformed
-        
+
     }//GEN-LAST:event_txtLoaiTheActionPerformed
 
     private void TxtDiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtDiemActionPerformed
-        
+
     }//GEN-LAST:event_TxtDiemActionPerformed
 
     private void tblDanhSachMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachMouseClicked
-        
+
         edit();
     }//GEN-LAST:event_tblDanhSachMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        
+
         insert();
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        
+
         update();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        
+
         delete();
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        
+
         clearForm();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
-        
+
         loadTable(txtTim.getText().trim());
     }//GEN-LAST:event_txtTimKeyReleased
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-        
+
         loadTable(txtTim.getText().trim());
     }//GEN-LAST:event_btnTimActionPerformed
 
-dao.impl.KhachHangDAOImpl dao = new dao.impl.KhachHangDAOImpl();
 
-String currentMaKH = "";
+    String currentMaKH = "";
 
-void clearTable() {
-    javax.swing.table.DefaultTableModel model =
-        (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
+    // --- XỬ LÝ ĐỔ DỮ LIỆU LÊN BẢNG (LOAD DATA) ---
+    void clearTable() {// Xóa trắng các dòng trên bảng giao diện
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
 
-    model.setRowCount(0);
-}
-
-void loadTable(String keyword) {
-    javax.swing.table.DefaultTableModel model =
-            (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
-
-    model.setColumnIdentifiers(new Object[]{
-        "Mã KH", "Tên Khách Hàng", "SĐT", "Loại thẻ", "Điểm"
-    });
-
-    model.setRowCount(0);
-
-    try {
-        java.util.List<entity.KhachHang> list;
-
-        if (keyword == null || keyword.trim().isEmpty()) {
-            list = dao.selectAll();
-        } else {
-            list = dao.selectByKeyword(keyword);
-        }
-
-        for (entity.KhachHang kh : list) {
-            model.addRow(new Object[]{
-                kh.getMaKhachHang(),
-                kh.getTenKhachHang(),
-                kh.getSoDienThoai(),
-                kh.getLoaiThe(),
-                kh.getDiemTichLuy()
-            });
-        }
-
-    } catch (Exception e) {
-        util.XDialog.alert(this, "Lỗi load bảng: " + e.getMessage());
-    }
-}
-void updateLoaiThe() {
-    try {
-        int diem = Integer.parseInt(TxtDiem.getText().trim());
-
-        if (diem < 100) {
-            txtLoaiThe.setText("Đồng");
-        } else if (diem < 500) {
-            txtLoaiThe.setText("Bạc");
-        } else if (diem < 800) {
-            txtLoaiThe.setText("Vàng");
-        } else {
-            txtLoaiThe.setText("Kim Cương");
-        }
-
-    } catch (Exception e) {
-        txtLoaiThe.setText("");
-    }
-}
-
-entity.KhachHang getForm() {
-    entity.KhachHang kh = new entity.KhachHang();
-
-    if (currentMaKH.isEmpty()) {
-        kh.setMaKhachHang("KH" + System.currentTimeMillis() % 100000);
-    } else {
-        kh.setMaKhachHang(currentMaKH);
+        model.setRowCount(0);
     }
 
-    kh.setTenKhachHang(txtTenKH.getText());
-    kh.setSoDienThoai(txtSoDT.getText());
+    void loadTable(String keyword) {
+        javax.swing.table.DefaultTableModel model
+                = (javax.swing.table.DefaultTableModel) tblDanhSach.getModel();
 
-    updateLoaiThe();
-    kh.setLoaiThe(txtLoaiThe.getText());
+        model.setColumnIdentifiers(new Object[]{
+            "Mã KH", "Tên Khách Hàng", "SĐT", "Loại thẻ", "Điểm"
+        });
 
-    try {
-        kh.setDiemTichLuy(Integer.parseInt(TxtDiem.getText()));
-    } catch (Exception e) {
-        kh.setDiemTichLuy(0);
-    }
+        model.setRowCount(0);
 
-    return kh;
-}
-
-void clearForm() {
-    txtTenKH.setText("");
-    txtSoDT.setText("");
-    txtLoaiThe.setText("");
-    TxtDiem.setText("");
-    currentMaKH = "";
-}
-
-void insert() {
-    if (txtTenKH.getText().isEmpty() || txtSoDT.getText().isEmpty()) {
-        util.XDialog.alert(this, "Nhập thiếu dữ liệu!");
-        return;
-    }
-
-    try {
-        dao.insert(getForm());
-        loadTable("");
-        clearForm();
-        util.XDialog.alert(this, "Thêm thành công!");
-    } catch (Exception e) {
-        util.XDialog.alert(this, "Lỗi thêm: " + e.getMessage());
-    }
-}
-
-void update() {
-    if (currentMaKH.isEmpty()) {
-        util.XDialog.alert(this, "Chọn khách hàng trước!");
-        return;
-    }
-
-    try {
-        dao.update(getForm());
-        loadTable("");
-        util.XDialog.alert(this, "Cập nhật thành công!");
-    } catch (Exception e) {
-        util.XDialog.alert(this, "Lỗi update: " + e.getMessage());
-    }
-}
-
-void delete() {
-    if (currentMaKH.isEmpty()) {
-        util.XDialog.alert(this, "Chọn khách hàng cần xóa!");
-        return;
-    }
-
-    if (util.XDialog.confirm(this, "Xóa khách hàng?")) {
         try {
-            dao.delete(currentMaKH);
+            java.util.List<entity.KhachHang> list;
+
+            if (keyword == null || keyword.trim().isEmpty()) {
+                list = dao.selectAll();
+            } else {
+                list = dao.selectByKeyword(keyword);
+            }
+
+            for (entity.KhachHang kh : list) {
+                model.addRow(new Object[]{
+                    kh.getMaKhachHang(),
+                    kh.getTenKhachHang(),
+                    kh.getSoDienThoai(),
+                    kh.getLoaiThe(),
+                    kh.getDiemTichLuy()
+                });
+            }
+
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi load bảng: " + e.getMessage());
+        }
+    }
+    // --- XỬ LÝ LOGIC CẬP NHẬT TỰ ĐỘNG ---
+    void updateLoaiThe() {
+        try {
+            int diem = Integer.parseInt(TxtDiem.getText().trim());
+
+            if (diem < 100) {
+                txtLoaiThe.setText("Đồng");
+            } else if (diem < 500) {
+                txtLoaiThe.setText("Bạc");
+            } else if (diem < 800) {
+                txtLoaiThe.setText("Vàng");
+            } else {
+                txtLoaiThe.setText("Kim Cương");
+            }
+
+        } catch (Exception e) {
+            txtLoaiThe.setText("");
+        }
+    }
+
+    entity.KhachHang getForm() {
+        entity.KhachHang kh = new entity.KhachHang();
+
+        if (currentMaKH.isEmpty()) {
+            kh.setMaKhachHang("KH" + System.currentTimeMillis() % 100000);
+        } else {
+            kh.setMaKhachHang(currentMaKH);
+        }
+
+        kh.setTenKhachHang(txtTenKH.getText());
+        kh.setSoDienThoai(txtSoDT.getText());
+
+        updateLoaiThe();
+        kh.setLoaiThe(txtLoaiThe.getText());
+
+        try {
+            kh.setDiemTichLuy(Integer.parseInt(TxtDiem.getText()));
+        } catch (Exception e) {
+            kh.setDiemTichLuy(0);
+        }
+
+        return kh;
+    }
+
+    void clearForm() {
+        txtTenKH.setText("");
+        txtSoDT.setText("");
+        txtLoaiThe.setText("");
+        TxtDiem.setText("");
+        currentMaKH = "";
+    }
+
+    void insert() {
+        if (txtTenKH.getText().isEmpty() || txtSoDT.getText().isEmpty()) {
+            util.XDialog.alert(this, "Nhập thiếu dữ liệu!");
+            return;
+        }
+
+        try {
+            dao.insert(getForm());
             loadTable("");
             clearForm();
-            util.XDialog.alert(this, "Xóa thành công!");
+            util.XDialog.alert(this, "Thêm thành công!");
         } catch (Exception e) {
-            util.XDialog.alert(this, "Lỗi xóa: " + e.getMessage());
+            util.XDialog.alert(this, "Lỗi thêm: " + e.getMessage());
         }
     }
-}
-void edit() {
-    int row = tblDanhSach.getSelectedRow();
 
-    if (row >= 0) {
-        currentMaKH = tblDanhSach.getValueAt(row, 0).toString();
+    void update() {
+        if (currentMaKH.isEmpty()) {
+            util.XDialog.alert(this, "Chọn khách hàng trước!");
+            return;
+        }
 
-        txtTenKH.setText(
-        tblDanhSach.getValueAt(row, 1) != null
-        ? tblDanhSach.getValueAt(row, 1).toString()
-        : ""
-    );
-
-    txtSoDT.setText(
-        tblDanhSach.getValueAt(row, 2) != null
-        ? tblDanhSach.getValueAt(row, 2).toString()
-        : ""
-    );
-
-    txtLoaiThe.setText(
-        tblDanhSach.getValueAt(row, 3) != null
-        ? tblDanhSach.getValueAt(row, 3).toString()
-        : ""
-    );
-
-    TxtDiem.setText(
-        tblDanhSach.getValueAt(row, 4) != null
-        ? tblDanhSach.getValueAt(row, 4).toString()
-        : ""
-    );
-
-        jTabbedPane1.setSelectedIndex(1);
+        try {
+            dao.update(getForm());
+            loadTable("");
+            util.XDialog.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            util.XDialog.alert(this, "Lỗi update: " + e.getMessage());
+        }
     }
-}
 
-public static void main(String args[]) {
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
+    void delete() {
+        if (currentMaKH.isEmpty()) {
+            util.XDialog.alert(this, "Chọn khách hàng cần xóa!");
+            return;
+        }
+
+        if (util.XDialog.confirm(this, "Xóa khách hàng?")) {
+            try {
+                dao.delete(currentMaKH);
+                loadTable("");
+                clearForm();
+                util.XDialog.alert(this, "Xóa thành công!");
+            } catch (Exception e) {
+                util.XDialog.alert(this, "Lỗi xóa: " + e.getMessage());
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
     }
 
-    java.awt.EventQueue.invokeLater(() -> {
-        new QLthetv().setVisible(true);
-    });
-}
+    void edit() {
+        int row = tblDanhSach.getSelectedRow();
+
+        if (row >= 0) {
+            currentMaKH = tblDanhSach.getValueAt(row, 0).toString();
+
+            txtTenKH.setText(
+                    tblDanhSach.getValueAt(row, 1) != null
+                    ? tblDanhSach.getValueAt(row, 1).toString()
+                    : ""
+            );
+
+            txtSoDT.setText(
+                    tblDanhSach.getValueAt(row, 2) != null
+                    ? tblDanhSach.getValueAt(row, 2).toString()
+                    : ""
+            );
+
+            txtLoaiThe.setText(
+                    tblDanhSach.getValueAt(row, 3) != null
+                    ? tblDanhSach.getValueAt(row, 3).toString()
+                    : ""
+            );
+
+            TxtDiem.setText(
+                    tblDanhSach.getValueAt(row, 4) != null
+                    ? tblDanhSach.getValueAt(row, 4).toString()
+                    : ""
+            );
+
+            jTabbedPane1.setSelectedIndex(1);
+        }
+    }
+
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        java.awt.EventQueue.invokeLater(() -> {
+            new QLthetv().setVisible(true);
+        });
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

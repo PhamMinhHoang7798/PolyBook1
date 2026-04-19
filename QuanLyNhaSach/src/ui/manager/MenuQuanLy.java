@@ -22,9 +22,11 @@ import ui.staff.Timkiem;
 
 public class MenuQuanLy extends javax.swing.JFrame {
 
+    // --- KHAI BÁO BIẾN VÀ HẰNG SỐ ---
     // Kích thước Avatar cố định cho đồng nhất
     private final int AVATAR_SIZE = 110;
 
+    // --- HÀM KHỞI TẠO VÀ CẤU HÌNH BAN ĐẦU ---
     public MenuQuanLy() {
         initComponents();
         setupAvatar(); // Khởi tạo các tùy chỉnh cho Avatar
@@ -33,6 +35,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         jPanel1.setMinimumSize(new java.awt.Dimension(250, 700));
     }
 
+    // --- THIẾT LẬP GIAO DIỆN AVATAR ---
     private void setupAvatar() {
         lblAvatar.setText("");
         lblAvatar.setHorizontalAlignment(SwingConstants.CENTER);
@@ -98,7 +101,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
                     // 3. Cập nhật tên file ảnh vào đối tượng và Database
                     currentUser.setHinhAnh(file.getName());
 
-                    dao.impl.UserDAOImpl dao = new dao.impl.UserDAOImpl();
+                    dao.impl.UserDAOImpl dao = new dao.impl.UserDAOImpl(); // Đối tượng thao tác với DB
                     dao.update(currentUser); // Lưu vào SQL Server
 
                     // 4. Vẽ lại ảnh tròn ngay lập tức trên Menu
@@ -148,6 +151,7 @@ public class MenuQuanLy extends javax.swing.JFrame {
         }
     }
 
+    // --- ĐIỀU CHỈNH CHUYỂN ĐỔI CÁC PANEL CHỨC NĂNG ---    
     private void showPanel(javax.swing.JFrame form) {
         jPanel2.removeAll();
         jPanel2.setLayout(new BorderLayout());
@@ -406,7 +410,6 @@ public class MenuQuanLy extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnQuanLyDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuanLyDoanhThuActionPerformed
-
         if (util.XAuth.isManager()) {
             showPanel(new QLDoanhThu());
         } else {

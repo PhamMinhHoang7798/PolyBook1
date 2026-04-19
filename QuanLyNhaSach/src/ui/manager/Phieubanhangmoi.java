@@ -516,7 +516,7 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
             return; // Nếu người dùng bấm Hủy hoặc không nhập gì thì thoát
         }
         // Tìm sản phẩm từ Database thông qua DAO
-        dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
+        dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();// Đối tượng thao tác với DB
         entity.SanPham sp = spDAO.selectById(maSP.trim());
 
         if (sp != null) {
@@ -637,11 +637,8 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
             }
         }
 
-        // 3. Tiến hành xử lý lưu Database & Tích điểm nếu vượt qua các bước kiểm tra trên
+        // --- PHẦN LOGIC LƯU HÓA ĐƠN ---
         try {
-            // --- PHẦN LOGIC LƯU HÓA ĐƠN ---
-            // (Chèn lệnh dao.insert(hd) của ông ở đây nếu cần)
-
             // --- LOGIC TÍCH ĐIỂM THÀNH VIÊN ---
             String sdt = jTextField2.getText().trim();
             if (!sdt.isEmpty()) {
@@ -686,7 +683,6 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
         txtMaVoucher.setText("");
 
         jLabel12.setText("0 VNĐ");
-        // Đảm bảo không xóa nhầm tiêu đề jLabel16 như nãy nữa
 
         btnInHoaĐon.setVisible(false);
         util.XDialog.alert(this, "Đã làm mới hệ thống.");
@@ -734,13 +730,14 @@ public class Phieubanhangmoi extends javax.swing.JFrame {
     private void txtTienKhachDuaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTienKhachDuaKeyReleased
 
         try {
+            //hiển thị o
             if (txtTienKhachDua.getText().trim().isEmpty()) {
                 jLabel15.setText("0 VNĐ");
                 return;
             }
             double tienKhachDua = Double.parseDouble(txtTienKhachDua.getText());
             double tienThoi = tienKhachDua - tongTien;
-            if (tienThoi < 0) {
+            if (tienThoi < 0) { //nếu số tiền đưa nhỏ hơn tổng tiền thì khách đưa thiếu
                 jLabel15.setText("Khách đưa thiếu!");
             } else {
                 jLabel15.setText(String.format("%,.0f VNĐ", tienThoi));

@@ -6,28 +6,33 @@ import java.util.List;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 
+// Lớp Timkiem: Cung cấp giao diện tra cứu thông tin đa năng cho nhân viên
 public class Timkiem extends javax.swing.JFrame {
 
+    // Khởi tạo đối tượng DAO để làm việc với dữ liệu khách hàng
     dao.impl.KhachHangDAOImpl khDAO = new dao.impl.KhachHangDAOImpl();
 
+    // Logger dùng để ghi lại lịch sử hoạt động hoặc lỗi của form này
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Timkiem.class.getName());
 
     public Timkiem() {
-        initComponents();
-        setLocationRelativeTo(null);// căn giữa màn hình
+        initComponents(); // Khởi tạo giao diện Swing
+        setLocationRelativeTo(null); // Hiển thị cửa sổ ở chính giữa màn hình
 
+        // Thiết lập Timer cho việc tìm kiếm Hóa đơn: Tự động tìm sau 300ms khi ngừng gõ phím
         javax.swing.Timer timerHD = new javax.swing.Timer(300, e -> {
-            fillTableHoaDon(txtMaHoaDon.getText().trim());// gọi tìm kiếm hóa đơn sau 300ms
+            fillTableHoaDon(txtMaHoaDon.getText().trim()); // Thực hiện đổ dữ liệu hóa đơn
         });
-        timerHD.setRepeats(false);// chỉ chạy 1 lần
+        timerHD.setRepeats(false); // Đảm bảo timer chỉ chạy một lần sau mỗi lần reset
         txtMaHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                timerHD.restart();// mỗi lần gõ → reset timer (tránh gọi liên tục)
+                timerHD.restart(); // Khi người dùng gõ phím, khởi động lại timer (tránh truy vấn database liên tục)
             }
         });
 
+        // Thiết lập Timer cho việc tìm kiếm Sản phẩm (tương tự như Hóa đơn)
         javax.swing.Timer timerSP = new javax.swing.Timer(300, e -> {
-            fillTableSanPham(txtMaSanPham.getText().trim());// tìm khách hàng
+            fillTableSanPham(txtMaSanPham.getText().trim());
         });
         timerSP.setRepeats(false);
         txtMaSanPham.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -36,6 +41,7 @@ public class Timkiem extends javax.swing.JFrame {
             }
         });
 
+        // Thiết lập Timer cho việc tìm kiếm Thành viên/Khách hàng
         javax.swing.Timer timerTV = new javax.swing.Timer(300, e -> {
             fillTableThanhVien(txtTim.getText().trim());
         });
@@ -45,53 +51,60 @@ public class Timkiem extends javax.swing.JFrame {
                 timerTV.restart();
             }
         });
-        // load dữ liệu ban đầu
+
+        // Load toàn bộ dữ liệu lên các bảng ngay khi vừa mở form
         fillTableHoaDon("");
         fillTableSanPham("");
         fillTableThanhVien("");
-        // khóa không cho sửa bảng
+
+        // Chế độ Read-only: Không cho phép người dùng sửa trực tiếp dữ liệu trên các bảng
         tblTimKiemHoaDon.setDefaultEditor(Object.class, null);
         tblTimKiemSanPham.setDefaultEditor(Object.class, null);
         tblDanhSach.setDefaultEditor(Object.class, null);
     }
 
-    void fillTableHoaDon(String keyword) { //đổ dữ liệu hóa đơn lên bảng
+    // Phương thức fillTableHoaDon: Truy vấn và hiển thị danh sách hóa đơn dựa trên từ khóa
+    void fillTableHoaDon(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblTimKiemHoaDon.getModel();
-        model.setRowCount(0); // xóa dữ liệu cũ
+        model.setRowCount(0); // Làm trống bảng trước khi nạp dữ liệu mới
+
+        // Câu lệnh SQL JOIN 4 bảng để lấy thông tin chi tiết hóa đơn
         String sql = "SELECT hd.MaHoaDon, kh.TenKhachHang, sp.TenSanPham, ct.SoLuong, ct.Gia "
                 + "FROM HoaDon hd JOIN HoaDonChiTiet ct ON hd.MaHoaDon = ct.MaHoaDon "
                 + "JOIN SanPham sp ON ct.MaSanPham = sp.MaSanPham "
                 + "JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKhachHang "
                 + "WHERE hd.MaHoaDon LIKE ? OR kh.TenKhachHang LIKE ?";
         try {
+            // Sử dụng XJdbc để thực thi câu lệnh truy vấn
             ResultSet rs = util.XJdbc.query(sql, "%" + keyword + "%", "%" + keyword + "%");
             while (rs.next()) {
                 model.addRow(new Object[]{
-                    rs.getString(1), // MaHoaDon
-                    rs.getString(2), // TenKhachHang
-                    rs.getString(3), // TenSanPham
-                    rs.getInt(4), // SoLuong
-                    util.XHelper.formatMoney(rs.getDouble(5)) // Gọi Helper để format Giá
+                    rs.getString(1), // Mã hóa đơn
+                    rs.getString(2), // Tên khách hàng
+                    rs.getString(3), // Tên sản phẩm
+                    rs.getInt(4), // Số lượng mua
+                    util.XHelper.formatMoney(rs.getDouble(5)) // Định dạng tiền tệ (VNĐ)
                 });
             }
         } catch (Exception e) {
-            e.printStackTrace();// log lỗi
+            e.printStackTrace(); // In lỗi ra console để kiểm tra
         }
     }
 
-    void fillTableSanPham(String keyword) {//đổ danh sách sản phẩm lên bảng
+    // Phương thức fillTableSanPham: Hiển thị danh sách sản phẩm tìm được
+    void fillTableSanPham(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblTimKiemSanPham.getModel();
-        model.setRowCount(0);// clear bảng
+        model.setRowCount(0); // Xóa dữ liệu cũ trên bảng
         try {
-            SanPhamDAOImpl dao = new SanPhamDAOImpl(); // DAO sản phẩm
-            List<SanPham> list = dao.selectByKeyword(keyword);// gọi DB
+            SanPhamDAOImpl dao = new SanPhamDAOImpl(); // Khởi tạo lớp xử lý sản phẩm
+            List<SanPham> list = dao.selectByKeyword(keyword); // Tìm sản phẩm theo từ khóa
             for (entity.SanPham sp : list) {
                 model.addRow(new Object[]{
                     sp.getMaSanPham(),
                     sp.getMaLoai(),
                     sp.getTenSanPham(),
-                    util.XHelper.formatMoney(sp.getDonGia()),
-                    sp.getSoLuongTon()
+                    util.XHelper.formatMoney(sp.getDonGia()), // Định dạng giá bán
+                    sp.getSoLuongTon() // Số lượng còn lại trong kho
                 });
             }
         } catch (Exception e) {
@@ -99,19 +112,21 @@ public class Timkiem extends javax.swing.JFrame {
         }
     }
 
-    void fillTableThanhVien(String keyword) {//đổ danh sách khách hàng
+    // Phương thức fillTableThanhVien: Hiển thị thông tin khách hàng/thành viên
+    void fillTableThanhVien(String keyword) {
         DefaultTableModel model = (DefaultTableModel) tblDanhSach.getModel();
-        model.setRowCount(0);// clear bảng
+        model.setRowCount(0); // Clear dữ liệu bảng
 
         try {
-            List<entity.KhachHang> list = khDAO.selectByKeyword(keyword); // gọi DAO khách hàng
+            // Lấy danh sách khách hàng từ cơ sở dữ liệu thông qua DAO
+            List<entity.KhachHang> list = khDAO.selectByKeyword(keyword);
 
             for (entity.KhachHang kh : list) {
                 model.addRow(new Object[]{
-                    kh.getSoDienThoai(),
+                    kh.getSoDienThoai(), // Số điện thoại (dùng làm ID)
                     kh.getTenKhachHang(),
-                    kh.getLoaiThe(),
-                    kh.getDiemTichLuy()
+                    kh.getLoaiThe(), // Hạng thẻ (Đồng, Bạc, Vàng...)
+                    kh.getDiemTichLuy() // Điểm tích lũy hiện tại
                 });
             }
         } catch (Exception e) {
@@ -433,19 +448,19 @@ public class Timkiem extends javax.swing.JFrame {
     private void btnTimKhackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKhackActionPerformed
         fillTableThanhVien(txtTim.getText().trim());
     }//GEN-LAST:event_btnTimKhackActionPerformed
-    // Hàm xác định hạng thẻ dựa trên điểm 
-        private String xacDinhLoaiThe(int diem) {
-            if (diem >= 200) {
-                return "Vàng";
-            } else if (diem >= 150) {
-                return "Bạc";
-            } else if (diem >= 100) {
-                return "Đồng";
-            } else {
-                return "Thường";
-            }
+    // Hàm phụ trợ: Xác định hạng thẻ dựa trên số điểm tích lũy của khách
+    private String xacDinhLoaiThe(int diem) {
+        if (diem >= 200) {
+            return "Vàng";
+        } else if (diem >= 150) {
+            return "Bạc";
+        } else if (diem >= 100) {
+            return "Đồng";
+        } else {
+            return "Thường";
         }
-        
+    }
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

@@ -1,24 +1,31 @@
 package ui.staff;
 
+//Lớp Welcome: Màn hình chào mừng (Splash Screen) của ứng dụng PolyBook. 
+//Mục đích: Hiển thị logo dự án và thanh tiến trình (progress bar) trước khi vào màn hình đăng nhập.
 public class Welcome extends javax.swing.JFrame {
 
+    // Logger để ghi lại các lỗi hệ thống nếu có trong quá trình khởi chạy
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Welcome.class.getName());
 
     public Welcome() {
-        initComponents();
-        //dòng này để đưa cửa sổ ra giữa màn hình
-        this.setLocationRelativeTo(null);
-        startLoading();
+        initComponents();// Khởi tạo các thành phần giao diện (nút, nhãn, thanh tiến trình)
+        this.setLocationRelativeTo(null);//dòng này để đưa cửa sổ ra giữa màn hình
+        startLoading();// Bắt đầu chạy tiến trình load thanh %
     }
 
+//    open: Phương thức hỗ trợ hiển thị form ra giữa màn hình (dùng khi gọi từ các lớp khác).
     public void open() {
         this.setLocationRelativeTo(null);
     }
 
+    //startLoading: Xử lý logic chạy thanh tiến trình (JProgressBar). 
+    //Mục đích:Tạo hiệu ứng tải ứng dụng từ 0% đến 100%.
     void startLoading() {
+        // Sử dụng một Thread (luồng) riêng để không làm treo giao diện người dùng
         new Thread(() -> {
             for (int i = 0; i <= 100; i++) {
                 try {
+                    // Tạm dừng luồng trong 30ms để tạo tốc độ load (tổng cộng khoảng 3 giây)
                     Thread.sleep(30); // tốc độ load
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -26,12 +33,13 @@ public class Welcome extends javax.swing.JFrame {
                 progressBar.setValue(i);
                 progressBar.setString(i + "%");
                 if (i == 100) {
+                    //// Khi tiến trình đạt 100%, đóng màn hình chào và mở màn hình Đăng nhập
                     dispose(); // đóng màn welcome
-                    // mở form chính (ví dụ Login)
-                    new Login().setVisible(true);
+
+                    new Login().setVisible(true); // mở form chính (ví dụ Login)
                 }
             }
-        }).start();
+        }).start();// Bắt đầu chạy luồng
     }
 
     @SuppressWarnings("unchecked")
@@ -90,7 +98,7 @@ public class Welcome extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Welcome().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Welcome().setVisible(true));// Khởi tạo và hiển thị màn hình Welcome trên luồng sự kiện của Swing
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

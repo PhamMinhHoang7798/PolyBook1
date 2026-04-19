@@ -14,10 +14,10 @@ public class ThanhToan extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ThanhToan.class.getName());
     // Khai báo các DAO Implementation
-    private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();
-    private dao.LoaiSPDAO loaiDAO = new dao.impl.LoaiSPDAOImpl();
-    private dao.impl.hoadonchitietDAOImpl hdctDAO = new dao.impl.hoadonchitietDAOImpl();
-    private dao.impl.hoadonDAOImpl hdDAO = new dao.impl.hoadonDAOImpl();
+    private dao.SanPhamDAO spDAO = new dao.impl.SanPhamDAOImpl();// Đối tượng thao tác với DB
+    private dao.LoaiSPDAO loaiDAO = new dao.impl.LoaiSPDAOImpl();// Đối tượng thao tác với DB
+    private dao.impl.hoadonchitietDAOImpl hdctDAO = new dao.impl.hoadonchitietDAOImpl();// Đối tượng thao tác với DB
+    private dao.impl.hoadonDAOImpl hdDAO = new dao.impl.hoadonDAOImpl();// Đối tượng thao tác với DB
     private double tienGiam = 0; // Lưu số tiền giảm từ Voucher
 
     // Model để quản lý dữ liệu trên Table
